@@ -66,7 +66,7 @@ function Overview() {
         <div>
             <h1>Hello World!</h1>
             <p>
-            {JSON.stringify(transactions, null, 2)};
+            {JSON.stringify(transactions[0], null, 2)};
             </p>
         </div>
     )
