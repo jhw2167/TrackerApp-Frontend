@@ -1,0 +1,27 @@
+/*
+    Styling for major Divs in Overview main component
+*/
+
+html, body, .container-table {
+    height: 100%;
+}
+
+/* Main Center div, by id */
+.container {
+    display: table;
+    width: 60%;
+
+    text-align: center;
+}
+
+/* LeftSide Div */
+
+/* DataTable Div */
+.right-data-table {
+    width: 50%;
+    margin-left: auto;
+    padding-right: 100px;
+    text-align: center;
+    color: red;
+}
+

@@ -1,5 +1,8 @@
 import { CpuInfo } from "os";
 
+//CSS
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../css/components/DataTable.css'
 
 //Define interface for props type
 interface DataTableProps {
@@ -13,21 +16,20 @@ function DataTable(props: DataTableProps) {
     //headers:Array<String>, data:Array<any>, cols:Array<String>
 
     return (
-            <table className="data-table">
+            <table className="transactions-table">
                 <tbody>
 
                 {/* Table Header */}
                 <tr className="data-table-header">{
                     Object.entries(props.headers).map(([key, value]) => {
-                    return  <th key={key}>{value}</th>})
+                    return <th key={key}>{value}</th>})
                 }</tr>
 
                 {/* Now return data columns */}
                 {Object.entries(props.data).map(([key, value]) => {
-                    <tr>
-                        {console.log(value)};
-                        {Object.entries(props.colNames).map(([key, col]) => {
-                            return <td>Hi{/*JSON.stringify(value)*/}</td>
+                    return <tr className="data-table-row" key={key}>
+                        {Object.entries(props.colNames).map(([dkey, col]) => {
+                            return <td className="data-table-entry" key={dkey}>{value[col.toString()]}</td>
                         })}
                     </tr>
                     

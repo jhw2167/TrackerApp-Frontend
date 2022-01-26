@@ -13,6 +13,7 @@ import DataTable from '../components/DataTable';
 
 //CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../css/main/Overview.css'
 import { Config } from '@testing-library/react';
 
 //import '../css/Landing.css';
@@ -64,33 +65,51 @@ function Overview() {
     }, []);
   
     return (
-        //page title and logo
+        <body>
 
-        //Large div contains entire vertical length page
-        <div className="center-div">
+        <div className="container container-table">
 
-            {//div for pie graph, upper left
-            }
+        
+            {/*page title and logo*/}
+            <header>
+                <div className="logoImg d-inline">
+                    <img src="images/logo.png" alt="Tracker"/>
+                </div>
+            </header>
 
-            <div>
-            {/*div for transactions table, right side entire length */}
-                <DataTable headers={DATA_TABLE_HEADERS} 
-                colNames={DATA_TABLE_COLS}
-                data={transactions} />
-            </div>
+            {/*Large div contains entire vertical length page*/}
+            <main className="center-div align-items-center">
+            <div className="row">
+                {//div for pie graph, upper left
+                }
 
-            {//div for summary table 1, expenses
-            }
+                {/*div for transactions table, right side entire length */}
+                <div className="col-4 right-data-table align-items-right">
+                    <DataTable headers={DATA_TABLE_HEADERS} 
+                    colNames=   {DATA_TABLE_COLS}
+                    data=       {transactions} />
+                </div>
 
-            {//div for summary table 2, income
-            }
+                {/*div for summary table 1, expenses */}
+                <div> 
 
-            <h1>Hello World!</h1>
-            <p>
-            {JSON.stringify(transactions[0], null, 2)};
-            </p>
-        </div>
+                </div>
+
+
+                {/*div for summary table 2, income*/ }
+                <div> </div>
+                <div> </div>
+                <h1>Hello World!</h1>
+                <p>
+                {JSON.stringify(transactions[0], null, 2)};
+                </p>
+
+            </div> {/* Container row class */}
+            </main>
+        </div>  {/* Container wrapper class */}
+    </body>
     )
+    //END REACT OVERVIEW ELEMENT
 }
 
 export default Overview;
