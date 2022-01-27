@@ -6,22 +6,32 @@ html, body, .container-table {
     height: 100%;
 }
 
+/* header div */
+header{
+    margin-top: 2em;
+    min-height: 4em;
+}
+
 /* Main Center div, by id */
 .container {
     display: table;
     width: 60%;
 
-    text-align: center;
+}
+
+.center-div {
+    margin-top: 2em;
 }
 
 /* LeftSide Div */
 
 /* DataTable Div */
 .right-data-table {
-    width: 50%;
+
+    margin-top: 2em;
     margin-left: auto;
-    padding-right: 100px;
+    width: 50%;
+
     text-align: center;
-    color: red;
 }
 

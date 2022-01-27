@@ -72,9 +72,10 @@ function Overview() {
         
             {/*page title and logo*/}
             <header>
-                <div className="logoImg d-inline">
+                <div className="logoImg d-inline header-div">
                     <img src="images/logo.png" alt="Tracker"/>
                 </div>
+                <h1>Tracker</h1>
             </header>
 
             {/*Large div contains entire vertical length page*/}
@@ -85,6 +86,7 @@ function Overview() {
 
                 {/*div for transactions table, right side entire length */}
                 <div className="col-4 right-data-table align-items-right">
+                    <h4>Recent Transactions</h4>
                     <DataTable headers={DATA_TABLE_HEADERS} 
                     colNames=   {DATA_TABLE_COLS}
                     data=       {transactions} />
@@ -99,13 +101,16 @@ function Overview() {
                 {/*div for summary table 2, income*/ }
                 <div> </div>
                 <div> </div>
-                <h1>Hello World!</h1>
-                <p>
-                {JSON.stringify(transactions[0], null, 2)};
-                </p>
+                
 
             </div> {/* Container row class */}
             </main>
+
+    {/* Container wrapper class */}
+            <footer>
+                <div> {JSON.stringify(transactions[0], null, 2)} </div>
+            </footer>
+
         </div>  {/* Container wrapper class */}
     </body>
     )

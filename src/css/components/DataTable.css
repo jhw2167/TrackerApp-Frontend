@@ -6,11 +6,35 @@
     float: right;
     text-align: center;
     width: 100%;
+    table-layout: fixed;
 }
 
-
 /* Header CSS */
+  .data-table-header{
+    background-color: rgba(8, 0, 0, 0.2);
+    color: black;
 
+    border: solid 2px rgba(8, 0, 0, 0.2);
+    border-bottom: 0;
+    line-height: 3em;
+    padding: -2px;
 
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    text-transform: uppercase;
+   }
 
 /* Row CSS */
+
+.data-table-row {
+    text-align: middle;
+    vertical-align:middle;
+    border: solid 2px black;
+
+    font-weight: 300;
+    font-size: 14px;
+    color: black;
+    overflow-x:auto;
+  }
+  
