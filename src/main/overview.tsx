@@ -4,7 +4,6 @@
 import React, { useState, useEffect } from 'react';
 //import { useCookies } from "react-cookie";
 //import { Modal, Button } from 'react-bootstrap';
-import axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
 
 
 //project imports
@@ -19,27 +18,6 @@ import { Config } from '@testing-library/react';
 import DataGraph from '../components/DataGraph';
 
 //import '../css/Landing.css';
-
-/*Helper functions */
-async function getRequest(url: string, setData: Function) {
-
-    const config: AxiosRequestConfig<any> = {
-        method: 'GET',
-        url: url
-    }
-
-    await axios(config).then( (resp) =>
-    {
-        console.log("Transactions returned: " + resp.data.toString() );
-        setData(resp.data);
-    }).catch( (reason) => {
-        console.log("Error from GET request from: " + url + " with error: " + reason);
-    }
-    );
-    //end axios call
-    
-}
-
 
 ///finances/overview?mn=August&yr=21
 //Guess we'll have to take some params here
@@ -59,12 +37,13 @@ function Overview() {
     ]
 
     /* State and Effect Functions */
-    const [transactions, setTransactions] = useState(["Loading Data"]);
+    const [transactions, setTransactions] = useState<consts.Transaction[]>([]);
+    const [categories, setCategories] = useState(["Loading Categories"]);
 
     //OnLanding
     useEffect( () => {
-        getRequest(api.SERVER_ALL_TRANSACTIONS, setTransactions);
-
+        api.getRequest(api.SERVER_ALL_TRANSACTIONS, setTransactions);
+        api.getRequest(api.SERVER_ALL_CATEGORIES, setCategories)
     }, []);
   
     return (
@@ -88,9 +67,13 @@ function Overview() {
                 <div className="col-4 data-graph">
                     <h5>September</h5>
                     <DataGraph
-                        
                         headers={DATA_TABLE_HEADERS}
                         data={transactions} />
+
+                    <h5>Cat Data</h5>
+                    <div>
+                        {JSON.stringify(consts.filterTransactions(transactions, categories, 50))}
+                    </div>
                 </div>
                 }
 
