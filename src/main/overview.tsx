@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 //import { Modal, Button } from 'react-bootstrap';
 import axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
 
+
 //project imports
 import * as consts from '../resources/constants';
 import * as api from '../resources/api';
@@ -15,6 +16,7 @@ import DataTable from '../components/DataTable';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/main/Overview.css'
 import { Config } from '@testing-library/react';
+import DataGraph from '../components/DataGraph';
 
 //import '../css/Landing.css';
 
@@ -83,6 +85,13 @@ function Overview() {
             <main className="center-div align-items-center">
             <div className="row">
                 {//div for pie graph, upper left
+                <div className="col-4 data-graph">
+                    <h5>September</h5>
+                    <DataGraph
+                        
+                        headers={DATA_TABLE_HEADERS}
+                        data={transactions} />
+                </div>
                 }
 
                 {/*div for transactions table, right side entire length */}
