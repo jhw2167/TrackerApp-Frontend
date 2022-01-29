@@ -9,6 +9,7 @@ interface DataTableProps {
     headers: String[];
     colNames: String[];
     data: Array<any>;
+    limit: number;
 }
 
 function DataTable(props: DataTableProps) {
@@ -26,7 +27,7 @@ function DataTable(props: DataTableProps) {
                 }</tr>
 
                 {/* Now return data columns */}
-                {Object.entries(props.data).map(([key, value]) => {
+                {Object.entries(props.data).slice(0, props.limit).map(([key, value]) => {
                     return <tr className="data-table-row" key={key}>
                         {Object.entries(props.colNames).map(([dkey, col]) => {
                             return <td className="data-table-entry" key={dkey}>{value[col.toString()]}</td>

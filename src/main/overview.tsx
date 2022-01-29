@@ -44,6 +44,7 @@ async function getRequest(url: string, setData: Function) {
 function Overview() {
 
     //Constants
+    const TOTAL_TRANSACTIONS = 25;
     const DATA_TABLE_HEADERS: Array<String> = [
         "Date", "Vendor", "Amount", "Category"
     ]
@@ -89,7 +90,8 @@ function Overview() {
                     <h4>Recent Transactions</h4>
                     <DataTable headers={DATA_TABLE_HEADERS} 
                     colNames=   {DATA_TABLE_COLS}
-                    data=       {transactions} />
+                    data=       {transactions} 
+                    limit=      {TOTAL_TRANSACTIONS}/>
                 </div>
 
                 {/*div for summary table 1, expenses */}

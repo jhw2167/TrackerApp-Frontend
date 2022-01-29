@@ -16,11 +16,13 @@ header{
 .container {
     display: table;
     width: 60%;
-
 }
 
 .center-div {
     margin-top: 2em;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+    min-height: 80vh;
 }
 
 /* LeftSide Div */
@@ -30,7 +32,8 @@ header{
 
     margin-top: 2em;
     margin-left: auto;
-    width: 50%;
+    margin-right: 5%;
+    width: 40%;
 
     text-align: center;
 }
