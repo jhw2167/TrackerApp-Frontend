@@ -10,8 +10,8 @@ import '../css/components/DataGraph.css'
 
 //Define interface for props type
 interface DataGraphProps {
-    headers: String[];
-    data: Array<any>;
+    headers: string[];
+    data: Object;
 }
 
 function DataGraph(props: DataGraphProps) {
@@ -19,7 +19,20 @@ function DataGraph(props: DataGraphProps) {
 
     /* CONSTANTS */ 
     const PI = Math.PI;
-    const myData = [ {angle: 1, radius: 10}, {angle: 2, label: 'Super Custom label', subLabel: 'With annotation', radius: 20}, {angle: 4, radius: 5, label: 'Alt Label'}, {angle: 3, radius: 14}, {angle: 5, radius: 12, subLabel: 'Sub Label only', className: 'custom-class'} ];
+    //angle
+    //radius
+    //label
+    //subLabel
+    //classname
+    //color?
+    const myData = [ {angle: 1000, radius: 10}, {angle: 2, label: 'Super Custom label', subLabel: 'With annotation', radius: 20}, {angle: 4, radius: 5, label: 'Alt Label'}, {angle: 3, radius: 14}, {angle: 5, radius: 12, subLabel: 'Sub Label only', className: 'custom-class'} ];
+    
+    const gHEIGHT = 250;
+    const gWIDTH = 250;
+    let graphData: any = [];
+    Object.entries(props.data).map(([key, val]) => {
+            graphData.push({angle: val, label: key});
+    } );
 
     /* STATES AND EFFECTS */
 
@@ -27,9 +40,10 @@ function DataGraph(props: DataGraphProps) {
         
             <RadialChart
             animation
-            data={myData}
-            width={300}
-            height={300}
+            data={graphData}
+            width={gWIDTH}
+            height={gHEIGHT}
+            showLabels={true}
             />
 
     )

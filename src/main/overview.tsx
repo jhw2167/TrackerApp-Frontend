@@ -25,11 +25,11 @@ function Overview() {
 
     //Constants
     const TOTAL_TRANSACTIONS = 25;
-    const DATA_TABLE_HEADERS: Array<String> = [
+    const DATA_TABLE_HEADERS: Array<string> = [
         "Date", "Vendor", "Amount", "Category"
     ]
 
-    const DATA_TABLE_COLS: Array<String> = [
+    const DATA_TABLE_COLS: Array<string> = [
         consts.TRANS_DATA_PURCHDATE,
         consts.TRANS_DATA_VEND,
         consts.TRANS_DATA_AMT,
@@ -39,12 +39,18 @@ function Overview() {
     /* State and Effect Functions */
     const [transactions, setTransactions] = useState<consts.Transaction[]>([]);
     const [categories, setCategories] = useState(["Loading Categories"]);
+    const [categoriesData, setCategoriesData] = useState<Object>(Object());
 
     //OnLanding
     useEffect( () => {
         api.getRequest(api.SERVER_ALL_TRANSACTIONS, setTransactions);
-        api.getRequest(api.SERVER_ALL_CATEGORIES, setCategories)
+        api.getRequest(api.SERVER_ALL_CATEGORIES, setCategories);
     }, []);
+
+    useEffect( () => {
+        setCategoriesData(consts.filterTransactions(transactions, categories, 50));
+    })
+    
   
     return (
         <body>
@@ -67,13 +73,11 @@ function Overview() {
                 <div className="col-4 data-graph">
                     <h5>September</h5>
                     <DataGraph
-                        headers={DATA_TABLE_HEADERS}
-                        data={transactions} />
+                        headers={categories}
+                        data={categoriesData} />
 
                     <h5>Cat Data</h5>
-                    <div>
-                        {JSON.stringify(consts.filterTransactions(transactions, categories, 50))}
-                    </div>
+
                 </div>
                 }
 
