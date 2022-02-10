@@ -1,14 +1,16 @@
 import { CpuInfo } from "os";
 
 //Project imports
-import { XYPlot, ArcSeries, RadialChart, ArcSeriesPoint } from "react-vis";
+import { XYPlot, ArcSeries, ArcSeriesPoint, 
+    DiscreteColorLegend, DiscreteColorLegendProps } from "react-vis";
+//import DiscreteColorLegend from 'legends/discrete-color-legend';
 import * as consts from '../resources/constants';
 
 //CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../node_modules/react-vis/dist/style.css';
 import '../css/components/DataGraph.css'
-import { useEffect, useState } from "react";
+import { useDebugValue, useEffect, useState } from "react";
 
 //Define interface for props type
 interface DataGraphProps {
@@ -31,42 +33,61 @@ function DataGraph(props: DataGraphProps) {
     
     const gHEIGHT = 280;
     const gWIDTH = 280;
-    const PAD_ANGLE = .1;
 
-    //Normalize data
-    let sum: number = 0;
-    Object.entries(props.data).forEach( ([key, value]) => sum+=value);
-
-    let colIndex = 0;
-    const colors = consts.colorPicker(7, Object.keys(props.data).length);
-    let graphData: any = [];
-    let lastAngle = 0;
-    const buffer = 0.01;
     const STROKE_COL = '#ffffff';
-    Object.entries(props.data).map(([key, val]) => {
-            let start = lastAngle;
-            let end = (start + (val * 2 * PI / sum));  //normalize val to 1
-            graphData.push({angle0: start, angle: end, label: key,
-                 color: colors[colIndex++], stroke: STROKE_COL});
-            lastAngle = end;
-    } );
+    const STROKE_WIDTH = 2;
+    const RAD_START = 0;
+    const RAD = 1;
+
+    const genGraphData: any = (data: any) => {
+
+        //Normalize data
+        let sum: number = 0;
+        Object.entries(props.data).forEach( ([key, value]) => sum+=value);
+
+        const colors = consts.colorPicker(7, Object.keys(props.data).length);
+        let graphData: ArcSeriesPoint[] = [];
+        let lastAngle = 0;
+        let colIndex = 0;
+
+        Object.entries(props.data).map(([key, val]) => {
+                let start = lastAngle;
+                let end = (start + (val * 2 * PI / sum));  //normalize val to 1
+                graphData.push({angle0: start, angle: end, 
+                    radius0: RAD_START, 
+                    radius: RAD, 
+                    label: key, color:
+                    colors[colIndex++],
+                    stroke: STROKE_COL, 
+                    style: {strokeWidth: STROKE_WIDTH}});
+                lastAngle = end;
+        } );
+
+            return graphData;
+    }
 
     /* STATES AND EFFECTS */
-    const [stateData, setStateData] = useState<ArcSeriesPoint[]>(graphData);
+    const [stateData, setStateData] = useState<ArcSeriesPoint[]>([]);
+    const [legendItems, setLegendItems] = useState<any[]>([]);
 
     //init
     useEffect( () => {
-        setStateData(graphData);
+       
     }, [])
 
     //Updates
     useEffect( () => {
+        let graphData = genGraphData(props.data);
         setStateData(graphData);
-    }, graphData)
+        setLegendItems(calcLegendData(graphData));
+        console.log("running");
+    }, [ [], props.data])
 
     return (
         
-        <XYPlot 
+
+        <div>
+            <XYPlot 
             xDomain={[-10, 10]}
             yDomain={[-10, 10]}
             width={gWIDTH}
@@ -79,10 +100,30 @@ function DataGraph(props: DataGraphProps) {
             data={stateData}
             //data={graphData}
             colorType={'literal'}/>
-        </XYPlot>
+            </XYPlot>
+
+            <div className="data-graph-legend">
+                <ul id="data-graph-legend-list">
+                    {Object.entries(legendItems).map(([key, value]) => {
+                        return <li dyn-color={String(value.color)}>{value.label}</li>
+                    })} {/*END JS*/}
+                </ul>
+            </div>
+           
+        </div>
+        
 
     )
 
+}
+//END DATAGRAPH MODULE
+
+function calcLegendData(data: ArcSeriesPoint[]) {
+    let arr: any[] = [];
+    Object.entries(data).map( ([key, value]) => {
+        arr.push({label: value.label, color: value.color});
+    })
+    return arr;
 }
 
 /*
