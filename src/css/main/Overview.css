@@ -23,17 +23,30 @@ header{
     border-left: 2px solid black;
     border-right: 2px solid black;
     min-height: 80vh;
+    min-width: 800px;
 }
 
 /* LeftSide Div */
+.left-div {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.left-data-graph {
+    margin-left: 6%;
+}
+
+#data-graph-title {
+    margin-left: 10%;
+}
 
 /* DataTable Div */
 .right-data-table {
-
     margin-top: 2em;
-    margin-left: auto;
-    margin-right: 5%;
     width: 40%;
+    min-width: 380px;
+    
 
     text-align: center;
 }

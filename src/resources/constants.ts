@@ -16,6 +16,49 @@ export const TRANS_DATA_REIMB = "reimburses";
 export const TRANS_DATA_POSTDATE = "postedDate"; 
 export const TRANS_DATA_NOTES = "notes";
 
+/* COLORS */
+export const PASTEL_PALETE = [
+    //Blues
+    '#edf2fb',
+    '#d7e3fc',
+    '#ccdbfd',
+    '#c1d3fe',
+    '#abc4ff',
+
+    //Reds
+    '#ffe5ec',
+    '#ffb3c6',
+    '#fb6f92',
+
+    //Greens
+    '#a0e8ce',
+    '#2fca91',
+    '#14563e',
+
+    //Yellow
+    '#ffde89',
+    '#ffca42',
+    '#f9b400'
+
+    //Mix 1:  #a7bed3 // #c6e2e9 // #f1ffc4 // #ffcaaf // #dab894
+    //Mix 2:  #70d6ff // #ff70a6 // #ff9770 // #ffd670 // #e9ff70
+  ];
+
+  export const colorPicker = function(start: number, total: number): string[]  {
+        let picked = [];
+        let index = start;
+        for (let i = 0; i < total; i++) {
+            if(index >= PASTEL_PALETE.length) {
+                index = ++start;
+            }
+            picked.push(PASTEL_PALETE[index])
+            index+=6;
+        }
+
+        return picked;
+  }
+
+
 /* Interfaces */
 export interface Transaction {
     tId: string;

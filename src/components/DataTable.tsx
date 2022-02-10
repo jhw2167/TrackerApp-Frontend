@@ -33,8 +33,6 @@ function DataTable(props: DataTableProps) {
                             return <td className="data-table-entry" key={dkey}>{value[col.toString()]}</td>
                         })}
                     </tr>
-                    
-                   
                     })
                 }
                 {/* END PRINT DATA */}

@@ -47,13 +47,14 @@ function Overview() {
         api.getRequest(api.SERVER_ALL_CATEGORIES, setCategories);
     }, []);
 
+    //On update to dependencies
     useEffect( () => {
         setCategoriesData(consts.filterTransactions(transactions, categories, 50));
-    })
+    }, [categories, transactions]);
     
   
     return (
-        <body>
+        <>
 
         <div className="container container-table">
 
@@ -68,21 +69,24 @@ function Overview() {
 
             {/*Large div contains entire vertical length page*/}
             <main className="center-div align-items-center">
-            <div className="row">
+            <div className="row row-centered-contents">
                 {//div for pie graph, upper left
-                <div className="col-4 data-graph">
-                    <h5>September</h5>
-                    <DataGraph
-                        headers={categories}
-                        data={categoriesData} />
-
-                    <h5>Cat Data</h5>
-
+                <div className="col-6 left-div">
+                    <div className="left-data-graph">
+                        <h4 id="data-graph-title">September</h4>
+                        <DataGraph
+                            headers={categories}
+                            data={categoriesData} />
+                    </div>
                 </div>
+                //END COL-4 DIV
                 }
 
+                {/* Spacing cols */}
+                
+
                 {/*div for transactions table, right side entire length */}
-                <div className="col-4 right-data-table align-items-right">
+                <div className="col-5 right-data-table align-items-right">
                     <h4>Recent Transactions</h4>
                     <DataTable headers={DATA_TABLE_HEADERS} 
                     colNames=   {DATA_TABLE_COLS}
@@ -110,7 +114,7 @@ function Overview() {
             </footer>
 
         </div>  {/* Container wrapper class */}
-    </body>
+    </>
     )
     //END REACT OVERVIEW ELEMENT
 }
