@@ -5,6 +5,7 @@
 #data-graph-wrapper{
     align-items: center;
     height: inherit;
+    background-color: gray;
 }
 
 #data-graph-plot{
@@ -14,9 +15,10 @@
 .data-graph-legend{
     align-items: center;
     margin: auto;
-    margin-left: 18%;
     margin-top: -6%;
     padding: 2%;
+    border: 1px solid black;
+    border-radius: 20px;
 }
 
 /* General list styling */

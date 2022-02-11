@@ -18,29 +18,35 @@ interface DataGraphProps {
     data: Object;
 }
 
+const PI = Math.PI;
+
+//DataGraph constants
+const gHEIGHT = 280;
+const gWIDTH = 280;
+
+const STROKE_COL = '#ffffff';
+const STROKE_WIDTH = 2;
+const RAD_START = 0;
+const RAD = 1;
+const MAX_DATA_DISPLAY = 8
+
+//Data Legend constants
+const l_STROKE_WIDTH = 12;
+const l_STROKE_STYLE = 'solid';
+const PER_LEGEND = 4;
+
 function DataGraph(props: DataGraphProps) {
 
 
     /* CONSTANTS */ 
-    const PI = Math.PI;
-    const BUL = "○";
     //angle
     //radius
     //label
     //subLabel
     //classname
     //color?
-    const myData: any = [ {angle: 10, radius: 10}, {angle: 2, label: 'Super Custom label', subLabel: 'With annotation', radius: 20}, {angle: 4, radius: 5, label: 'Alt Label'}, {angle: 3, radius: 14}, {angle: 5, radius: 12, subLabel: 'Sub Label only', className: 'custom-class'} ];
-    const DATA_LENGTH = 8;
+    const myData: any = [ {angle: 10, radius: 10}, {angle: 2, label: 'Super Custom label', subLabel: 'With annotation', radius: 20}, {angle: 4, radius: 5, label: 'Alt Label'}, {angle: 3, radius: 14}, {angle: 5, radius: 12, subLabel: 'Sub Label only', className: 'custom-class'} ];;
     
-    const gHEIGHT = 280;
-    const gWIDTH = 280;
-
-    const STROKE_COL = '#ffffff';
-    const STROKE_WIDTH = 2;
-    const RAD_START = 0;
-    const RAD = 1;
-
     const genGraphData: any = (data: any) => {
 
         //Normalize data
@@ -109,16 +115,16 @@ function DataGraph(props: DataGraphProps) {
 
             <div className="data-graph-legend">
 
-            <table id="data-graph-legend-list">
-                    {Object.entries(legendItems).map(([key, value]) => {
-                        return <tr>
-                            <td className="bul" style={{color: value[0].color}}>{BUL}</td>
-                                <td className="data-graph-val">{value[0].label}</td>
-                            <td className="bul" style={{color: value[1].color}}>{BUL}</td>
-                                <td className="data-graph-val">{value[1].label}</td>
-                        </tr>
-                    })} {/*END JS*/}
-                </table>
+            <DiscreteColorLegend orientation="horizontal" 
+            width={gWIDTH}
+            items={legendItems.slice(0, PER_LEGEND)} >
+                </DiscreteColorLegend>
+
+            {/* lower row */}
+                <DiscreteColorLegend orientation="horizontal" 
+            width={gWIDTH}
+            items={legendItems.slice(PER_LEGEND, MAX_DATA_DISPLAY)} >
+                </DiscreteColorLegend>
     
             </div>
            
@@ -132,11 +138,9 @@ function DataGraph(props: DataGraphProps) {
 
 function calcLegendData(data: ArcSeriesPoint[]) {
     let arr: any[] = [];
-    let lastData: any = undefined;
-    Object.entries(data).map( ([key, value], index) => {
-        (index % 2 == 0 ? lastData = {label: value.label, color: value.color} : 
-            arr.push([lastData, {label: value.label, color: value.color}]  )
-        );
+    Object.entries(data).map( ([key, value]) => {
+        arr.push({title: value.label, color: value.color,
+        strokeWidth: l_STROKE_WIDTH, strokeStyle: l_STROKE_STYLE})
     })
     return arr;
 }
