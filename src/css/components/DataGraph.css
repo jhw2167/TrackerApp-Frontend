@@ -1,16 +1,54 @@
 /* Styling for our main summary pie chart */
 
+/* DIV styling for table */
+
+#data-graph-wrapper{
+    align-items: center;
+    height: inherit;
+}
+
+#data-graph-plot{
+
+}
+
+.data-graph-legend{
+    align-items: center;
+    margin: auto;
+    margin-left: 18%;
+    margin-top: -6%;
+    padding: 2%;
+}
+
 /* General list styling */
+
 #data-graph-legend-list{
-    color: black;
-    list-style: none;
-    columns: 2;
-    justify-content: left;
+    text-align: center;
+
+    margin: auto;
+    table-layout: fixed;
+
+    line-height: 1em;
+    border-collapse: separate;
+}
+
+#data-graph-legend-list > tr{
+    text-align: left;
 }
 
 /* Special styling for list attribs */
-li::before {
-    content: "• "; 
-    color: attr(dyn-color);
+.bul {
+    font-size: 1em;
+    vertical-align: bottom;
+
+    width: 5%;
+}
+
+.data-graph-val {
     font-size: medium;
+    font-weight: 400;
+
+    width: 40%;
+
+    vertical-align: top;
+    text-align: left;
 }

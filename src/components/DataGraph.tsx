@@ -23,6 +23,7 @@ function DataGraph(props: DataGraphProps) {
 
     /* CONSTANTS */ 
     const PI = Math.PI;
+    const BUL = "○";
     //angle
     //radius
     //label
@@ -30,6 +31,7 @@ function DataGraph(props: DataGraphProps) {
     //classname
     //color?
     const myData: any = [ {angle: 10, radius: 10}, {angle: 2, label: 'Super Custom label', subLabel: 'With annotation', radius: 20}, {angle: 4, radius: 5, label: 'Alt Label'}, {angle: 3, radius: 14}, {angle: 5, radius: 12, subLabel: 'Sub Label only', className: 'custom-class'} ];
+    const DATA_LENGTH = 8;
     
     const gHEIGHT = 280;
     const gWIDTH = 280;
@@ -81,37 +83,47 @@ function DataGraph(props: DataGraphProps) {
         setStateData(graphData);
         setLegendItems(calcLegendData(graphData));
         console.log("running");
-    }, [ [], props.data])
+    }, [props.data])
 
     return (
         
 
-        <div>
-            <XYPlot 
-            xDomain={[-10, 10]}
-            yDomain={[-10, 10]}
-            width={gWIDTH}
-            height={gHEIGHT}
-            strokeType={'literal'}>
+        <div className="data-graph-wrapper">
 
-            <ArcSeries
-            center={{x: 0, y: 0}}
-            //data={myData}
-            data={stateData}
-            //data={graphData}
-            colorType={'literal'}/>
-            </XYPlot>
+            <div className="data-graph-plot">
+                <XYPlot 
+                xDomain={[-.78, 1]}
+                yDomain={[-.78, 1]}
+                width={gWIDTH}
+                height={gHEIGHT}
+                strokeType={'literal'}>
+
+                <ArcSeries
+                center={{x: 0, y: 0}}
+                //data={myData}
+                data={stateData}
+                //data={graphData}
+                colorType={'literal'}/>
+                </XYPlot>
+            </div>
 
             <div className="data-graph-legend">
-                <ul id="data-graph-legend-list">
+
+            <table id="data-graph-legend-list">
                     {Object.entries(legendItems).map(([key, value]) => {
-                        return <li dyn-color={String(value.color)}>{value.label}</li>
+                        return <tr>
+                            <td className="bul" style={{color: value[0].color}}>{BUL}</td>
+                                <td className="data-graph-val">{value[0].label}</td>
+                            <td className="bul" style={{color: value[1].color}}>{BUL}</td>
+                                <td className="data-graph-val">{value[1].label}</td>
+                        </tr>
                     })} {/*END JS*/}
-                </ul>
+                </table>
+    
             </div>
            
         </div>
-        
+        //end data graph wrapper
 
     )
 
@@ -120,8 +132,11 @@ function DataGraph(props: DataGraphProps) {
 
 function calcLegendData(data: ArcSeriesPoint[]) {
     let arr: any[] = [];
-    Object.entries(data).map( ([key, value]) => {
-        arr.push({label: value.label, color: value.color});
+    let lastData: any = undefined;
+    Object.entries(data).map( ([key, value], index) => {
+        (index % 2 == 0 ? lastData = {label: value.label, color: value.color} : 
+            arr.push([lastData, {label: value.label, color: value.color}]  )
+        );
     })
     return arr;
 }
