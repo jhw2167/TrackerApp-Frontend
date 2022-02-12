@@ -80,11 +80,11 @@ function Overview() {
                 {//div for pie graph, upper left
                 <div className="col-6 left-div">
                     <div className="left-data-graph">
-                        <h4 id="data-graph-title">September</h4>
                         <DataGraph
                            data={categoriesData} 
                            exclusions={DATA_GRAPH_EXC_FUNC}
                            limit={DATA_GRAPH_LIMIT}
+                           title={'September'}
                            />
                     </div>
                 </div>

@@ -34,12 +34,8 @@ header{
 }
 
 .left-data-graph {
-    margin-left: 6%;
-}
-
-#data-graph-title {
-    margin-left: 4%;
-    margin-bottom: 0;
+    width: 90%;
+    background-color: rgba(196,196,196, 212);
 }
 
 /* DataTable Div */

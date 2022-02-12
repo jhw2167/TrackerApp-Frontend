@@ -19,6 +19,7 @@ interface DataGraphProps {
     data: DataTuple[];
     exclusions?: Function;
     limit?: number;
+    title: string;
 }
 
 const PI = Math.PI;
@@ -73,6 +74,8 @@ function DataGraph(props: DataGraphProps) {
         
 
         <div className="data-graph-wrapper">
+
+            <h4 id="data-graph-title">{props.title}</h4>
 
             <div className="data-graph-plot">
                 <XYPlot 

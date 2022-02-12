@@ -1,15 +1,29 @@
 /* Styling for our main summary pie chart */
 
-/* DIV styling for table */
 
-#data-graph-wrapper{
-    align-items: center;
-    height: inherit;
-    background-color: gray;
+.data-graph-wrapper{
+    text-align: center;
+    height: auto;
+    padding-top: 4%;
+
+    --bs-gutter-x: 0;
 }
 
-#data-graph-plot{
 
+/* Title */
+
+#data-graph-title {
+    margin-bottom: -5%;
+}
+
+/* DIV styling for Graph */
+
+#data-graph-plot {
+
+}
+
+.data-graph-plot > * {
+    margin: auto;
 }
 
 .data-graph-legend{
@@ -17,8 +31,8 @@
     margin: auto;
     margin-top: -6%;
     padding: 2%;
-    border: 1px solid black;
-    border-radius: 20px;
+    /*border: 1px solid black;
+    border-radius: 20px;*/
 }
 
 /* General list styling */
@@ -37,30 +51,13 @@
     text-align: left;
 }
 
-/* Special styling for list attribs */
-.bul {
-    font-size: 1em;
-    vertical-align: bottom;
-
-    width: 5%;
-}
-
-.data-graph-val {
-    font-size: medium;
-    font-weight: 400;
-
-    width: 40%;
-
-    vertical-align: top;
-    text-align: left;
-}
-
 /* Overriding CSS Legend items */
 
 /* Box holds a few legend items */
 .rv-discrete-color-legend {
     overflow-y: unset;
     margin: auto;
+    font-weight: bold;
 }
 
 /* Box holds a few legend items */
