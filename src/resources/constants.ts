@@ -19,10 +19,8 @@ export const TRANS_DATA_NOTES = "notes";
 /* COLORS */
 export const PASTEL_PALETE = [
     //Blues
-    '#edf2fb',
-    '#d7e3fc',
-    '#ccdbfd',
-    '#c1d3fe',
+    '#3D426B',
+    '#89CFF0',
     '#abc4ff',
 
     //Reds
@@ -32,30 +30,65 @@ export const PASTEL_PALETE = [
 
     //Greens
     '#a0e8ce',
-    '#2fca91',
+    '#DAF7A6',
     '#14563e',
 
     //Yellow
     '#ffde89',
     '#ffca42',
-    '#f9b400'
+    '#f9b400',
+
+    //Pinks/Purp
+    '#D77FA1',
+    '#FF0048',
+    '#B983FF',
+
+    //Greens Again 
+    '#C6D57E',
+    '#CDF2CA',
+    '#E7FBBE',
+
+    //Red/Orange
+    '#FF7878',
+    '#F6AE99',
+    '#ff8000',
+
+    //Blues again
+    '#99FEFF',
+    '#316B83',
+    '#11324D'
+
 
     //Mix 1:  #a7bed3 // #c6e2e9 // #f1ffc4 // #ffcaaf // #dab894
     //Mix 2:  #70d6ff // #ff70a6 // #ff9770 // #ffd670 // #e9ff70
   ];
 
   export const colorPicker = function(start: number, total: number): string[]  {
-        let picked = [];
+        let picked = new Set<string>();
         let index = start;
+        const ERR_COLOR = '1D1C1A';
         for (let i = 0; i < total; i++) {
             if(index >= PASTEL_PALETE.length) {
                 index = ++start;
             }
-            picked.push(PASTEL_PALETE[index])
-            index+=6;
+            //console.log("L: %d, Index: %d, val: " + PASTEL_PALETE[index], PASTEL_PALETE.length, index);
+            if(!picked.has(PASTEL_PALETE[index])) {
+                picked.add(PASTEL_PALETE.at(index) || ERR_COLOR);
+            } else if(total > PASTEL_PALETE.length) {
+                picked.add(PASTEL_PALETE.at(index) || ERR_COLOR);
+            } else {
+                i--;
+            }
+            
+            index+= ((Math.random() * 3) + 3);
         }
 
-        return picked;
+        let res: string[] = [];
+        picked.forEach( (value) => {
+        res.push(value);
+    })
+
+    return res;
   }
 
 
@@ -63,7 +96,7 @@ export const PASTEL_PALETE = [
 export interface Transaction {
     tId: string;
     purchasedate: Date;
-    amount: Number;
+    amount: number;
     vendor: string;
     category: string;
     boughtFor: string;
@@ -75,20 +108,31 @@ export interface Transaction {
     notes: string;
 }
 
+export interface DataTuple {
+    label: string;
+    data: Object;
+}
+
 /* FUNCTION CONSTANTS */
 
 //Returns object parsed by categories
-export const filterTransactions = function(data: Transaction[], categories: string[], limit: number): Object  {
-    let res = Object();
+export const aggregateTransactions = function(data: Transaction[], categories: string[], limit: number): DataTuple[]  {
+    let map: Map<string, number> = new Map<string, number>();
 
     //Append array for each category
     Object.entries(categories).map(([key, val]) => {
-        res[val] = 0;
+        map.set(val, 0);
     })
 
     //parse through limited transactions to garner results
     Object.entries(data).slice(0, limit).map(([key, value]) => {
-        res[value.category]+= value.amount;
+       map.set(value.category, (map.get(value.category) || 0) + value.amount);
+    })
+
+    //Return array of DataTuples
+    let res: DataTuple[] = [];
+    map.forEach( (value, key) => {
+        res.push({label: key, data: value});
     })
 
     return res;

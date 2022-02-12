@@ -8,6 +8,7 @@ import React, { useState, useEffect } from 'react';
 
 //project imports
 import * as consts from '../resources/constants';
+import {DataTuple, Transaction} from '../resources/constants';
 import * as api from '../resources/api';
 import DataTable from '../components/DataTable';
 
@@ -36,10 +37,16 @@ function Overview() {
         consts.TRANS_DATA_CAT
     ]
 
+    const DATA_GRAPH_EXCLUSIONS = new Set<string>(["Income"]);
+    const DATA_GRAPH_EXC_FUNC: Function = (tuple: DataTuple) => {
+        return !DATA_GRAPH_EXCLUSIONS.has(tuple.label as string);
+    }
+    const DATA_GRAPH_LIMIT = 8; 
+
     /* State and Effect Functions */
-    const [transactions, setTransactions] = useState<consts.Transaction[]>([]);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [categories, setCategories] = useState(["Loading Categories"]);
-    const [categoriesData, setCategoriesData] = useState<Object>(Object());
+    const [categoriesData, setCategoriesData] = useState<DataTuple[]>([]);
 
     //OnLanding
     useEffect( () => {
@@ -49,7 +56,7 @@ function Overview() {
 
     //On update to dependencies
     useEffect( () => {
-        setCategoriesData(consts.filterTransactions(transactions, categories, 50));
+        setCategoriesData(consts.aggregateTransactions(transactions, categories, 50));
     }, [categories, transactions]);
     
   
@@ -75,8 +82,10 @@ function Overview() {
                     <div className="left-data-graph">
                         <h4 id="data-graph-title">September</h4>
                         <DataGraph
-                            headers={categories}
-                            data={categoriesData} />
+                           data={categoriesData} 
+                           exclusions={DATA_GRAPH_EXC_FUNC}
+                           limit={DATA_GRAPH_LIMIT}
+                           />
                     </div>
                 </div>
                 //END COL-4 DIV
@@ -84,7 +93,6 @@ function Overview() {
 
                 {/* Spacing cols */}
                 
-
                 {/*div for transactions table, right side entire length */}
                 <div className="col-5 right-data-table align-items-right">
                     <h4>Recent Transactions</h4>

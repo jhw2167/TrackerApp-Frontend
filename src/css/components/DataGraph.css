@@ -54,3 +54,20 @@
     vertical-align: top;
     text-align: left;
 }
+
+/* Overriding CSS Legend items */
+
+/* Box holds a few legend items */
+.rv-discrete-color-legend {
+    overflow-y: unset;
+    margin: auto;
+}
+
+/* Box holds a few legend items */
+.rv-discrete-color-legend-item {
+    text-align: center;
+}
+
+.rv-discrete-color-legend-item::after{
+    width: 100%;
+}
