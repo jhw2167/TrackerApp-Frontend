@@ -11,7 +11,7 @@ import {DataTuple, Transaction} from '../resources/constants';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../node_modules/react-vis/dist/style.css';
 import '../css/components/DataGraph.css'
-import { useDebugValue, useEffect, useState } from "react";
+import React, { useDebugValue, useEffect, useState } from "react";
 import { stringify } from "querystring";
 
 //Define interface for props type
@@ -22,17 +22,23 @@ interface DataGraphProps {
     title: string;
 }
 
+/* CONSTANTS */ 
 const PI = Math.PI;
 
 //DataGraph constants
 const gHEIGHT = 280;
 const gWIDTH = 280;
 
-const STROKE_COL = '#ffffff';
-const STROKE_WIDTH = 2;
 const RAD_START = 0;
 const RAD = 1;
 const MAX_DATA_DISPLAY = 8
+
+const STROKE_WIDTH = 3;
+const ANIM_STROKE_WIDTH = 5;
+
+const DEF_CHART_STYLE = {stroke: 'white', strokeWidth: STROKE_WIDTH};
+const ANIM_CHART_STYLE = {stroke: 'black', strokeWidth: ANIM_STROKE_WIDTH};
+    
 
 //Data Legend constants
 const l_STROKE_WIDTH = 12;
@@ -40,21 +46,13 @@ const l_STROKE_STYLE = 'solid';
 const PER_LEGEND = 4;
 
 function DataGraph(props: DataGraphProps) {
-
-
-    /* CONSTANTS */ 
-    //angle
-    //radius
-    //label
-    //subLabel
-    //classname
-    //color?
-    const myData: any = [ {angle: 10, radius: 10}, {angle: 2, label: 'Super Custom label', subLabel: 'With annotation', radius: 20}, {angle: 4, radius: 5, label: 'Alt Label'}, {angle: 3, radius: 14}, {angle: 5, radius: 12, subLabel: 'Sub Label only', className: 'custom-class'} ];;
+    
     
     /* STATES AND EFFECTS */
     const [stateData, setStateData] = useState<ArcSeriesPoint[]>([]);
     const [legendItems, setLegendItems] = useState<any[]>([]);
 
+    const [hovColor, sethovColor] = useState<any>('white');
     //init
     useEffect( () => {
        
@@ -70,6 +68,15 @@ function DataGraph(props: DataGraphProps) {
         //console.log("running");
     }, [props.data])
 
+    //Functions
+    const styleChartData = (data: ArcSeriesPoint, event: React.MouseEvent, style: boolean = true) => {
+        let animData: ArcSeriesPoint[] = [];
+
+        
+        console.log("running");
+    }
+    
+
     return (
         
 
@@ -83,14 +90,29 @@ function DataGraph(props: DataGraphProps) {
                 yDomain={[-.78, 1]}
                 width={gWIDTH}
                 height={gHEIGHT}
-                strokeType={'literal'}>
+                strokeType={'literal'}
+                >
 
                 <ArcSeries
                 center={{x: 0, y: 0}}
-                //data={myData}
-                data={stateData}
-                //data={graphData}
-                colorType={'literal'}/>
+                data={stateData.map( (value) => {
+                    return {...value, style: (value.color == hovColor) ? ANIM_CHART_STYLE : DEF_CHART_STYLE}
+                })}
+                colorType={'literal'}
+                onValueMouseOver={(value) => {
+                    let newData: any[] = [];
+                    let hov = value;
+                    stateData.forEach( (val) => {
+                        if(val.color != value.color) {
+                            newData.push({...val, stlye: DEF_CHART_STYLE} );
+                        } else hov = val;
+                    });
+                    newData.push({...hov, style: ANIM_CHART_STYLE} );
+                    setStateData(newData);
+                    sethovColor(value.color);
+                }}
+                onValueMouseOut={ () => sethovColor('none') }
+                />
                 </XYPlot>
             </div>
 
@@ -117,6 +139,7 @@ function DataGraph(props: DataGraphProps) {
 }
 //END DATAGRAPH MODULE
 
+/* Calc Data functions */
 function genGraphData(data: DataTuple[], 
     exclusions: Function = (value: any) => {return true;}, limit: number = data.length ) {
 
@@ -145,35 +168,33 @@ function genGraphData(data: DataTuple[],
         data.push( {data: sumOther, label: "Other"})
     }
 
-    /*
-    data.forEach( (value) => {
-        console.log("New LAB: " + value.label + " : " + value.data);
-    })
-    */
-
     //Normalize data
     let sum: number = 0;
     data.forEach( (tuple : DataTuple) => sum += tuple.data as number);
+    const PAD_ANGLE = 0.04 //0-1, a percent each arc is padded between next
 
-    const colors = consts.colorPicker( Math.random() * consts.PASTEL_PALETE.length, data.length);
-    console.log("Colors: " + JSON.stringify(colors));
+    const colors = consts.colorPicker( Math.random() * consts.PASTEL_PALETE.length, data.length+1);
     let graphData: ArcSeriesPoint[] = [];
     let lastAngle = 0;
     let colIndex = 0;
+    const NORM = (2 * PI / sum );
+    const SIG_FIGS = 10000
 
-    data.map((tuple) => {
+    data.map((tuple) => 
+        {
             let start = lastAngle;
-            let end = (start - (tuple.data as number * 2 * PI / sum));  //normalize val to 1
-            graphData.push({angle0: start, angle: end, 
+            let end = Math.round( (start - (tuple.data as number * NORM) ) * SIG_FIGS) / SIG_FIGS;  //normalize val to 1
+            graphData.push({
+                angle0: start,
+                angle: end, 
                 radius0: RAD_START, 
                 radius: RAD, 
                 label: tuple.label, 
-                color: colors[colIndex++],
-                stroke: STROKE_COL, 
-                style: {strokeWidth: STROKE_WIDTH}});
-            lastAngle = end;
-    } );
+                color: colors[colIndex++]});
 
+            lastAngle = end;
+        }
+    );
         return graphData;
 }
 
@@ -187,15 +208,12 @@ function calcLegendData(data: ArcSeriesPoint[]) {
     return arr;
 }
 
-/*
-<RadialChart
-            animation
-            data={graphData}
-            width={gWIDTH}
-            height={gHEIGHT}
-            showLabels={false}
-            colorType='literal'
-            />
-*/
+/* Styling Functions */
+
+//Style chart on value hovered
+
+//Style legend on value hovered
+
+//style table?
 
 export default DataGraph;
