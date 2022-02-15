@@ -1,0 +1,368 @@
+diff --git a/node_modules/react-vis/dist/legends/discrete-color-legend-item.js b/node_modules/react-vis/dist/legends/discrete-color-legend-item.js
+index 4b12b44..bc3f007 100644
+--- a/node_modules/react-vis/dist/legends/discrete-color-legend-item.js
++++ b/node_modules/react-vis/dist/legends/discrete-color-legend-item.js
+@@ -1,10 +1,4 @@
+-'use strict';
+-
+-Object.defineProperty(exports, "__esModule", {
+-  value: true
+-});
+-
+-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; // Copyright (c) 2016 - 2017 Uber Technologies, Inc.
++// Copyright (c) 2016 - 2017 Uber Technologies, Inc.
+ //
+ // Permission is hereby granted, free of charge, to any person obtaining a copy
+ // of this software and associated documentation files (the "Software"), to deal
+@@ -24,75 +18,66 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
+ // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ // THE SOFTWARE.
+ 
+-var _react = require('react');
+-
+-var _react2 = _interopRequireDefault(_react);
++import React from 'react';
+ 
+-var _propTypes = require('prop-types');
++import PropTypes from 'prop-types';
+ 
+-var _propTypes2 = _interopRequireDefault(_propTypes);
+-
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+-
+-var STROKE_STYLES = {
++const STROKE_STYLES = {
+   dashed: '6, 2',
+   solid: null
+ };
+ 
+-function DiscreteColorLegendItem(_ref) {
+-  var color = _ref.color,
+-      strokeDasharray = _ref.strokeDasharray,
+-      strokeStyle = _ref.strokeStyle,
+-      strokeWidth = _ref.strokeWidth,
+-      disabled = _ref.disabled,
+-      onClick = _ref.onClick,
+-      orientation = _ref.orientation,
+-      onMouseEnter = _ref.onMouseEnter,
+-      onMouseLeave = _ref.onMouseLeave,
+-      title = _ref.title;
+-
+-  var className = 'rv-discrete-color-legend-item ' + orientation;
++function DiscreteColorLegendItem({
++  color,
++  strokeDasharray,
++  strokeStyle,
++  strokeWidth,
++  disabled,
++  onClick,
++  orientation,
++  onMouseEnter,
++  onMouseLeave,
++  title,
++  innerStyle
++}) {
++  let className = `rv-discrete-color-legend-item ${orientation}`;
+   if (disabled) {
+     className += ' disabled';
+   }
+   if (onClick) {
+     className += ' clickable';
+   }
+-  var strokeDasharrayStyle = STROKE_STYLES[strokeStyle] || strokeDasharray;
+-  return _react2.default.createElement(
+-    'div',
+-    { className: className, onClick: onClick, onMouseEnter: onMouseEnter, onMouseLeave: onMouseLeave },
+-    _react2.default.createElement(
+-      'svg',
+-      { className: 'rv-discrete-color-legend-item__color', height: 2, width: 14 },
+-      _react2.default.createElement('path', {
+-        className: 'rv-discrete-color-legend-item__color__path',
+-        d: 'M 0, 1 L 14, 1',
+-        style: _extends({}, strokeWidth ? { strokeWidth: strokeWidth } : {}, strokeDasharrayStyle ? { strokeDasharray: strokeDasharrayStyle } : {}, {
+-          stroke: disabled ? null : color
+-        })
++  const strokeDasharrayStyle = STROKE_STYLES[strokeStyle] || strokeDasharray;
++  return (
++    <div {...{className, onClick, onMouseEnter, onMouseLeave}}>
++      <svg className="rv-discrete-color-legend-item__color" height={2} width={14}>
++        <path
++          className="rv-discrete-color-legend-item__color__path"
++          d="M 0, 1 L 14, 1"
++          style={{
++            ...(strokeWidth ? {strokeWidth} : {}),
++            ...(strokeDasharrayStyle ? {strokeDasharray: strokeDasharrayStyle} : {}),
++            stroke: disabled ? null : color
++          }}
+ 
+-      })
+-    ),
+-    _react2.default.createElement(
+-      'span',
+-      { className: 'rv-discrete-color-legend-item__title' },
+-      title
+-    )
++        />
++      </svg>
++      <span className="rv-discrete-color-legend-item__title" style={innerStyle}>{title}</span>
++    </div>
+   );
+ }
+ 
+ DiscreteColorLegendItem.propTypes = {
+-  color: _propTypes2.default.string.isRequired,
+-  disabled: _propTypes2.default.bool,
+-  title: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.element]).isRequired,
+-  onClick: _propTypes2.default.func,
+-  onMouseEnter: _propTypes2.default.func,
+-  onMouseLeave: _propTypes2.default.func,
+-  orientation: _propTypes2.default.oneOf(['vertical', 'horizontal']).isRequired,
+-  strokeDasharray: _propTypes2.default.string,
+-  strokeWidth: _propTypes2.default.number,
+-  strokeStyle: _propTypes2.default.oneOf(Object.keys(STROKE_STYLES))
++  color: PropTypes.string.isRequired,
++  disabled: PropTypes.bool,
++  title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
++  onClick: PropTypes.func,
++  onMouseEnter: PropTypes.func,
++  onMouseLeave: PropTypes.func,
++  orientation: PropTypes.oneOf(['vertical', 'horizontal']).isRequired,
++  strokeDasharray: PropTypes.string,
++  strokeWidth: PropTypes.number,
++  strokeStyle: PropTypes.oneOf(Object.keys(STROKE_STYLES))
+ };
+ DiscreteColorLegendItem.defaultProps = {
+   disabled: false,
+@@ -100,4 +85,4 @@ DiscreteColorLegendItem.defaultProps = {
+ };
+ DiscreteColorLegendItem.displayName = 'DiscreteColorLegendItem';
+ 
+-exports.default = DiscreteColorLegendItem;
+\ No newline at end of file
++export default DiscreteColorLegendItem;
+\ No newline at end of file
+diff --git a/node_modules/react-vis/dist/legends/discrete-color-legend.js b/node_modules/react-vis/dist/legends/discrete-color-legend.js
+index 3051ae1..f25a7f7 100644
+--- a/node_modules/react-vis/dist/legends/discrete-color-legend.js
++++ b/node_modules/react-vis/dist/legends/discrete-color-legend.js
+@@ -1,10 +1,6 @@
+-'use strict';
++var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+ 
+-Object.defineProperty(exports, "__esModule", {
+-  value: true
+-});
+-
+-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; // Copyright (c) 2016 - 2017 Uber Technologies, Inc.
++// Copyright (c) 2016 - 2017 Uber Technologies, Inc.
+ //
+ // Permission is hereby granted, free of charge, to any person obtaining a copy
+ // of this software and associated documentation files (the "Software"), to deal
+@@ -24,21 +20,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
+ // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ // THE SOFTWARE.
+ 
+-var _react = require('react');
+-
+-var _react2 = _interopRequireDefault(_react);
+-
+-var _propTypes = require('prop-types');
+-
+-var _propTypes2 = _interopRequireDefault(_propTypes);
+-
+-var _discreteColorLegendItem = require('./discrete-color-legend-item');
+-
+-var _discreteColorLegendItem2 = _interopRequireDefault(_discreteColorLegendItem);
++import React from 'react';
+ 
+-var _theme = require('../theme');
++import PropTypes from 'prop-types';
+ 
+-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
++import DiscreteColorLegendItem from './discrete-color-legend-item';
++import { DISCRETE_COLOR_RANGE } from '../theme';
+ 
+ function DiscreteColorLegend(_ref) {
+   var className = _ref.className,
+@@ -52,14 +39,14 @@ function DiscreteColorLegend(_ref) {
+       style = _ref.style,
+       width = _ref.width;
+ 
+-  return _react2.default.createElement(
++  return React.createElement(
+     'div',
+     {
+       className: 'rv-discrete-color-legend ' + orientation + ' ' + className,
+       style: _extends({ width: width, height: height }, style)
+     },
+     items.map(function (item, i) {
+-      return _react2.default.createElement(_discreteColorLegendItem2.default, {
++      return React.createElement(DiscreteColorLegendItem, {
+         title: item.title ? item.title : item,
+         color: item.color ? item.color : colors[i % colors.length],
+         strokeDasharray: item.strokeDasharray,
+@@ -68,6 +55,7 @@ function DiscreteColorLegend(_ref) {
+         disabled: Boolean(item.disabled),
+         orientation: orientation,
+         key: i,
++        innerStyle: item.innerStyle,
+         onClick: onItemClick ? function (e) {
+           return onItemClick(item, i, e);
+         } : null,
+@@ -84,24 +72,25 @@ function DiscreteColorLegend(_ref) {
+ 
+ DiscreteColorLegend.displayName = 'DiscreteColorLegendItem';
+ DiscreteColorLegend.propTypes = {
+-  className: _propTypes2.default.string,
+-  items: _propTypes2.default.arrayOf(_propTypes2.default.oneOfType([_propTypes2.default.shape({
+-    title: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.element]).isRequired,
+-    color: _propTypes2.default.string,
+-    disabled: _propTypes2.default.bool
+-  }), _propTypes2.default.string.isRequired, _propTypes2.default.element])).isRequired,
+-  onItemClick: _propTypes2.default.func,
+-  onItemMouseEnter: _propTypes2.default.func,
+-  onItemMouseLeave: _propTypes2.default.func,
+-  height: _propTypes2.default.number,
+-  width: _propTypes2.default.number,
+-  orientation: _propTypes2.default.oneOf(['vertical', 'horizontal'])
++  className: PropTypes.string,
++  items: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.shape({
++    title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
++    color: PropTypes.string,
++    disabled: PropTypes.bool
++  }), PropTypes.string.isRequired, PropTypes.element])).isRequired,
++  onItemClick: PropTypes.func,
++  onItemMouseEnter: PropTypes.func,
++  onItemMouseLeave: PropTypes.func,
++  height: PropTypes.number,
++  width: PropTypes.number,
++  orientation: PropTypes.oneOf(['vertical', 'horizontal']),
++  innerStyle: PropTypes.any
+ };
+ 
+ DiscreteColorLegend.defaultProps = {
+   className: '',
+-  colors: _theme.DISCRETE_COLOR_RANGE,
++  colors: DISCRETE_COLOR_RANGE,
+   orientation: 'vertical'
+ };
+ 
+-exports.default = DiscreteColorLegend;
+\ No newline at end of file
++export default DiscreteColorLegend;
+\ No newline at end of file
+diff --git a/node_modules/react-vis/es/legends/discrete-color-legend-item.js b/node_modules/react-vis/es/legends/discrete-color-legend-item.js
+index 87f33a4..bc3f007 100644
+--- a/node_modules/react-vis/es/legends/discrete-color-legend-item.js
++++ b/node_modules/react-vis/es/legends/discrete-color-legend-item.js
+@@ -1,5 +1,3 @@
+-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+-
+ // Copyright (c) 2016 - 2017 Uber Technologies, Inc.
+ //
+ // Permission is hereby granted, free of charge, to any person obtaining a copy
+@@ -24,51 +22,48 @@ import React from 'react';
+ 
+ import PropTypes from 'prop-types';
+ 
+-var STROKE_STYLES = {
++const STROKE_STYLES = {
+   dashed: '6, 2',
+   solid: null
+ };
+ 
+-function DiscreteColorLegendItem(_ref) {
+-  var color = _ref.color,
+-      strokeDasharray = _ref.strokeDasharray,
+-      strokeStyle = _ref.strokeStyle,
+-      strokeWidth = _ref.strokeWidth,
+-      disabled = _ref.disabled,
+-      onClick = _ref.onClick,
+-      orientation = _ref.orientation,
+-      onMouseEnter = _ref.onMouseEnter,
+-      onMouseLeave = _ref.onMouseLeave,
+-      title = _ref.title;
+-
+-  var className = 'rv-discrete-color-legend-item ' + orientation;
++function DiscreteColorLegendItem({
++  color,
++  strokeDasharray,
++  strokeStyle,
++  strokeWidth,
++  disabled,
++  onClick,
++  orientation,
++  onMouseEnter,
++  onMouseLeave,
++  title,
++  innerStyle
++}) {
++  let className = `rv-discrete-color-legend-item ${orientation}`;
+   if (disabled) {
+     className += ' disabled';
+   }
+   if (onClick) {
+     className += ' clickable';
+   }
+-  var strokeDasharrayStyle = STROKE_STYLES[strokeStyle] || strokeDasharray;
+-  return React.createElement(
+-    'div',
+-    { className: className, onClick: onClick, onMouseEnter: onMouseEnter, onMouseLeave: onMouseLeave },
+-    React.createElement(
+-      'svg',
+-      { className: 'rv-discrete-color-legend-item__color', height: 2, width: 14 },
+-      React.createElement('path', {
+-        className: 'rv-discrete-color-legend-item__color__path',
+-        d: 'M 0, 1 L 14, 1',
+-        style: _extends({}, strokeWidth ? { strokeWidth: strokeWidth } : {}, strokeDasharrayStyle ? { strokeDasharray: strokeDasharrayStyle } : {}, {
+-          stroke: disabled ? null : color
+-        })
++  const strokeDasharrayStyle = STROKE_STYLES[strokeStyle] || strokeDasharray;
++  return (
++    <div {...{className, onClick, onMouseEnter, onMouseLeave}}>
++      <svg className="rv-discrete-color-legend-item__color" height={2} width={14}>
++        <path
++          className="rv-discrete-color-legend-item__color__path"
++          d="M 0, 1 L 14, 1"
++          style={{
++            ...(strokeWidth ? {strokeWidth} : {}),
++            ...(strokeDasharrayStyle ? {strokeDasharray: strokeDasharrayStyle} : {}),
++            stroke: disabled ? null : color
++          }}
+ 
+-      })
+-    ),
+-    React.createElement(
+-      'span',
+-      { className: 'rv-discrete-color-legend-item__title' },
+-      title
+-    )
++        />
++      </svg>
++      <span className="rv-discrete-color-legend-item__title" style={innerStyle}>{title}</span>
++    </div>
+   );
+ }
+ 
+diff --git a/node_modules/react-vis/es/legends/discrete-color-legend.js b/node_modules/react-vis/es/legends/discrete-color-legend.js
+index 283bc06..f25a7f7 100644
+--- a/node_modules/react-vis/es/legends/discrete-color-legend.js
++++ b/node_modules/react-vis/es/legends/discrete-color-legend.js
+@@ -55,6 +55,7 @@ function DiscreteColorLegend(_ref) {
+         disabled: Boolean(item.disabled),
+         orientation: orientation,
+         key: i,
++        innerStyle: item.innerStyle,
+         onClick: onItemClick ? function (e) {
+           return onItemClick(item, i, e);
+         } : null,
+@@ -82,7 +83,8 @@ DiscreteColorLegend.propTypes = {
+   onItemMouseLeave: PropTypes.func,
+   height: PropTypes.number,
+   width: PropTypes.number,
+-  orientation: PropTypes.oneOf(['vertical', 'horizontal'])
++  orientation: PropTypes.oneOf(['vertical', 'horizontal']),
++  innerStyle: PropTypes.any
+ };
+ 
+ DiscreteColorLegend.defaultProps = {

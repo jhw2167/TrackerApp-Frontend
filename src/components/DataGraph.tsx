@@ -1,5 +1,8 @@
 import { CpuInfo } from "os";
 
+//React imports
+import React, { useDebugValue, useEffect, useState } from "react";
+
 //Project imports
 import { XYPlot, ArcSeries, ArcSeriesPoint, 
     DiscreteColorLegend, DiscreteColorLegendProps } from "react-vis";
@@ -11,8 +14,9 @@ import {DataTuple, Transaction} from '../resources/constants';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../node_modules/react-vis/dist/style.css';
 import '../css/components/DataGraph.css'
-import React, { useDebugValue, useEffect, useState } from "react";
-import { stringify } from "querystring";
+
+//React CSS
+import * as CSS from 'csstype';
 
 //Define interface for props type
 interface DataGraphProps {
@@ -45,6 +49,17 @@ const l_STROKE_WIDTH = 12;
 const l_STROKE_STYLE = 'solid';
 const PER_LEGEND = 4;
 
+const DEF_LEG_STYLE: CSS.Properties = {
+    ['fontSize' as any]: 12,
+    ['fontWeight' as any]: 200,
+};
+
+const ANIM_LEG_STYLE: CSS.Properties = {
+    ['fontSize' as any]: 15,
+    ['fontWeight' as any]: 900,
+};
+
+
 function DataGraph(props: DataGraphProps) {
     
     
@@ -52,7 +67,7 @@ function DataGraph(props: DataGraphProps) {
     const [stateData, setStateData] = useState<ArcSeriesPoint[]>([]);
     const [legendItems, setLegendItems] = useState<any[]>([]);
 
-    const [hovColor, sethovColor] = useState<any>('white');
+    const [hovColor, sethovColor] = useState<any>('none');
     //init
     useEffect( () => {
        
@@ -68,14 +83,21 @@ function DataGraph(props: DataGraphProps) {
         //console.log("running");
     }, [props.data])
 
-    //Functions
-    const styleChartData = (data: ArcSeriesPoint, event: React.MouseEvent, style: boolean = true) => {
-        let animData: ArcSeriesPoint[] = [];
 
-        
-        console.log("running");
+     let sethovValue = (color: string): void => {
+        let newData: any[] = [];
+        let hov = null;
+        stateData.forEach( (val) => {
+            if(val.color !== color) {
+                newData.push({...val, stlye: DEF_CHART_STYLE} );
+            } else hov = val;
+        });
+        if(hov) {
+            newData.push({...hov as ArcSeriesPoint, style: ANIM_CHART_STYLE} );
+            setStateData(newData);
+        }
+        sethovColor(color);
     }
-    
 
     return (
         
@@ -96,21 +118,10 @@ function DataGraph(props: DataGraphProps) {
                 <ArcSeries
                 center={{x: 0, y: 0}}
                 data={stateData.map( (value) => {
-                    return {...value, style: (value.color == hovColor) ? ANIM_CHART_STYLE : DEF_CHART_STYLE}
+                    return {...value, style: (value.color === hovColor) ? ANIM_CHART_STYLE : DEF_CHART_STYLE}
                 })}
                 colorType={'literal'}
-                onValueMouseOver={(value) => {
-                    let newData: any[] = [];
-                    let hov = value;
-                    stateData.forEach( (val) => {
-                        if(val.color != value.color) {
-                            newData.push({...val, stlye: DEF_CHART_STYLE} );
-                        } else hov = val;
-                    });
-                    newData.push({...hov, style: ANIM_CHART_STYLE} );
-                    setStateData(newData);
-                    sethovColor(value.color);
-                }}
+                onValueMouseOver={(value) => {sethovValue(value.color as string)}}
                 onValueMouseOut={ () => sethovColor('none') }
                 />
                 </XYPlot>
@@ -120,20 +131,24 @@ function DataGraph(props: DataGraphProps) {
 
             <DiscreteColorLegend orientation="horizontal" 
             width={gWIDTH}
-            items={legendItems.slice(0, PER_LEGEND)} >
+            items={legendItems.slice(0, PER_LEGEND).map((value) => {
+                return {...value, innerStyle: (value.color === hovColor) ? ANIM_LEG_STYLE : DEF_LEG_STYLE}
+            })} >
                 </DiscreteColorLegend>
 
             {/* lower row */}
                 <DiscreteColorLegend orientation="horizontal" 
-            width={gWIDTH}
-            items={legendItems.slice(PER_LEGEND, MAX_DATA_DISPLAY)} >
-                </DiscreteColorLegend>
+                width={gWIDTH}
+                items={legendItems.slice(PER_LEGEND, MAX_DATA_DISPLAY).map( (value) => {
+                    return {...value, innerStyle: (value.color === hovColor) ? ANIM_LEG_STYLE : DEF_LEG_STYLE}
+                    })}
+                 />
     
             </div>
            
         </div>
         //end data graph wrapper
-
+                    
     )
 
 }
@@ -205,6 +220,9 @@ function calcLegendData(data: ArcSeriesPoint[]) {
         arr.push({title: value.label, color: value.color,
         strokeWidth: l_STROKE_WIDTH, strokeStyle: l_STROKE_STYLE})
     })
+
+    //Partition into balanced groups... future problem
+
     return arr;
 }
 

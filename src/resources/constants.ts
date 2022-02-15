@@ -66,25 +66,31 @@ export const PASTEL_PALETE = [
   export const colorPicker = function(start: number, total: number): string[]  {
         let picked = new Set<string>();
         let index = start;
-        const ERR_COLOR = '1D1C1A';
+        const ERR_COLOR = '#1D1C1A';
         for (let i = 0; i < total; i++) {
             if(index >= PASTEL_PALETE.length) {
-                index = ++start;
+                index %= PASTEL_PALETE.length;
             }
-            //console.log("L: %d, Index: %d, val: " + PASTEL_PALETE[index], PASTEL_PALETE.length, index);
-            if(!picked.has(PASTEL_PALETE[index])) {
-                picked.add(PASTEL_PALETE.at(index) || ERR_COLOR);
-            } else if(total > PASTEL_PALETE.length) {
-                picked.add(PASTEL_PALETE.at(index) || ERR_COLOR);
-            } else {
-                i--;
+            //console.log("L: %d, Index: %d, val: %s", PASTEL_PALETE.length, index, PASTEL_PALETE.at(index));
+
+            let nextCol = PASTEL_PALETE.at(index);
+            if(nextCol) {
+                if(!picked.has(nextCol)) {
+                    picked.add(nextCol);
+                } else if(total > PASTEL_PALETE.length) {
+                    picked.add(nextCol);
+                } else {
+                    i--;
+                }
             }
             
-            index+= ((Math.random() * 3) + 3);
+            
+            index += ((Math.random() * 3) + 3);
         }
 
         let res: string[] = [];
         picked.forEach( (value) => {
+        //console.log("------- Col: " + value);
         res.push(value);
     })
 
