@@ -5,7 +5,8 @@ import React, { useDebugValue, useEffect, useState } from "react";
 
 //Project imports
 import { XYPlot, ArcSeries, ArcSeriesPoint, 
-    DiscreteColorLegend, DiscreteColorLegendProps } from "react-vis";
+    DiscreteColorLegend, DiscreteColorLegendProps,
+     Hint } from "react-vis";
 //import DiscreteColorLegend from 'legends/discrete-color-legend';
 import * as consts from '../resources/constants';
 import {DataTuple, Transaction} from '../resources/constants';
@@ -17,6 +18,7 @@ import '../css/components/DataGraph.css'
 
 //React CSS
 import * as CSS from 'csstype';
+import { validateLocaleAndSetLanguage } from "typescript";
 
 //Define interface for props type
 interface DataGraphProps {
@@ -24,6 +26,12 @@ interface DataGraphProps {
     exclusions?: Function;
     limit?: number;
     title: string;
+}
+
+interface FullArcSeriesPoint extends ArcSeriesPoint {
+    value: any,
+    label: string,
+    pct: number;
 }
 
 /* CONSTANTS */ 
@@ -64,10 +72,11 @@ function DataGraph(props: DataGraphProps) {
     
     
     /* STATES AND EFFECTS */
-    const [stateData, setStateData] = useState<ArcSeriesPoint[]>([]);
+    const [stateData, setStateData] = useState<FullArcSeriesPoint[]>([]);
     const [legendItems, setLegendItems] = useState<any[]>([]);
 
     const [hovColor, sethovColor] = useState<any>('none');
+    const [hovValue, sethovValue] = useState<any>();
     //init
     useEffect( () => {
        
@@ -84,7 +93,8 @@ function DataGraph(props: DataGraphProps) {
     }, [props.data])
 
 
-     let sethovValue = (color: string): void => {
+    //places hovered value at back of array so its drawn last
+     let setHovValueByColor = (color: string): void => {
         let newData: any[] = [];
         let hov = null;
         stateData.forEach( (val) => {
@@ -95,10 +105,14 @@ function DataGraph(props: DataGraphProps) {
         if(hov) {
             newData.push({...hov as ArcSeriesPoint, style: ANIM_CHART_STYLE} );
             setStateData(newData);
+            sethovValue(hov);
+        } else {
+            sethovValue(undefined);
         }
         sethovColor(color);
     }
 
+    //getHovValue simply returns value at end of array
     return (
         
 
@@ -121,11 +135,31 @@ function DataGraph(props: DataGraphProps) {
                     return {...value, style: (value.color === hovColor) ? ANIM_CHART_STYLE : DEF_CHART_STYLE}
                 })}
                 colorType={'literal'}
-                onValueMouseOver={(value) => {sethovValue(value.color as string)}}
-                onValueMouseOut={ () => sethovColor('none') }
+                onValueMouseOver={(value) => {setHovValueByColor(value.color as string)}}
+                onValueMouseOut={ () => setHovValueByColor('none') }
                 />
+
+            {/* ######## TOOLTIP ########  */ }
+            {/* ######## TOOLTIP ########  */ }
+            {/* ######## TOOLTIP ########  */ }
+
+                {hovValue ? (
+                <Hint value={buildValue(hovValue)}>
+                    <div className="data-graph-tooltip">
+                        <p className="sublabel-title">{hovValue.label}</p>
+                        <p>{"$" + (hovValue.value as number).toFixed(2) +
+                         ",  " + (hovValue.pct*100).toFixed(1) + "%"}</p>
+                    </div>
+                </Hint> ) 
+                    : null}
+
                 </XYPlot>
             </div>
+
+            {/* ######## LEGEND ########  */ }
+            {/* ######## LEGEND ########  */ }
+            {/* ######## LEGEND ########  */ }
+
 
             <div className="data-graph-legend">
 
@@ -142,6 +176,7 @@ function DataGraph(props: DataGraphProps) {
                 items={legendItems.slice(PER_LEGEND, MAX_DATA_DISPLAY).map( (value) => {
                     return {...value, innerStyle: (value.color === hovColor) ? ANIM_LEG_STYLE : DEF_LEG_STYLE}
                     })}
+
                  />
     
             </div>
@@ -189,7 +224,7 @@ function genGraphData(data: DataTuple[],
     const PAD_ANGLE = 0.04 //0-1, a percent each arc is padded between next
 
     const colors = consts.colorPicker( Math.random() * consts.PASTEL_PALETE.length, data.length+1);
-    let graphData: ArcSeriesPoint[] = [];
+    let graphData: FullArcSeriesPoint[] = [];
     let lastAngle = 0;
     let colIndex = 0;
     const NORM = (2 * PI / sum );
@@ -204,9 +239,12 @@ function genGraphData(data: DataTuple[],
                 angle: end, 
                 radius0: RAD_START, 
                 radius: RAD, 
+                color: colors[colIndex++],
+                //Extended values
+                value: tuple.data as number,
                 label: tuple.label, 
-                color: colors[colIndex++]});
-
+                pct: Math.round(( tuple.data as number / sum) * 1000) / 1000
+                });
             lastAngle = end;
         }
     );
@@ -227,6 +265,24 @@ function calcLegendData(data: ArcSeriesPoint[]) {
 }
 
 /* Styling Functions */
+
+
+function buildValue(hoveredCell: ArcSeriesPoint | undefined) {
+    const {radius, angle, angle0} = hoveredCell ? hoveredCell : 
+    {radius: 0, angle: 0, angle0: 0};
+    const truedAngle = (angle - angle0) / 2;
+
+     return {
+       x: 1.20,
+       y: 1.05
+     };
+
+    // return {
+    //   x: radius * Math.cos(truedAngle),
+    //   y: radius * Math.sin(truedAngle)
+    // };
+  }
+
 
 //Style chart on value hovered
 
