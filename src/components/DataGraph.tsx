@@ -132,7 +132,7 @@ function DataGraph(props: DataGraphProps) {
                 <ArcSeries
                 center={{x: 0, y: 0}}
                 data={stateData.map( (value) => {
-                    return {...value, style: (value.color === hovColor) ? ANIM_CHART_STYLE : DEF_CHART_STYLE}
+                    return {...value, style: (value.color === hovColor) ? ANIM_CHART_STYLE : DEF_CHART_STYLE} as ArcSeriesPoint
                 })}
                 colorType={'literal'}
                 onValueMouseOver={(value) => {setHovValueByColor(value.color as string)}}
@@ -221,22 +221,21 @@ function genGraphData(data: DataTuple[],
     //Normalize data
     let sum: number = 0;
     data.forEach( (tuple : DataTuple) => sum += tuple.data as number);
-    const PAD_ANGLE = 0.04 //0-1, a percent each arc is padded between next
 
     const colors = consts.colorPicker( Math.random() * consts.PASTEL_PALETE.length, data.length+1);
     let graphData: FullArcSeriesPoint[] = [];
     let lastAngle = 0;
     let colIndex = 0;
-    const NORM = (2 * PI / sum );
-    const SIG_FIGS = 10000
+    const NORM: number = (2 * PI / sum );
+    const SIG_FIGS: number = 1000;
 
     data.map((tuple) => 
         {
-            let start = lastAngle;
-            let end = Math.round( (start - (tuple.data as number * NORM) ) * SIG_FIGS) / SIG_FIGS;  //normalize val to 1
+            let start: number = lastAngle;
+            let end: number = Math.round( (start - (tuple.data as number * NORM) ) * SIG_FIGS) / SIG_FIGS;  //normalize val to 1
             graphData.push({
-                angle0: start,
-                angle: end, 
+                angle0: start as number,
+                angle: end as number, 
                 radius0: RAD_START, 
                 radius: RAD, 
                 color: colors[colIndex++],

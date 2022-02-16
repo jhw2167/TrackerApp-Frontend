@@ -55,7 +55,7 @@ function Overview(props: OverviewProps) {
     //OnLanding
     useEffect( () => {
         const [start, end] = consts.convMnYrToTimeFrame(props.mn, props.yr);
-        console.log(api.SERVER_ALL_TRANSACTIONS_DATES(start, end));
+        //console.log(api.SERVER_ALL_TRANSACTIONS_DATES(start, end));
         api.getRequest(api.SERVER_ALL_TRANSACTIONS_DATES(start, end), setTransactions);
         api.getRequest(api.SERVER_ALL_CATEGORIES, setCategories);
     }, []);
