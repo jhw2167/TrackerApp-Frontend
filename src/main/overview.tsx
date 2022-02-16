@@ -50,7 +50,10 @@ function Overview() {
 
     //OnLanding
     useEffect( () => {
-        api.getRequest(api.SERVER_ALL_TRANSACTIONS, setTransactions);
+        //api.getRequest(api.SERVER_ALL_TRANSACTIONS, setTransactions);
+        const start = '2021-09-19';
+        const end = '2021-09-26';
+        api.getRequest(api.SERVER_ALL_TRANSACTIONS_DATES(start, end), setTransactions);
         api.getRequest(api.SERVER_ALL_CATEGORIES, setCategories);
     }, []);
 

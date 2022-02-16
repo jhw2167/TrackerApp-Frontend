@@ -28,8 +28,7 @@
 .data-graph-legend{
     align-items: center;
     margin: auto;
-    margin-top: -6%;
-    padding: 2%;
+    margin-top: -4%;
     /*border: 1px solid black;
     border-radius: 20px;*/
 }
@@ -46,10 +45,6 @@
     border-collapse: separate;
 }
 
-#data-graph-legend-list > tr{
-    text-align: left;
-}
-
 /* Overriding CSS Legend items */
 
 /* Box holds a few legend items */
@@ -61,6 +56,7 @@
 /* Box holds a few legend items */
 .rv-discrete-color-legend-item {
     text-align: center;
+    padding: 6px 8px ;
 }
 
 .rv-discrete-color-legend-item::after{

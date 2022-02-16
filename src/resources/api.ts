@@ -11,6 +11,14 @@ export const PORT = ":8080/";
 export const SERVER_ALL_TRANSACTIONS = DOMAIN + PORT + "transactions";
 export const SERVER_ALL_CATEGORIES = SERVER_ALL_TRANSACTIONS + "/categories";
 
+/*Utility functions */
+
+    //Build request with dates
+    export function SERVER_ALL_TRANSACTIONS_DATES(from: string, to: string): string {
+        return SERVER_ALL_TRANSACTIONS + "/dates" 
+        + "?start=" + from +
+        "&to=" + to;
+    }
 
 /* REQUESTS */
 
