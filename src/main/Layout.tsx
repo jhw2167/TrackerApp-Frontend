@@ -1,15 +1,21 @@
 import React from "react";
-import { Route, Routes} from "react-router-dom";
+import { Route, Routes, Navigate, useSearchParams} from "react-router-dom";
 import Overview from './overview';
 
 function Layout() {
+
+  //Give me some search params to pass
+  let [searchParams, setSearchParams] = useSearchParams();
+
+  console.log("SP: %s %s ", searchParams.get("mn"), searchParams.get("yr") );
     return (
         <Routes>
-          
-          <Route path="/" element={<Overview />} />
-          <Route path="overview" element={<Overview />} >
+          <Route path="/overview" element={<Overview 
+            mn={searchParams.get("mn")} 
+            yr={searchParams.get("yr")} />} />
+          <Route path="*" element={<Navigate to="/overview" />} />
+
            {/*  <Route path="summary" element={Overview} /> */}
-          </Route>
         </Routes>
           
     );

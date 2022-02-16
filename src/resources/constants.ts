@@ -17,86 +17,105 @@ export const TRANS_DATA_POSTDATE = "postedDate";
 export const TRANS_DATA_NOTES = "notes";
 
 /* COLORS */
-export const PASTEL_PALETE = [
-    //Blues
-    '#3D426B',
-    '#89CFF0',
-    '#abc4ff',
+    export const PASTEL_PALETE = [
+        //Blues
+        '#3D426B',
+        '#89CFF0',
+        '#abc4ff',
 
-    //Reds
-    '#ffe5ec',
-    '#ffb3c6',
-    '#fb6f92',
+        //Reds
+        '#ffe5ec',
+        '#ffb3c6',
+        '#fb6f92',
 
-    //Greens
-    '#a0e8ce',
-    '#DAF7A6',
-    '#14563e',
+        //Greens
+        '#a0e8ce',
+        '#DAF7A6',
+        '#14563e',
 
-    //Yellow
-    '#ffde89',
-    '#ffca42',
-    '#f9b400',
+        //Yellow
+        '#ffde89',
+        '#ffca42',
+        '#f9b400',
 
-    //Pinks/Purp
-    '#D77FA1',
-    '#FF0048',
-    '#B983FF',
+        //Pinks/Purp
+        '#D77FA1',
+        '#FF0048',
+        '#B983FF',
 
-    //Greens Again 
-    '#C6D57E',
-    '#CDF2CA',
-    '#E7FBBE',
+        //Greens Again 
+        '#C6D57E',
+        '#CDF2CA',
+        '#E7FBBE',
 
-    //Red/Orange
-    '#FF7878',
-    '#F6AE99',
-    '#ff8000',
+        //Red/Orange
+        '#FF7878',
+        '#F6AE99',
+        '#ff8000',
 
-    //Blues again
-    '#99FEFF',
-    '#316B83',
-    '#11324D'
+        //Blues again
+        '#99FEFF',
+        '#316B83',
+        '#11324D'
 
 
-    //Mix 1:  #a7bed3 // #c6e2e9 // #f1ffc4 // #ffcaaf // #dab894
-    //Mix 2:  #70d6ff // #ff70a6 // #ff9770 // #ffd670 // #e9ff70
-  ];
+        //Mix 1:  #a7bed3 // #c6e2e9 // #f1ffc4 // #ffcaaf // #dab894
+        //Mix 2:  #70d6ff // #ff70a6 // #ff9770 // #ffd670 // #e9ff70
+    ];
 
-  export const colorPicker = function(start: number, total: number): string[]  {
-        let picked = new Set<string>();
-        let index = start;
-        const ERR_COLOR = '#1D1C1A';
-        for (let i = 0; i < total; i++) {
-            if(index >= PASTEL_PALETE.length) {
-                index %= PASTEL_PALETE.length;
-            }
-            //console.log("L: %d, Index: %d, val: %s", PASTEL_PALETE.length, index, PASTEL_PALETE.at(index));
-
-            let nextCol = PASTEL_PALETE.at(index);
-            if(nextCol) {
-                if(!picked.has(nextCol)) {
-                    picked.add(nextCol);
-                } else if(total > PASTEL_PALETE.length) {
-                    picked.add(nextCol);
-                } else {
-                    i--;
+  //Color picker
+    export const colorPicker = function(start: number, total: number): string[]  {
+            let picked = new Set<string>();
+            let index = start;
+            const ERR_COLOR = '#1D1C1A';
+            for (let i = 0; i < total; i++) {
+                if(index >= PASTEL_PALETE.length) {
+                    index %= PASTEL_PALETE.length;
                 }
+                //console.log("L: %d, Index: %d, val: %s", PASTEL_PALETE.length, index, PASTEL_PALETE.at(index));
+
+                let nextCol = PASTEL_PALETE.at(index);
+                if(nextCol) {
+                    if(!picked.has(nextCol)) {
+                        picked.add(nextCol);
+                    } else if(total > PASTEL_PALETE.length) {
+                        picked.add(nextCol);
+                    } else {
+                        i--;
+                    }
+                }
+                
+                
+                index += ((Math.random() * 3) + 3);
             }
-            
-            
-            index += ((Math.random() * 3) + 3);
-        }
 
-        let res: string[] = [];
-        picked.forEach( (value) => {
-        //console.log("------- Col: " + value);
-        res.push(value);
-    })
+            let res: string[] = [];
+            picked.forEach( (value) => {
+            //console.log("------- Col: " + value);
+            res.push(value);
+        })
 
-    return res;
-  }
+        return res;
+    }
 
+/* UTILITY */
+const MONTHS= ["January","February","March","April","May","June","July",
+            "August","September","October","November","December"];
+
+    export const convMnYrToTimeFrame = function(mn: string | undefined | null,
+         yr: string | undefined | null, asStrings: boolean = false): [Date, Date] {
+
+        //Get Iso month and year
+        const month: number = mn ? MONTHS.indexOf(mn)+1 : (new Date(Date.now())).getMonth();
+        const year: number = yr ? Number(yr) : (new Date(Date.now())).getFullYear();
+
+        //return dates
+        let start: any = new Date(year + "-" + month + "-01");
+        let end: any = new Date(( (month == 11) ? year+1 : year) + "-"
+         + ((month == 11) ? "1" : month+1) + "-01");
+
+        return [start, end];
+    }
 
 /* Interfaces */
 export interface Transaction {

@@ -19,10 +19,14 @@ import { Config } from '@testing-library/react';
 import DataGraph from '../components/DataGraph';
 
 //import '../css/Landing.css';
+interface OverviewProps {
+    mn?: string | null;
+    yr?: string | null;
+}
 
 ///finances/overview?mn=August&yr=21
 //Guess we'll have to take some params here
-function Overview() {
+function Overview(props: OverviewProps) {
 
     //Constants
     const TOTAL_TRANSACTIONS = 25;
@@ -50,9 +54,8 @@ function Overview() {
 
     //OnLanding
     useEffect( () => {
-        //api.getRequest(api.SERVER_ALL_TRANSACTIONS, setTransactions);
-        const start = '2021-09-19';
-        const end = '2021-09-26';
+        const [start, end] = consts.convMnYrToTimeFrame(props.mn, props.yr);
+        console.log(api.SERVER_ALL_TRANSACTIONS_DATES(start, end));
         api.getRequest(api.SERVER_ALL_TRANSACTIONS_DATES(start, end), setTransactions);
         api.getRequest(api.SERVER_ALL_CATEGORIES, setCategories);
     }, []);
