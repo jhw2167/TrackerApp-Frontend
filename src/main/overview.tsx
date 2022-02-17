@@ -38,10 +38,10 @@ function Overview(props: OverviewProps) {
     ]
 
     const DATA_TABLE_COLS: Array<string> = [
-        consts.TRANS_DATA_PURCHDATE,
-        consts.TRANS_DATA_VEND,
-        consts.TRANS_DATA_AMT,
-        consts.TRANS_DATA_CAT
+        consts.TRANS_DATA.PURCHDATE,
+        consts.TRANS_DATA.VEND,
+        consts.TRANS_DATA.AMT,
+        consts.TRANS_DATA.CAT
     ]
 
     const DATA_GRAPH_EXCLUSIONS = new Set<string>(["Income"]);

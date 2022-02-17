@@ -18,7 +18,6 @@ import '../css/components/DataGraph.css'
 
 //React CSS
 import * as CSS from 'csstype';
-import { validateLocaleAndSetLanguage } from "typescript";
 
 //Define interface for props type
 interface DataGraphProps {

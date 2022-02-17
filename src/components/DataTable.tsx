@@ -1,8 +1,16 @@
 import { CpuInfo } from "os";
 
+//Project imports
+import * as c from '../resources/constants';
+
+//other imports
+import _ from 'underscore';
+
 //CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/components/DataTable.css'
+import * as CSS from 'csstype';
+import { useEffect, useState } from "react";
 
 //Define interface for props type
 interface DataTableProps {
@@ -10,11 +18,32 @@ interface DataTableProps {
     colNames: String[];
     data: Array<any>;
     limit: number;
+    hovCells?: Array<any>;
 }
+
+/* Styles */ 
+const HOV_ROW_STYLE: CSS.Properties = {
+    ["fontWeight" as any]: 600,
+    ["fontSize" as any]: 16,
+    ["border" as any]: 'solid 3px black',
+    ["line-height" as any]: '1.6em'
+};
+
+/* CONSTS */
+const MAX_VEND_LEN = 12;
+
 
 function DataTable(props: DataTableProps) {
 
-    //headers:Array<String>, data:Array<any>, cols:Array<String>
+    /* STATES */
+    const [hovCells, setHovCells] = useState<Set<any>>(new Set());
+    const [deepHovCell, setDeepHovCell] = useState<any>();
+
+    /* EFFECTS */
+    useEffect( () => {
+
+    }
+    , [props.hovCells])
 
     return (
             <table className="transactions-table">
@@ -28,9 +57,57 @@ function DataTable(props: DataTableProps) {
 
                 {/* Now return data columns */}
                 {Object.entries(props.data).slice(0, props.limit).map(([key, value]) => {
-                    return <tr className="data-table-row" key={key}>
+                    let isHov: number = hovCells.has(value) ? 1 : 0;
+                    isHov += _.isEqual(deepHovCell, value) ? 1 : 0; //0-no hov, 1-hov, 2-deep hov
+
+                    let rowStyle = isHov > 0 ? HOV_ROW_STYLE : undefined;
+                    return <tr className="data-table-row" style={rowStyle} key={key}
+                    onMouseEnter={() => {
+                        hovCells.add(value);
+                        setHovCells(hovCells); 
+                        setDeepHovCell(value); }}
+
+                    onMouseLeave={() => {
+                        hovCells.delete(value);
+                        setHovCells(hovCells); 
+                        setDeepHovCell(null);}}
+                     >
                         {Object.entries(props.colNames).map(([dkey, col]) => {
-                            return <td className="data-table-entry" key={dkey}>{value[col.toString()]}</td>
+
+                            let innerStyle: CSS.Properties = {};
+                            let val:string = value[col.toString()];
+                            switch(col.toString()) {
+
+                                case c.TRANS_DATA.PURCHDATE:
+                                    innerStyle = {['fontSize' as any]: 14};
+
+                                    let split = val.split('-'); //[2022, MM, YY]
+                                    val = Number(split[1]) + '/' + Number(split[2]) +
+                                    '/' + ( Number(split[0]) - 2000);
+                                    break;
+
+                                case c.TRANS_DATA.VEND:
+                                    if(val.length > MAX_VEND_LEN ) {
+                                        val = val.slice(0, 12);
+                                        val += '...'
+                                    }
+                                    innerStyle= {['width' as any]: '50%'};
+                                    break;
+
+                                case c.TRANS_DATA.AMT:
+                                    innerStyle= {['textAlign' as any]: 'left',
+                                    ['padding-left' as any]: isHov > 1 ? '5%' : '10%'};
+                                    val = '$' + Number(val).toFixed(2);
+                                    break;
+
+                                case c.TRANS_DATA.CAT:
+                                    break;
+    
+                            }
+
+                            return <td className="data-table-entry"
+                            style={innerStyle}
+                            key={dkey}>{val}</td>
                         })}
                     </tr>
                     })
