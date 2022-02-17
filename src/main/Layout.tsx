@@ -7,12 +7,13 @@ function Layout() {
   //Give me some search params to pass
   let [searchParams, setSearchParams] = useSearchParams();
 
-  console.log("SP: %s %s ", searchParams.get("mn"), searchParams.get("yr") );
+  //console.log("SP: %s %s ", searchParams.get("mn"), searchParams.get("yr") );
     return (
         <Routes>
           <Route path="/overview" element={<Overview 
             mn={searchParams.get("mn")} 
-            yr={searchParams.get("yr")} />} />
+            yr={searchParams.get("yr")}
+            setSearchParams={setSearchParams} />} />
           <Route path="*" element={<Navigate to="/overview" />} />
 
            {/*  <Route path="summary" element={Overview} /> */}

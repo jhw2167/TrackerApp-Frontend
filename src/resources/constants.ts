@@ -99,16 +99,27 @@ export const TRANS_DATA_NOTES = "notes";
     }
 
 /* UTILITY */
-const MONTHS= ["January","February","March","April","May","June","July",
-            "August","September","October","November","December"];
+export const MONTHS= ["january","february","march","april","may","june","july",
+            "august","september","october","november","december"];
+export const MNTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul","aug", "sep", "oct", "nov", "dec"];
 
     export const convMnYrToTimeFrame = function(mn: string | undefined | null,
          yr: string | undefined | null, asStrings: boolean = false): [Date, Date] {
 
         //Get Iso month and year
-        const month: number = mn ? MONTHS.indexOf(mn)+1 : (new Date(Date.now())).getMonth();
-        const year: number = yr ? Number(yr) : (new Date(Date.now())).getFullYear();
+        let temp = -1;
+        mn = mn ? mn?.toLocaleLowerCase() : "";
+        if(!mn || ( (MNTHS.indexOf(mn)==-1) && (MNTHS.indexOf(mn)==-1) ) ) {
+            temp = (new Date(Date.now())).getMonth()+1;
+        } else if (mn?.length == 3) {
+            temp = MNTHS.indexOf(mn)+1;
+        } else {
+            temp = MONTHS.indexOf(mn)+1;
+        }
 
+        const month: number = temp;
+        const year: number = yr ? Number(yr) : (new Date(Date.now())).getFullYear();
+        //console.log("M: %d : %s, y: %s : %s", month, mn, year, yr)
         //return dates
         let start: any = new Date(year + "-" + month + "-01");
         let end: any = new Date(( (month == 11) ? year+1 : year) + "-"

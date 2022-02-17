@@ -17,11 +17,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/main/Overview.css'
 import { Config } from '@testing-library/react';
 import DataGraph from '../components/DataGraph';
+import { URLSearchParamsInit } from 'react-router-dom';
+import { URLSearchParams } from 'url';
 
 //import '../css/Landing.css';
 interface OverviewProps {
     mn?: string | null;
     yr?: string | null;
+    setSearchParams: Function;
 }
 
 ///finances/overview?mn=August&yr=21
@@ -51,10 +54,16 @@ function Overview(props: OverviewProps) {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [categories, setCategories] = useState(["Loading Categories"]);
     const [categoriesData, setCategoriesData] = useState<DataTuple[]>([]);
+    const [currentMonth, setCurrentMonth] = useState<string>( 
+        consts.MONTHS[(new Date( Date.now()).getMonth())] );
 
     //OnLanding
     useEffect( () => {
         const [start, end] = consts.convMnYrToTimeFrame(props.mn, props.yr);
+        const srchParamStr = "?mn=" + consts.MONTHS.at(start.getMonth()) + "&yr=" + start.getFullYear();
+        props.setSearchParams(srchParamStr);
+        setCurrentMonth(consts.MONTHS[(new Date( Date.now()).getMonth())])
+        setCurrentMonth(currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1) );
         //console.log(api.SERVER_ALL_TRANSACTIONS_DATES(start, end));
         api.getRequest(api.SERVER_ALL_TRANSACTIONS_DATES(start, end), setTransactions);
         api.getRequest(api.SERVER_ALL_CATEGORIES, setCategories);
@@ -90,7 +99,7 @@ function Overview(props: OverviewProps) {
                            data={categoriesData} 
                            exclusions={DATA_GRAPH_EXC_FUNC}
                            limit={DATA_GRAPH_LIMIT}
-                           title={'September'}
+                           title={currentMonth}
                            />
                     </div>
                 </div>
