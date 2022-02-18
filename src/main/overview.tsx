@@ -82,8 +82,6 @@ function Overview(props: OverviewProps) {
             let hovCells = new Set<any>();
             transactions.forEach((v) => { if(v.category==hovCategory) { hovCells.add(v);} })
             hovCellFunc(hovCells);
-            //console.log("Category: " + hovCategory)
-            //hovCells.forEach((v) => console.log("----" + JSON.stringify(v)))
         } else if(hovCellFunc) {
             hovCellFunc(new Set<any>())
         }

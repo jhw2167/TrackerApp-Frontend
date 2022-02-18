@@ -24,7 +24,7 @@ interface DataTableProps {
 /* Styles */ 
 const HOV_ROW_STYLE: CSS.Properties = {
     ["fontWeight" as any]: 600,
-    ["fontSize" as any]: 14,
+    ["fontSize" as any]: 15,
     ["border" as any]: 'solid 3px black',
     ["lineHeight" as any]: '1.6em'
 };
@@ -43,7 +43,6 @@ function DataTable(props: DataTableProps) {
     /* EFFECTS */
     useEffect( () => {
         if(props.hovCellFunc) {
-            console.log("Setting function: ")
             props.hovCellFunc((s: Set<any>) => (s: Set<any>) => setExtHovCells(s));
         }
     }
@@ -107,7 +106,7 @@ function DataTable(props: DataTableProps) {
 
                                 case c.TRANS_DATA.AMT:
                                     innerStyle= {['textAlign' as any]: 'left',
-                                    ['paddingLeft' as any]: isHov > 1 ? '5%' : '10%'};
+                                    ['paddingLeft' as any]: isHov > 1 ? '6%' : '9%'};
                                     val = '$' + Number(val).toFixed(2);
                                     break;
 
