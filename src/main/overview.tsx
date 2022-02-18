@@ -57,6 +57,9 @@ function Overview(props: OverviewProps) {
     const [currentMonth, setCurrentMonth] = useState<string>( 
         consts.MONTHS[(new Date( Date.now()).getMonth())] );
 
+    const [hovCategory, setHovCategory] = useState<string>("");
+    const [hovCells, setHovCells] = useState<Set<any>>(new Set<any>());
+
     //OnLanding
     useEffect( () => {
         const [start, end] = consts.convMnYrToTimeFrame(props.mn, props.yr);
@@ -74,7 +77,15 @@ function Overview(props: OverviewProps) {
         setCategoriesData(consts.aggregateTransactions(transactions, categories, 50));
     }, [categories, transactions]);
     
-  
+    useEffect( () => {
+        if(hovCategory) {
+            transactions.forEach((v) => { if(v.category==hovCategory) { hovCells.add(v);} })
+            setHovCells(hovCells);
+        } else {
+            setHovCells(new Set<any>());
+        }
+    }, [hovCategory])
+
     return (
         <>
 
@@ -96,10 +107,11 @@ function Overview(props: OverviewProps) {
                 <div className="col-6 left-div">
                     <div className="left-data-graph">
                         <DataGraph
-                           data={categoriesData} 
-                           exclusions={DATA_GRAPH_EXC_FUNC}
-                           limit={DATA_GRAPH_LIMIT}
-                           title={currentMonth}
+                           data=          {categoriesData} 
+                           exclusions=    {DATA_GRAPH_EXC_FUNC}
+                           limit=         {DATA_GRAPH_LIMIT}
+                           title=         {currentMonth}
+                           setHovSegment= {setHovCategory}
                            />
                     </div>
                 </div>
@@ -114,7 +126,9 @@ function Overview(props: OverviewProps) {
                     <DataTable headers={DATA_TABLE_HEADERS} 
                     colNames=   {DATA_TABLE_COLS}
                     data=       {transactions} 
-                    limit=      {TOTAL_TRANSACTIONS}/>
+                    limit=      {TOTAL_TRANSACTIONS}
+                    hovCells=   {hovCells}
+                    />
                 </div>
 
                 {/*div for summary table 1, expenses */}

@@ -39,15 +39,6 @@
     white-space: nowrap;
   }
   
-  /*
-  .data-table-row:hover {
-    font-weight: 600;
-    font-size: 16px; 
-
-    border: solid 3px black;
-    line-height: 1.6em;
-  }
-*/
 
   /* cell CSS */
   .data-table-entry {

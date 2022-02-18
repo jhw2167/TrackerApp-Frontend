@@ -21,10 +21,11 @@ import * as CSS from 'csstype';
 
 //Define interface for props type
 interface DataGraphProps {
+    title: string;
     data: DataTuple[];
     exclusions?: Function;
     limit?: number;
-    title: string;
+    setHovSegment?: Function;
 }
 
 interface FullArcSeriesPoint extends ArcSeriesPoint {
@@ -37,8 +38,8 @@ interface FullArcSeriesPoint extends ArcSeriesPoint {
 const PI = Math.PI;
 
 //DataGraph constants
-const gHEIGHT = 280;
-const gWIDTH = 280;
+const gHEIGHT = 240;
+const gWIDTH = 240;
 
 const RAD_START = 0;
 const RAD = 1;
@@ -52,18 +53,18 @@ const ANIM_CHART_STYLE = {stroke: 'black', strokeWidth: ANIM_STROKE_WIDTH};
     
 
 //Data Legend constants
-const l_STROKE_WIDTH = 12;
+const l_STROKE_WIDTH = 10;
 const l_STROKE_STYLE = 'solid';
 const PER_LEGEND = 4;
 
 const DEF_LEG_STYLE: CSS.Properties = {
-    ['fontSize' as any]: 12,
+    ['fontSize' as any]: 10,
     ['fontWeight' as any]: 200,
 };
 
 const ANIM_LEG_STYLE: CSS.Properties = {
-    ['fontSize' as any]: 15,
-    ['fontWeight' as any]: 900,
+    ['fontSize' as any]: 14,
+    ['fontWeight' as any]: 600,
 };
 
 
@@ -71,47 +72,61 @@ function DataGraph(props: DataGraphProps) {
     
     
     /* STATES AND EFFECTS */
-    const [stateData, setStateData] = useState<FullArcSeriesPoint[]>([]);
-    const [legendItems, setLegendItems] = useState<any[]>([]);
+        const [stateData, setStateData] = useState<FullArcSeriesPoint[]>([]);
+        const [legendItems, setLegendItems] = useState<any[]>([]);
 
-    const [hovColor, sethovColor] = useState<any>('none');
-    const [hovValue, sethovValue] = useState<any>();
-    //init
-    useEffect( () => {
-       
-    }, [])
+        const [hovColor, sethovColor] = useState<any>('none');
+        const [hovValue, sethovValue] = useState<FullArcSeriesPoint>();
+        //init
+        useEffect( () => {
+        
+        }, [])
 
-    //Updates
-    useEffect( () => {
-        if(props.data.length > 0) {
-            let graphData = genGraphData(props.data, props.exclusions, props.limit);
-            setStateData(graphData);
-            setLegendItems(calcLegendData(graphData));
+        //Updates
+        useEffect( () => {
+            if(props.data.length > 0) {
+                let graphData = genGraphData(props.data, props.exclusions, props.limit);
+                setStateData(graphData);
+                setLegendItems(calcLegendData(graphData));
+            }
+            //console.log("running");
+        }, [props.data])
+
+
+
+    /* FUNCTIONS */ 
+
+        //places hovered value at back of array so its drawn last
+        let setHovValueByColor = (color: string): void => {
+            let newData: any[] = [];
+            let hov = null;
+            stateData.forEach( (val) => {
+                if(val.color !== color) {
+                    newData.push({...val, stlye: DEF_CHART_STYLE} );
+                } else hov = val;
+            });
+            if(hov) {
+                newData.push({...hov as ArcSeriesPoint, style: ANIM_CHART_STYLE} );
+                setStateData(newData);
+                sethovValue(hov);
+                if(props.setHovSegment) props.setHovSegment((hov as FullArcSeriesPoint).label);
+            } else {
+                sethovValue(undefined);
+                if(props.setHovSegment) props.setHovSegment("");
+            }
+            sethovColor(color);
         }
-        //console.log("running");
-    }, [props.data])
+        //END
 
-
-    //places hovered value at back of array so its drawn last
-     let setHovValueByColor = (color: string): void => {
-        let newData: any[] = [];
-        let hov = null;
-        stateData.forEach( (val) => {
-            if(val.color !== color) {
-                newData.push({...val, stlye: DEF_CHART_STYLE} );
-            } else hov = val;
-        });
-        if(hov) {
-            newData.push({...hov as ArcSeriesPoint, style: ANIM_CHART_STYLE} );
-            setStateData(newData);
-            sethovValue(hov);
-        } else {
-            sethovValue(undefined);
+        //for legend styling
+        let buildStyledLegend = (value: any) => {
+            return {...value, innerStyle: (value.color === hovColor) ? ANIM_LEG_STYLE : DEF_LEG_STYLE};
+            // return <div
+            // onMouseEnter={() => setHovValueByColor(value.color)}
+            // onMouseLeave={() => setHovValueByColor("")}
+            // > {item} </div>
         }
-        sethovColor(color);
-    }
 
-    //getHovValue simply returns value at end of array
     return (
         
 
@@ -165,7 +180,7 @@ function DataGraph(props: DataGraphProps) {
             <DiscreteColorLegend orientation="horizontal" 
             width={gWIDTH}
             items={legendItems.slice(0, PER_LEGEND).map((value) => {
-                return {...value, innerStyle: (value.color === hovColor) ? ANIM_LEG_STYLE : DEF_LEG_STYLE}
+                return buildStyledLegend(value);
             })} >
                 </DiscreteColorLegend>
 
@@ -173,7 +188,7 @@ function DataGraph(props: DataGraphProps) {
                 <DiscreteColorLegend orientation="horizontal" 
                 width={gWIDTH}
                 items={legendItems.slice(PER_LEGEND, MAX_DATA_DISPLAY).map( (value) => {
-                    return {...value, innerStyle: (value.color === hovColor) ? ANIM_LEG_STYLE : DEF_LEG_STYLE}
+                    return buildStyledLegend(value);
                     })}
 
                  />
@@ -285,6 +300,7 @@ function buildValue(hoveredCell: ArcSeriesPoint | undefined) {
 //Style chart on value hovered
 
 //Style legend on value hovered
+
 
 //style table?
 

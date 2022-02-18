@@ -18,15 +18,15 @@ interface DataTableProps {
     colNames: String[];
     data: Array<any>;
     limit: number;
-    hovCells?: Array<any>;
+    hovCells?: Set<any>;
 }
 
 /* Styles */ 
 const HOV_ROW_STYLE: CSS.Properties = {
     ["fontWeight" as any]: 600,
-    ["fontSize" as any]: 16,
+    ["fontSize" as any]: 14,
     ["border" as any]: 'solid 3px black',
-    ["line-height" as any]: '1.6em'
+    ["lineHeight" as any]: '1.6em'
 };
 
 /* CONSTS */
@@ -41,7 +41,7 @@ function DataTable(props: DataTableProps) {
 
     /* EFFECTS */
     useEffect( () => {
-
+        if(props.hovCells) setHovCells(props.hovCells);
     }
     , [props.hovCells])
 
@@ -96,7 +96,7 @@ function DataTable(props: DataTableProps) {
 
                                 case c.TRANS_DATA.AMT:
                                     innerStyle= {['textAlign' as any]: 'left',
-                                    ['padding-left' as any]: isHov > 1 ? '5%' : '10%'};
+                                    ['paddingLeft' as any]: isHov > 1 ? '5%' : '10%'};
                                     val = '$' + Number(val).toFixed(2);
                                     break;
 

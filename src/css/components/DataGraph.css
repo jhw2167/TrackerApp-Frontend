@@ -1,11 +1,17 @@
 /* Styling for our main summary pie chart */
 
 .data-graph-wrapper{
-    text-align: center;
+    
+    width: 80%;
     height: auto;
     padding-top: 4%;
+    margin: auto;
 
     --bs-gutter-x: 0;
+
+    background-color: black;
+    color: white;
+    text-align: center;
 }
 
 
@@ -18,7 +24,7 @@
 /* DIV styling for Graph */
 
 #data-graph-plot {
-
+    height: auto;
 }
 
 .data-graph-plot > * {
@@ -56,7 +62,8 @@
 /* Box holds a few legend items */
 .rv-discrete-color-legend-item {
     text-align: center;
-    padding: 6px 8px ;
+    padding: 5px 8px ;          /* top left */
+    color: white;
 }
 
 .rv-discrete-color-legend-item::after{
