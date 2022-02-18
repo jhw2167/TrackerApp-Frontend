@@ -18,7 +18,7 @@
 /* Title */
 
 #data-graph-title {
-    margin-bottom: -5%;
+    margin-bottom: -3%;
 }
 
 /* DIV styling for Graph */
@@ -64,6 +64,11 @@
     text-align: center;
     padding: 5px 8px ;          /* top left */
     color: white;
+}
+
+.rv-discrete-color-legend-item.clickable:hover {
+    background: inherit;
+    cursor: inherit;
 }
 
 .rv-discrete-color-legend-item::after{

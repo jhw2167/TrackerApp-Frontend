@@ -6,7 +6,8 @@ import React, { useDebugValue, useEffect, useState } from "react";
 //Project imports
 import { XYPlot, ArcSeries, ArcSeriesPoint, 
     DiscreteColorLegend, DiscreteColorLegendProps,
-     Hint } from "react-vis";
+     Hint, 
+     RVMouseEventHandler} from "react-vis";
 //import DiscreteColorLegend from 'legends/discrete-color-legend';
 import * as consts from '../resources/constants';
 import {DataTuple, Transaction} from '../resources/constants';
@@ -58,8 +59,8 @@ const l_STROKE_STYLE = 'solid';
 const PER_LEGEND = 4;
 
 const DEF_LEG_STYLE: CSS.Properties = {
-    ['fontSize' as any]: 10,
-    ['fontWeight' as any]: 200,
+    ['fontSize' as any]: 11,
+    ['fontWeight' as any]: 400,
 };
 
 const ANIM_LEG_STYLE: CSS.Properties = {
@@ -77,6 +78,7 @@ function DataGraph(props: DataGraphProps) {
 
         const [hovColor, sethovColor] = useState<any>('none');
         const [hovValue, sethovValue] = useState<FullArcSeriesPoint>();
+        const [legItemClick, setLegItemClick] = useState<any>(false);
         //init
         useEffect( () => {
         
@@ -100,6 +102,7 @@ function DataGraph(props: DataGraphProps) {
         let setHovValueByColor = (color: string): void => {
             let newData: any[] = [];
             let hov = null;
+            if(props.setHovSegment) props.setHovSegment("");    //reset this, then reset later
             stateData.forEach( (val) => {
                 if(val.color !== color) {
                     newData.push({...val, stlye: DEF_CHART_STYLE} );
@@ -112,7 +115,6 @@ function DataGraph(props: DataGraphProps) {
                 if(props.setHovSegment) props.setHovSegment((hov as FullArcSeriesPoint).label);
             } else {
                 sethovValue(undefined);
-                if(props.setHovSegment) props.setHovSegment("");
             }
             sethovColor(color);
         }
@@ -121,10 +123,6 @@ function DataGraph(props: DataGraphProps) {
         //for legend styling
         let buildStyledLegend = (value: any) => {
             return {...value, innerStyle: (value.color === hovColor) ? ANIM_LEG_STYLE : DEF_LEG_STYLE};
-            // return <div
-            // onMouseEnter={() => setHovValueByColor(value.color)}
-            // onMouseLeave={() => setHovValueByColor("")}
-            // > {item} </div>
         }
 
     return (
@@ -149,8 +147,8 @@ function DataGraph(props: DataGraphProps) {
                     return {...value, style: (value.color === hovColor) ? ANIM_CHART_STYLE : DEF_CHART_STYLE} as ArcSeriesPoint
                 })}
                 colorType={'literal'}
-                onValueMouseOver={(value) => {setHovValueByColor(value.color as string)}}
-                onValueMouseOut={ () => setHovValueByColor('none') }
+                onValueMouseOver={(value) => { if(!legItemClick) setHovValueByColor(value.color as string)}}
+                onValueMouseOut={ () => { if(!legItemClick) setHovValueByColor('none') }}
                 />
 
             {/* ######## TOOLTIP ########  */ }
@@ -181,7 +179,12 @@ function DataGraph(props: DataGraphProps) {
             width={gWIDTH}
             items={legendItems.slice(0, PER_LEGEND).map((value) => {
                 return buildStyledLegend(value);
-            })} >
+            })}
+            onItemMouseEnter={(item) => {if(!legItemClick) setHovValueByColor(item.color)}}
+            onItemMouseLeave={() => {if(!legItemClick) setHovValueByColor("") }}
+           //onItemClick={(item: any) => {setLegItemClick(item); setHovValueByColor(item.color);}} 
+           /* LATER DEVELOPMENT */
+            >
                 </DiscreteColorLegend>
 
             {/* lower row */}
@@ -190,7 +193,8 @@ function DataGraph(props: DataGraphProps) {
                 items={legendItems.slice(PER_LEGEND, MAX_DATA_DISPLAY).map( (value) => {
                     return buildStyledLegend(value);
                     })}
-
+                    onItemMouseEnter={(item) => {if(!legItemClick) setHovValueByColor(item.color)}}
+                    onItemMouseLeave={() => {if(!legItemClick) setHovValueByColor("") }}
                  />
     
             </div>

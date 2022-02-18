@@ -58,7 +58,7 @@ function Overview(props: OverviewProps) {
         consts.MONTHS[(new Date( Date.now()).getMonth())] );
 
     const [hovCategory, setHovCategory] = useState<string>("");
-    const [hovCells, setHovCells] = useState<Set<any>>(new Set<any>());
+    const [hovCellFunc, setHovCellFunc] = useState<Function>();
 
     //OnLanding
     useEffect( () => {
@@ -78,13 +78,17 @@ function Overview(props: OverviewProps) {
     }, [categories, transactions]);
     
     useEffect( () => {
-        if(hovCategory) {
+        if(hovCategory && hovCellFunc) {
+            let hovCells = new Set<any>();
             transactions.forEach((v) => { if(v.category==hovCategory) { hovCells.add(v);} })
-            setHovCells(hovCells);
-        } else {
-            setHovCells(new Set<any>());
+            hovCellFunc(hovCells);
+            //console.log("Category: " + hovCategory)
+            //hovCells.forEach((v) => console.log("----" + JSON.stringify(v)))
+        } else if(hovCellFunc) {
+            hovCellFunc(new Set<any>())
         }
     }, [hovCategory])
+
 
     return (
         <>
@@ -127,7 +131,7 @@ function Overview(props: OverviewProps) {
                     colNames=   {DATA_TABLE_COLS}
                     data=       {transactions} 
                     limit=      {TOTAL_TRANSACTIONS}
-                    hovCells=   {hovCells}
+                    hovCellFunc=   {setHovCellFunc}
                     />
                 </div>
 

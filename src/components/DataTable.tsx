@@ -18,7 +18,7 @@ interface DataTableProps {
     colNames: String[];
     data: Array<any>;
     limit: number;
-    hovCells?: Set<any>;
+    hovCellFunc?: Function;
 }
 
 /* Styles */ 
@@ -36,14 +36,25 @@ const MAX_VEND_LEN = 12;
 function DataTable(props: DataTableProps) {
 
     /* STATES */
+    const [extHovCells, setExtHovCells] = useState<Set<any>>(new Set());
     const [hovCells, setHovCells] = useState<Set<any>>(new Set());
     const [deepHovCell, setDeepHovCell] = useState<any>();
 
     /* EFFECTS */
     useEffect( () => {
-        if(props.hovCells) setHovCells(props.hovCells);
+        if(props.hovCellFunc) {
+            console.log("Setting function: ")
+            props.hovCellFunc((s: Set<any>) => (s: Set<any>) => setExtHovCells(s));
+        }
     }
-    , [props.hovCells])
+    , [])
+
+    useEffect( () => {
+        if(extHovCells) {
+            setHovCells(extHovCells);
+        }
+    }
+    , [extHovCells])
 
     return (
             <table className="transactions-table">
