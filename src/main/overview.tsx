@@ -32,7 +32,7 @@ interface OverviewProps {
 function Overview(props: OverviewProps) {
 
     //Constants
-    const TOTAL_TRANSACTIONS = 25;
+    const MAX_TRANS_PAGE: number = 25;
     const DATA_TABLE_HEADERS: Array<string> = [
         "Date", "Vendor", "Amount", "Category"
     ]
@@ -51,7 +51,10 @@ function Overview(props: OverviewProps) {
     const DATA_GRAPH_LIMIT = 8; 
 
     /* State and Effect Functions */
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([]);
+    const [monthlyTransactions, setMonthlyTransactions] = useState<Transaction[]>([]);
+    const [offsetTransactions, setOffsetTransactions] = useState<number>(0);
+
     const [categories, setCategories] = useState(["Loading Categories"]);
     const [categoriesData, setCategoriesData] = useState<DataTuple[]>([]);
     const [currentMonth, setCurrentMonth] = useState<string>( 
@@ -62,25 +65,30 @@ function Overview(props: OverviewProps) {
 
     //OnLanding
     useEffect( () => {
+
+        //Date stuff
         const [start, end] = consts.convMnYrToTimeFrame(props.mn, props.yr);
         const srchParamStr = "?mn=" + consts.MONTHS.at(start.getMonth()) + "&yr=" + start.getFullYear();
         props.setSearchParams(srchParamStr);
         setCurrentMonth(consts.MONTHS[(new Date( Date.now()).getMonth())])
         setCurrentMonth(currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1) );
-        //console.log(api.SERVER_ALL_TRANSACTIONS_DATES(start, end));
-        api.getRequest(api.SERVER_ALL_TRANSACTIONS_DATES(start, end), setTransactions);
+
+        //api calls
+        api.getRequest(api.SERVER_ALL_TRANSACTIONS_DATES(start, end), setMonthlyTransactions);
+        api.getRequest(api.SERVER_ALL_TRANSACTIONS_RECENT(offsetTransactions + MAX_TRANS_PAGE,
+             offsetTransactions), setRecentTransactions);
         api.getRequest(api.SERVER_ALL_CATEGORIES, setCategories);
     }, []);
 
     //On update to dependencies
     useEffect( () => {
-        setCategoriesData(consts.aggregateTransactions(transactions, categories, 50));
-    }, [categories, transactions]);
+        setCategoriesData(consts.aggregateTransactions(monthlyTransactions, categories, 50));
+    }, [categories, monthlyTransactions]);
     
     useEffect( () => {
         if(hovCategory && hovCellFunc) {
             let hovCells = new Set<any>();
-            transactions.forEach((v) => { if(v.category==hovCategory) { hovCells.add(v);} })
+            recentTransactions.forEach((v) => { if(v.category==hovCategory) { hovCells.add(v);} })
             hovCellFunc(hovCells);
         } else if(hovCellFunc) {
             hovCellFunc(new Set<any>())
@@ -127,8 +135,8 @@ function Overview(props: OverviewProps) {
                     <h4>Recent Transactions</h4>
                     <DataTable headers={DATA_TABLE_HEADERS} 
                     colNames=   {DATA_TABLE_COLS}
-                    data=       {transactions} 
-                    limit=      {TOTAL_TRANSACTIONS}
+                    data=       {recentTransactions} 
+                    limit=      {MAX_TRANS_PAGE}
                     hovCellFunc=   {setHovCellFunc}
                     />
                 </div>
@@ -149,7 +157,7 @@ function Overview(props: OverviewProps) {
 
     {/* Container wrapper class */}
             <footer>
-                <div> {JSON.stringify(transactions[0], null, 2)} </div>
+                <div> {JSON.stringify(recentTransactions[0], null, 2)} </div>
             </footer>
 
         </div>  {/* Container wrapper class */}

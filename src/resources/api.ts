@@ -25,6 +25,14 @@ export const SERVER_ALL_CATEGORIES = SERVER_ALL_TRANSACTIONS + "/categories";
         "&to=" + to;
     }
 
+
+    //Build request with dates
+    export function SERVER_ALL_TRANSACTIONS_RECENT(limit: Number, offset: Number = 0): string {
+        return SERVER_ALL_TRANSACTIONS + "/recent" 
+        + "?limit=" + limit +
+        "&offset=" + offset;
+    }
+
 /* REQUESTS */
 
 export const getRequest = async function getRequest(url: string, setData: Function) {
