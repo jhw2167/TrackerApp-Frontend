@@ -4,7 +4,7 @@ import { CpuInfo } from "os";
 import * as c from '../resources/constants';
 
 //other imports
-import _ from 'underscore';
+import _, { values } from 'underscore';
 
 //CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,10 +14,13 @@ import { useEffect, useState } from "react";
 
 //Define interface for props type
 interface DataTableProps {
+    title: string;
     headers: String[];
-    colNames: String[];
     data: Array<any>;
     limit: number;
+    minRows?: number;
+    aggOtherRow?: boolean;
+    summaryRow?: boolean;
     hovCellFunc?: Function;
 }
 
@@ -40,6 +43,8 @@ function DataTable(props: DataTableProps) {
     const [hovCells, setHovCells] = useState<Set<any>>(new Set());
     const [deepHovCell, setDeepHovCell] = useState<any>();
 
+    const [data, setData] = useState<any[]>(props.data);
+    
     /* EFFECTS */
     useEffect( () => {
         if(props.hovCellFunc) {
@@ -54,19 +59,23 @@ function DataTable(props: DataTableProps) {
         }
     }
     , [extHovCells])
+    
 
-    return (
+    return ( 
+    <div className={'subtable-' + props.title.replace(' ', '-')}>
+
             <table className="transactions-table">
                 <tbody>
 
-                {/* Table Header */}
+                {/*             Table Header            */}
                 <tr className="data-table-header">{
                     Object.entries(props.headers).map(([key, value]) => {
                     return <th key={key}>{value}</th>})
                 }</tr>
 
-                {/* Now return data columns */}
-                {Object.entries(props.data).slice(0, props.limit).map(([key, value]) => {
+
+                {/*         Now return data row      */}
+                {data.slice(0, props.limit).map( (value: any, key: number) => {
                     let isHov: number = hovCells.has(value) ? 1 : 0;
                     isHov += _.isEqual(deepHovCell, value) ? 1 : 0; //0-no hov, 1-hov, 2-deep hov
 
@@ -82,42 +91,11 @@ function DataTable(props: DataTableProps) {
                         setHovCells(hovCells); 
                         setDeepHovCell(null);}}
                      >
-                        {Object.entries(props.colNames).map(([dkey, col]) => {
 
-                            let innerStyle: CSS.Properties = {};
-                            let val:string = value[col.toString()];
-                            switch(col.toString()) {
-
-                                case c.TRANS_DATA.PURCHDATE:
-                                    innerStyle = {['fontSize' as any]: 14};
-
-                                    let split = val.split('-'); //[2022, MM, YY]
-                                    val = Number(split[1]) + '/' + Number(split[2]) +
-                                    '/' + ( Number(split[0]) - 2000);
-                                    break;
-
-                                case c.TRANS_DATA.VEND:
-                                    if(val.length > MAX_VENDOR_DISP_LEN ) {
-                                        val = val.slice(0, 12);
-                                        val += '...'
-                                    }
-                                    innerStyle= {['width' as any]: '50%'};
-                                    break;
-
-                                case c.TRANS_DATA.AMT:
-                                    innerStyle= {['textAlign' as any]: 'left',
-                                    ['paddingLeft' as any]: isHov > 1 ? '6%' : '9%'};
-                                    val = '$' + Number(val).toFixed(2);
-                                    break;
-
-                                case c.TRANS_DATA.CAT:
-                                    break;
-    
-                            }
-
-                            return <td className="data-table-entry"
-                            style={innerStyle}
-                            key={dkey}>{val}</td>
+                        {/*         Now return data COLS      */}
+                        {Object.entries(value).map(([key, val]) => {
+                            return <td className="data-subtable-entry"
+                            key={key}>{JSON.stringify(val)}</td>
                         })}
                     </tr>
                     })
@@ -126,6 +104,8 @@ function DataTable(props: DataTableProps) {
 
                 </tbody>
             </table>
+
+        </div>
     )
     //END RETURN
 }

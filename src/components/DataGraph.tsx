@@ -24,6 +24,8 @@ import * as CSS from 'csstype';
 interface DataGraphProps {
     title: string;
     data: DataTuple[];
+    height: number;
+    width: number;
     exclusions?: Function;
     limit?: number;
     setHovSegment?: Function;
@@ -39,8 +41,6 @@ interface FullArcSeriesPoint extends ArcSeriesPoint {
 const PI = Math.PI;
 
 //DataGraph constants
-const gHEIGHT = 240;
-const gWIDTH = 240;
 
 const RAD_START = 0;
 const RAD = 1;
@@ -73,6 +73,7 @@ function DataGraph(props: DataGraphProps) {
     
     
     /* STATES AND EFFECTS */
+        const[graphDims, setGraphDims] = useState<number[]>([props.height, props.width]);
         const [stateData, setStateData] = useState<FullArcSeriesPoint[]>([]);
         const [legendItems, setLegendItems] = useState<any[]>([]);
 
@@ -91,8 +92,13 @@ function DataGraph(props: DataGraphProps) {
                 setStateData(graphData);
                 setLegendItems(calcLegendData(graphData));
             }
+            
             //console.log("running");
         }, [props.data])
+
+        useEffect(() => { 
+            setGraphDims([props.height, props.width]);
+        }, [window.innerWidth])
 
 
 
@@ -130,14 +136,14 @@ function DataGraph(props: DataGraphProps) {
 
         <div className="data-graph-wrapper">
 
-            <h4 id="data-graph-title">{props.title}</h4>
+            <h2 id="data-graph-title">{props.title}</h2>
 
             <div className="data-graph-plot">
                 <XYPlot 
                 xDomain={[-.78, 1]}
                 yDomain={[-.78, 1]}
-                width={gWIDTH}
-                height={gHEIGHT}
+                height={graphDims[0] as number}
+                width={graphDims[1] as number}
                 strokeType={'literal'}
                 >
 
@@ -176,7 +182,7 @@ function DataGraph(props: DataGraphProps) {
             <div className="data-graph-legend">
 
             <DiscreteColorLegend orientation="horizontal" 
-            width={gWIDTH}
+            width={graphDims[1] as number}
             items={legendItems.slice(0, PER_LEGEND).map((value) => {
                 return buildStyledLegend(value);
             })}
@@ -189,7 +195,7 @@ function DataGraph(props: DataGraphProps) {
 
             {/* lower row */}
                 <DiscreteColorLegend orientation="horizontal" 
-                width={gWIDTH}
+                width={graphDims[1] as number}
                 items={legendItems.slice(PER_LEGEND, MAX_DATA_DISPLAY).map( (value) => {
                     return buildStyledLegend(value);
                     })}

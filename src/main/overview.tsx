@@ -8,9 +8,10 @@ import React, { useState, useEffect } from 'react';
 
 //project imports
 import * as consts from '../resources/constants';
-import {DataTuple, Transaction} from '../resources/constants';
+import {DataTuple, Transaction, Summary} from '../resources/constants';
 import * as api from '../resources/api';
 import DataTable from '../components/DataTable';
+import SubTable from '../components/SubTable';
 
 //CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -19,6 +20,7 @@ import { Config } from '@testing-library/react';
 import DataGraph from '../components/DataGraph';
 import { URLSearchParamsInit } from 'react-router-dom';
 import { URLSearchParams } from 'url';
+import useWindowDimensions from '../resources/WindowDims';
 
 //import '../css/Landing.css';
 interface OverviewProps {
@@ -49,11 +51,17 @@ function Overview(props: OverviewProps) {
         return !DATA_GRAPH_EXCLUSIONS.has(tuple.label as string);
     }
     const DATA_GRAPH_LIMIT = 8; 
+    const SUMMARY_TABLE_LIMIT = 4;
 
     /* State and Effect Functions */
+    let {winHeight, winWidth } = useWindowDimensions();
+    //console.log(JSON.stringify(JSON.stringify({winHeight, winWidth})));
     const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([]);
     const [monthlyTransactions, setMonthlyTransactions] = useState<Transaction[]>([]);
     const [offsetTransactions, setOffsetTransactions] = useState<number>(0);
+
+    const [incomeSummary, setIncomeSummary] = useState<Summary[]>([]);
+    const [expenseSummary, setExpenseSummary] = useState<Summary[]>([]);
 
     const [categories, setCategories] = useState(["Loading Categories"]);
     const [categoriesData, setCategoriesData] = useState<DataTuple[]>([]);
@@ -77,8 +85,16 @@ function Overview(props: OverviewProps) {
         api.getRequest(api.SERVER_ALL_TRANSACTIONS_DATES(start, end), setMonthlyTransactions);
         api.getRequest(api.SERVER_ALL_TRANSACTIONS_RECENT(offsetTransactions + MAX_TRANS_PAGE,
              offsetTransactions), setRecentTransactions);
+
+        api.getRequest(api.SERVER_INCOME_SUMMARY(start, end), setIncomeSummary);
+        api.getRequest(api.SERVER_EXPENSE_SUMMARY(start, end), setExpenseSummary);
+        
         api.getRequest(api.SERVER_ALL_CATEGORIES, setCategories);
     }, []);
+
+
+    /* On window resize */
+    
 
     //On update to dependencies
     useEffect( () => {
@@ -93,7 +109,9 @@ function Overview(props: OverviewProps) {
         } else if(hovCellFunc) {
             hovCellFunc(new Set<any>())
         }
-    }, [hovCategory])
+    }, [hovCategory]);
+
+
 
 
     return (
@@ -113,45 +131,92 @@ function Overview(props: OverviewProps) {
             {/*Large div contains entire vertical length page*/}
             <main className="center-div align-items-center">
             <div className="row row-centered-contents">
-                {//div for pie graph, upper left
-                <div className="col-6 left-div">
-                    <div className="left-data-graph">
+
+               
+                <div className="col-6 left-div half-portion-wrapper-col">
+
+                    <div className='row inner-portion-top-row'>
+                        <div className='col-12 inner-portion-full-col'>
+                        
+                        
+                        <div className="left-data-graph">
                         <DataGraph
                            data=          {categoriesData} 
                            exclusions=    {DATA_GRAPH_EXC_FUNC}
                            limit=         {DATA_GRAPH_LIMIT}
                            title=         {currentMonth}
                            setHovSegment= {setHovCategory}
+                           height={Math.min(winWidth * .40 * .90, 320)}
+                           width={Math.min(winWidth * .40 * .90, 320)}
                            />
+                        </div>
+
+
+                        </div>    
                     </div>
+                    {/* END TOP ROW UPPER LEFT */}
+
+
+                    <div className='row inner-portion-second-row'>
+                        <div className='col-12 inner-portion-full-col'>
+                        
+                            <div className='summary-tables'>
+                            {/*div for summary table 1, expenses */}
+                            <div className='inline-summary-table'> 
+                                <SubTable 
+                                    title={'Income Summary'}
+                                    headers={['Income Summary']}
+                                    data={incomeSummary}
+                                    limit={SUMMARY_TABLE_LIMIT}
+                                />
+                            </div>
+
+                            <div className="summary-table-spacer"></div>
+
+                                {/*div for summary table 2, income*/ }
+                            <div className='inline-summary-table'> 
+                                <SubTable 
+                                    title={'Expense Summary'}
+                                    headers={['Expense Summary']}
+                                    data={expenseSummary}
+                                    limit={SUMMARY_TABLE_LIMIT}
+                                />
+                            </div>
+                            </div>
+
+                        </div>    
+                    </div>
+                    {/*#######################*/}
+                    {/* END SECOND ROW  LEFT */}
+                    {/*#######################*/}
+
+                   
+
                 </div>
-                //END COL-4 DIV
-                }
+               {/*#######################*/}
+                {/* END Left side col segment */}
+                {/*#######################*/}
+
+
 
                 {/* Spacing cols */}
                 
                 {/*div for transactions table, right side entire length */}
-                <div className="col-5 right-data-table align-items-right">
-                    <h4>Recent Transactions</h4>
-                    <DataTable headers={DATA_TABLE_HEADERS} 
-                    colNames=   {DATA_TABLE_COLS}
-                    data=       {recentTransactions} 
-                    limit=      {MAX_TRANS_PAGE}
-                    hovCellFunc=   {setHovCellFunc}
-                    />
+                <div className="col-6">
+
+                    <div className='right-data-table'>
+                        <h4>Recent Transactions</h4>
+                        <DataTable headers={DATA_TABLE_HEADERS} 
+                        colNames=   {DATA_TABLE_COLS}
+                        data=       {recentTransactions} 
+                        limit=      {MAX_TRANS_PAGE}
+                        hovCellFunc=   {setHovCellFunc}
+                        />
+
+                    </div>
                 </div>
-
-                {/*div for summary table 1, expenses */}
-                <div> 
-
-                </div>
-
-
-                {/*div for summary table 2, income*/ }
-                <div> </div>
-                <div> </div>
                 
-
+               
             </div> {/* Container row class */}
             </main>
 

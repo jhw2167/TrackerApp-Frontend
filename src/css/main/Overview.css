@@ -14,7 +14,6 @@ header{
 
 /* Main Center div, by id */
 .container {
-    display: table;
     width: 60%;
 }
 
@@ -29,19 +28,33 @@ header{
 /* LeftSide Div */
 .left-div {
     text-align: center;
-    display: flex;
     justify-content: center;
+    margin: auto;
+    margin-top: 0%;
 }
 
 .left-data-graph {
-    width: 90%;
-    background-color: rgba(196,196,196, 212);
+    width: 100%;
+    margin: auto;
+    margin-bottom: 10%;
 }
+
+
+.sumary-tables {
+    margin: auto;
+    width: 80%;
+}
+
+.inline-summary-table {
+    margin-bottom: 10%;
+}
+
 
 /* DataTable Div */
 .right-data-table {
-    margin-top: 2em;
-    width: 40%;
+    float: right;
+    margin: auto;
+    margin-right: 7%;
     min-width: 380px;
     
 

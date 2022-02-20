@@ -25,6 +25,28 @@ export const SERVER_ALL_CATEGORIES = SERVER_ALL_TRANSACTIONS + "/categories";
         "&to=" + to;
     }
 
+    //Income Summary
+    export function SERVER_INCOME_SUMMARY(start: Date, end: Date): string {
+        //Date.proto.toISOString() gives 2022-02-15 date format
+        const from = start.toISOString().split("T")[0];
+        const to = end.toISOString().split("T")[0];
+
+        return SERVER_ALL_TRANSACTIONS + "/income" 
+        + "?start=" + from +
+        "&to=" + to;
+    }
+
+
+    //Expense Summary
+    export function SERVER_EXPENSE_SUMMARY(start: Date, end: Date): string {
+        //Date.proto.toISOString() gives 2022-02-15 date format
+        const from = start.toISOString().split("T")[0];
+        const to = end.toISOString().split("T")[0];
+
+        return SERVER_ALL_TRANSACTIONS + "/expenses" 
+        + "?start=" + from +
+        "&to=" + to;
+    }
 
     //Build request with dates
     export function SERVER_ALL_TRANSACTIONS_RECENT(limit: Number, offset: Number = 0): string {
