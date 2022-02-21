@@ -64,9 +64,10 @@ export const getRequest = async function getRequest(url: string, setData: Functi
         url: url
     }
 
+    console.log("Making call to: " + url)
     await axios(config).then( (resp) =>
     {
-        //console.log("Transactions returned: " + resp.data.toString() );
+        console.log("Transactions returned: " + url );//+ JSON.stringify(resp.data));
         setData(resp.data);
     }).catch( (reason) => {
         console.log("Error from GET request from: " + url + " with error: " + reason);

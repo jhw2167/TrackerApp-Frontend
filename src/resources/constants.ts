@@ -138,7 +138,7 @@ export const MNTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul","aug", "se
     }
 
     export const properCase = function(a: string): string {
-        return a.charAt(0).toUpperCase() + a.slice(1);
+        return a.charAt(0).toUpperCase() + a.slice(1).toLowerCase();
     }
 /* Interfaces */
 export interface Transaction {
@@ -163,7 +163,7 @@ export interface DataTuple {
 
 export interface Summary {
     aggregateCol: string,
-    value: Number,
+    value: number,
     categories: string
 }
 

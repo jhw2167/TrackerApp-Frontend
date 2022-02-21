@@ -88,6 +88,8 @@ function Overview(props: OverviewProps) {
         api.getRequest(api.SERVER_INCOME_SUMMARY(start, end), setIncomeSummary);
         api.getRequest(api.SERVER_EXPENSE_SUMMARY(start, end), setExpenseSummary);
         
+        console.log("Inc: %s \n\n Exp: %s", incomeSummary, expenseSummary);
+
         api.getRequest(api.SERVER_ALL_CATEGORIES, setCategories);
     }, []);
 
@@ -111,7 +113,7 @@ function Overview(props: OverviewProps) {
     }, [hovCategory]);
 
 
-
+    //Only Render if we have all our data:
 
     return (
         <>
@@ -167,6 +169,9 @@ function Overview(props: OverviewProps) {
                                     title={'Expense Summary'}
                                     headers={['Expense Summary']}
                                     colNames={Object.values(consts.SUMMARY_DATA)}
+                                    aggFunction={sumTableAgg}
+                                    aggOtherRow={true}
+                                    minRows={3}
                                     data={expenseSummary}
                                     limit={SUMMARY_TABLE_LIMIT}
                                 />
@@ -185,6 +190,9 @@ function Overview(props: OverviewProps) {
                                     title={'Income Summary'}
                                     headers={['Income Summary']}
                                     colNames={Object.values(consts.SUMMARY_DATA)}
+                                    aggFunction={sumTableAgg}
+                                    minRows={3}
+                                    aggOtherRow={true}
                                     data={incomeSummary}
                                     limit={SUMMARY_TABLE_LIMIT}
                                 />
@@ -215,7 +223,7 @@ function Overview(props: OverviewProps) {
                         <h4>Recent Transactions</h4>
                         <DataTable headers={DATA_TABLE_HEADERS} 
                         colNames=   {DATA_TABLE_COLS}
-                        data=       {recentTransactions} 
+                        data=       {recentTransactions}
                         limit=      {MAX_TRANS_PAGE}
                         hovCellFunc=   {setHovCellFunc}
                         />
@@ -237,6 +245,17 @@ function Overview(props: OverviewProps) {
     </>
     )
     //END REACT OVERVIEW ELEMENT
+}
+
+function sumTableAgg(data: Summary[], aggRowName: string = 'NONE' ) {
+
+    let sum = 0;
+    data.forEach(curr => { sum += curr.value as number }); 
+    return  {
+        [consts.SUMMARY_DATA.aggregate]: aggRowName,
+        [consts.SUMMARY_DATA.value]: sum,
+        [consts.SUMMARY_DATA.categories]: 'None'
+    }
 }
 
 export default Overview;

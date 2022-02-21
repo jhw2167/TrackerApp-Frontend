@@ -66,3 +66,9 @@ header{
     text-align: center;
 }
 
+/* Divs with text indicate waiting for data retrieval */
+.loading-data-try {
+    color: white;
+    font-size: large;
+    font-weight: 600;
+}

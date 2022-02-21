@@ -131,6 +131,10 @@ function DataGraph(props: DataGraphProps) {
             return {...value, innerStyle: (value.color === hovColor) ? ANIM_LEG_STYLE : DEF_LEG_STYLE};
         }
 
+    if(stateData.length == 0) {
+        return (<div className="loading-data-try"> Loading Data... </div>)
+    }
+
     return (
         
 
@@ -139,7 +143,7 @@ function DataGraph(props: DataGraphProps) {
 
             <h2 id="data-graph-title">{props.title}</h2>
 
-            
+
         <div className="graph-components-wrapper">
             <div className="data-graph-plot">
                 <XYPlot 
