@@ -130,12 +130,13 @@ function Overview(props: OverviewProps) {
 
             {/*Large div contains entire vertical length page*/}
             <main className="center-div align-items-center">
-            <div className="row row-centered-contents">
+            <div className="row">
 
                
-                <div className="col-6 left-div half-portion-wrapper-col">
+                <div className="col-6 half-portion-wrapper-col">
+                    <div className='left-div row-centered-contents'>
 
-                    <div className='row inner-portion-top-row'>
+                    <div className='row inner-portion-top-row justify-content-center'>
                         <div className='col-12 inner-portion-full-col'>
                         
                         
@@ -146,8 +147,8 @@ function Overview(props: OverviewProps) {
                            limit=         {DATA_GRAPH_LIMIT}
                            title=         {currentMonth}
                            setHovSegment= {setHovCategory}
-                           height={Math.min(winWidth * .40 * .90, 320)}
-                           width={Math.min(winWidth * .40 * .90, 320)}
+                           height={Math.min(winWidth * .40 * .90, 290)}
+                           width={Math.min(winWidth * .40 * .90, 300)}
                            />
                         </div>
 
@@ -157,41 +158,48 @@ function Overview(props: OverviewProps) {
                     {/* END TOP ROW UPPER LEFT */}
 
 
-                    <div className='row inner-portion-second-row'>
-                        <div className='col-12 inner-portion-full-col'>
-                        
-                            <div className='summary-tables'>
+                    <div className='row second-row justify-content-center'>
+                        <div className='col-10 inner-portion-full-col'>
+
                             {/*div for summary table 1, expenses */}
-                            <div className='inline-summary-table'> 
-                                <SubTable 
-                                    title={'Income Summary'}
-                                    headers={['Income Summary']}
-                                    data={incomeSummary}
-                                    limit={SUMMARY_TABLE_LIMIT}
-                                />
-                            </div>
 
-                            <div className="summary-table-spacer"></div>
-
-                                {/*div for summary table 2, income*/ }
                             <div className='inline-summary-table'> 
                                 <SubTable 
                                     title={'Expense Summary'}
                                     headers={['Expense Summary']}
+                                    colNames={Object.values(consts.SUMMARY_DATA)}
                                     data={expenseSummary}
                                     limit={SUMMARY_TABLE_LIMIT}
                                 />
                             </div>
-                            </div>
 
                         </div>    
                     </div>
+                            
+                    <div className='row third-row justify-content-center'>
+                        <div className='col-10 inner-portion-full-col'>
+
+                                {/*div for summary table 2, income*/ }
+
+                                <div className='inline-summary-table'> 
+                                <SubTable 
+                                    title={'Income Summary'}
+                                    headers={['Income Summary']}
+                                    colNames={Object.values(consts.SUMMARY_DATA)}
+                                    data={incomeSummary}
+                                    limit={SUMMARY_TABLE_LIMIT}
+                                />
+                                </div>
+
+
+                        </div>
+                        </div>    
                     {/*#######################*/}
                     {/* END SECOND ROW  LEFT */}
                     {/*#######################*/}
 
                    
-
+                    </div>
                 </div>
                {/*#######################*/}
                 {/* END Left side col segment */}
@@ -222,7 +230,8 @@ function Overview(props: OverviewProps) {
 
     {/* Container wrapper class */}
             <footer>
-                <div> {JSON.stringify(recentTransactions[0], null, 2)} </div>
+                <div> {//JSON.stringify(recentTransactions[0], null, 2)
+                } </div>
             </footer>
 
         </div>  {/* Container wrapper class */}

@@ -136,8 +136,11 @@ function DataGraph(props: DataGraphProps) {
 
         <div className="data-graph-wrapper">
 
+
             <h2 id="data-graph-title">{props.title}</h2>
 
+            
+        <div className="graph-components-wrapper">
             <div className="data-graph-plot">
                 <XYPlot 
                 xDomain={[-.78, 1]}
@@ -204,7 +207,8 @@ function DataGraph(props: DataGraphProps) {
                  />
     
             </div>
-           
+        
+        </div>
         </div>
         //end data graph wrapper
                     

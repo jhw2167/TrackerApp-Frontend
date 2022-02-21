@@ -4,6 +4,7 @@
 
 html, body, .container-table {
     height: 100%;
+    background-color: black;
 }
 
 /* header div */
@@ -15,38 +16,42 @@ header{
 /* Main Center div, by id */
 .container {
     width: 60%;
+    background-color: white;
+    padding-bottom: 10px;
 }
 
 .center-div {
     margin-top: 2em;
-    border-left: 2px solid black;
-    border-right: 2px solid black;
+    border: 8px solid black;
+    border-top: 0px;
+    border-bottom: 0px;
     min-height: 80vh;
     min-width: 800px;
 }
 
 /* LeftSide Div */
 .left-div {
-    text-align: center;
-    justify-content: center;
+    width: 85%;
     margin: auto;
     margin-top: 0%;
+
+    text-align: center;
+    justify-content: center;
+    
 }
 
 .left-data-graph {
-    width: 100%;
     margin: auto;
     margin-bottom: 10%;
 }
 
-
-.sumary-tables {
-    margin: auto;
-    width: 80%;
-}
 
 .inline-summary-table {
+    height: 100%;
     margin-bottom: 10%;
+    width: 100%;
+    table-layout: fixed;
+
 }
 
 
@@ -55,7 +60,7 @@ header{
     float: right;
     margin: auto;
     margin-right: 7%;
-    min-width: 380px;
+    min-width: 340px;
     
 
     text-align: center;

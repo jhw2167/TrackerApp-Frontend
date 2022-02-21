@@ -19,6 +19,12 @@ export const TRANS_DATA = {
 	NOTES: 'notes'
 }
 
+export const SUMMARY_DATA = {
+    aggregate: 'aggregateCol',
+    value: 'value',
+    categories: 'categories'
+}
+
 /* COLORS */
     export const PASTEL_PALETE = [
         //Blues
