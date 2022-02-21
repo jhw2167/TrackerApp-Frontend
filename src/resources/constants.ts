@@ -137,6 +137,9 @@ export const MNTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul","aug", "se
         return [start, end];
     }
 
+    export const properCase = function(a: string): string {
+        return a.charAt(0).toUpperCase() + a.slice(1);
+    }
 /* Interfaces */
 export interface Transaction {
     tId: string;
@@ -167,7 +170,7 @@ export interface Summary {
 /* FUNCTION CONSTANTS */
 
 //Returns object parsed by categories
-export const aggregateTransactions = function(data: Transaction[], categories: string[] | Set<string>, limit: number): DataTuple[]  {
+export const aggregateTransactions = function(data: Transaction[], categories: string[] | Set<string>, limit: number = Infinity): DataTuple[]  {
     let map: Map<string, number> = new Map<string, number>();
 
     //Append array for each category
@@ -189,18 +192,3 @@ export const aggregateTransactions = function(data: Transaction[], categories: s
     return res;
 }
 
-/*
-    - filters data with passed function
-    - Pulls "categories" to aggregate with via aggBy function by placing them in a set
-    - Performs aggregate function according to provided method, i.e aggWith may specify
-    "add all values with same category in filtered dataSet" or
-    "join all strings with same category in filtered dataSet"
-*/
-export const setAggregate = function(data: any[],
-     aggBy: Function, aggWith: Function): any[] {
-
-    let cats = new Set<string>();
-    data.forEach((v) => aggBy(cats, v));
-
-    return aggWith(data, cats, data.length);
-}

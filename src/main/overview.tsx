@@ -46,7 +46,7 @@ function Overview(props: OverviewProps) {
         consts.TRANS_DATA.CAT
     ]
 
-    const DATA_GRAPH_EXCLUSIONS = new Set<string>(["Income"]);
+    const DATA_GRAPH_EXCLUSIONS = new Set<string>(['Income', 'Returns']);
     const DATA_GRAPH_EXC_FUNC: Function = (tuple: DataTuple) => {
         return !DATA_GRAPH_EXCLUSIONS.has(tuple.label as string);
     }
@@ -78,8 +78,7 @@ function Overview(props: OverviewProps) {
         const [start, end] = consts.convMnYrToTimeFrame(props.mn, props.yr);
         const srchParamStr = "?mn=" + consts.MONTHS.at(start.getMonth()) + "&yr=" + start.getFullYear();
         props.setSearchParams(srchParamStr);
-        setCurrentMonth(consts.MONTHS[(new Date( Date.now()).getMonth())])
-        setCurrentMonth(currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1) );
+        setCurrentMonth(consts.properCase(consts.MONTHS[start.getMonth()]))
 
         //api calls
         api.getRequest(api.SERVER_ALL_TRANSACTIONS_DATES(start, end), setMonthlyTransactions);
@@ -98,7 +97,7 @@ function Overview(props: OverviewProps) {
 
     //On update to dependencies
     useEffect( () => {
-        setCategoriesData(consts.aggregateTransactions(monthlyTransactions, categories, 50));
+        setCategoriesData(consts.aggregateTransactions(monthlyTransactions, categories));
     }, [categories, monthlyTransactions]);
     
     useEffect( () => {

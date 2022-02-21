@@ -49,10 +49,10 @@ export const SERVER_ALL_CATEGORIES = SERVER_ALL_TRANSACTIONS + "/categories";
     }
 
     //Build request with dates
-    export function SERVER_ALL_TRANSACTIONS_RECENT(limit: Number, offset: Number = 0): string {
+    export function SERVER_ALL_TRANSACTIONS_RECENT(limit: Number, offset: number = 0): string {
         return SERVER_ALL_TRANSACTIONS + "/recent" 
         + "?limit=" + limit +
-        "&offset=" + offset;
+        "&offset=" + Math.max(offset, 0);
     }
 
 /* REQUESTS */

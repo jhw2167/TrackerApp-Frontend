@@ -73,7 +73,7 @@ function DataTable(props: DataTableProps) {
                 <tbody>
 
                 {/*             Table Header            */}
-                <tr className="data-table-header">{
+                <tr className={'data-table-header' + ' data-subtable-header'}>{
                     Object.entries(props.headers).map(([key, value]) => {
                     return <th colSpan={ (data && data.length > 0) ? Object.entries(data[0]).length : 1}
                      key={key}>{value}</th>})
@@ -81,13 +81,13 @@ function DataTable(props: DataTableProps) {
 
 
                 {/*         Now return data row      */}
-                {data.slice(0, props.limit).map( (value: any, key: number) => {
+                {data.slice(0, props.limit-1).map( (value: any, key: number) => {
                     let isHov: number = hovCells.has(value) ? 1 : 0;
                     isHov += _.isEqual(deepHovCell, value) ? 1 : 0; //0-no hov, 1-hov, 2-deep hov
 
                     let rowStyle = isHov > 0 ? HOV_ROW_STYLE : undefined;
                     return <tr className= {props.title.replace(' ', '-').toLowerCase() + '-subtable-row' 
-                            + ' data-subtable-row'}
+                            + ' data-subtable-row' + ' data-table-row'}
                      style={rowStyle} key={key}
                     onMouseEnter={() => {
                         hovCells.add(value);
