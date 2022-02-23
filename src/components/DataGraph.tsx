@@ -19,6 +19,7 @@ import '../css/components/DataGraph.css'
 
 //React CSS
 import * as CSS from 'csstype';
+import Arrow from "../resources/arrow";
 
 //Define interface for props type
 interface DataGraphProps {
@@ -29,6 +30,7 @@ interface DataGraphProps {
     exclusions?: Function;
     limit?: number;
     setHovSegment?: Function;
+    updateDataHyperlink?: Function;
 }
 
 interface FullArcSeriesPoint extends ArcSeriesPoint {
@@ -131,6 +133,13 @@ function DataGraph(props: DataGraphProps) {
             return {...value, innerStyle: (value.color === hovColor) ? ANIM_LEG_STYLE : DEF_LEG_STYLE};
         }
 
+        //for hyperlink on arrows
+        const arrowFunc = (a: number) => {
+            if(props.updateDataHyperlink)
+                props.updateDataHyperlink(a)
+        }
+        
+
     if(stateData.length == 0) {
         return (<div className="loading-data-try"> Loading Data... </div>)
     }
@@ -140,8 +149,16 @@ function DataGraph(props: DataGraphProps) {
 
         <div className="data-graph-wrapper">
 
-
-            <h2 id="data-graph-title">{props.title}</h2>
+            <div className="row justify-content-center" id="data-graph-full-title">
+                <Arrow width={40} color={'#000000'}
+                    direction={'left'} size={26} weight={900}
+                    onClick={() => arrowFunc(1)}/>
+                <h2 id="data-graph-title">{props.title}</h2>
+                <Arrow width={40} color={'#000000'}
+                    direction={'right'} size={26} weight={900}
+                    onClick={() => arrowFunc(-1)}/>
+            </div>
+            
 
 
         <div className="graph-components-wrapper">

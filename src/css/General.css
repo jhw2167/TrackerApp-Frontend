@@ -1,0 +1,13 @@
+/* Styling for components that appear in various pages */
+
+
+/* Hyperlink Arrows */
+.hyperlink-arrow {
+    padding: 4px;
+}
+
+.hyperlink-arrow:hover {
+    color: white !important;
+    background-color: black;
+    cursor: pointer;
+}

@@ -11,19 +11,29 @@
 }
 
 .graph-components-wrapper {
+    position: relative;
     background-color: black;
     color: white;
+    z-index: 0;
 }
 
 /* Title */
+#data-graph-full-title {
+    background-color: white;
+    position: relative;
+    z-index: 10;
+}
 
 #data-graph-title {
-    margin-bottom: -5%;
-    position: relative;
     color: black;
-    background-color: white;
-    height: 1.4em;
+    width: fit-content;
+    padding: 0 6px !important;
 }
+
+#data-graph-full-title > * {
+    padding: 0;
+}
+
 
 /* DIV styling for Graph */
 

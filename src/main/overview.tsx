@@ -65,31 +65,38 @@ function Overview(props: OverviewProps) {
 
     const [categories, setCategories] = useState(["Loading Categories"]);
     const [categoriesData, setCategoriesData] = useState<DataTuple[]>([]);
-    const [currentMonth, setCurrentMonth] = useState<string>( 
-        consts.MONTHS[(new Date( Date.now()).getMonth())] );
+    const [currentDateByMonth, setCurrentDateByMonth] = useState<Date>( () => {
+        let date = new Date(Date.now());
+        return new Date(date.getFullYear(), date.getMonth(), 1);
+    });
 
     const [hovCategory, setHovCategory] = useState<string>("");
     const [hovCellFunc, setHovCellFunc] = useState<Function>();
 
-    //OnLanding
-    useEffect( () => {
+    //Grouped functions
+    const updateOnDateChange = (start: Date, end: Date) => {
 
-        //Date stuff
-        const [start, end] = consts.convMnYrToTimeFrame(props.mn, props.yr);
-        const srchParamStr = "?mn=" + consts.MONTHS.at(start.getMonth()) + "&yr=" + start.getFullYear();
-        props.setSearchParams(srchParamStr);
-        setCurrentMonth(consts.properCase(consts.MONTHS[start.getMonth()]))
-
-        //api calls
+        //transactions
+        console.log("st: %s and end: %s", start, end);
         api.getRequest(api.SERVER_ALL_TRANSACTIONS_DATES(start, end), setMonthlyTransactions);
         api.getRequest(api.SERVER_ALL_TRANSACTIONS_RECENT(offsetTransactions + MAX_TRANS_PAGE,
              offsetTransactions), setRecentTransactions);
 
         api.getRequest(api.SERVER_INCOME_SUMMARY(start, end), setIncomeSummary);
         api.getRequest(api.SERVER_EXPENSE_SUMMARY(start, end), setExpenseSummary);
-        
-        console.log("Inc: %s \n\n Exp: %s", incomeSummary, expenseSummary);
 
+        const srchParamStr = "?mn=" + consts.MONTHS.at(start.getMonth()) + "&yr=" + start.getFullYear();
+        props.setSearchParams(srchParamStr);
+        
+    }
+
+    //OnLanding
+    useEffect( () => {
+        //Date stuff
+        const [start, end] = consts.convMnYrToTimeFrame(props.mn, props.yr);
+
+        //api Calls
+        updateOnDateChange(start, end);
         api.getRequest(api.SERVER_ALL_CATEGORIES, setCategories);
     }, []);
 
@@ -101,6 +108,12 @@ function Overview(props: OverviewProps) {
     useEffect( () => {
         setCategoriesData(consts.aggregateTransactions(monthlyTransactions, categories));
     }, [categories, monthlyTransactions]);
+
+    useEffect( () =>  {
+        updateOnDateChange(currentDateByMonth, 
+            new Date(currentDateByMonth.getFullYear(), currentDateByMonth.getMonth()+1, 1));
+    }
+    , [currentDateByMonth])
     
     useEffect( () => {
         if(hovCategory && hovCellFunc) {
@@ -112,6 +125,19 @@ function Overview(props: OverviewProps) {
         }
     }, [hovCategory]);
 
+
+    //Other functions
+    const updateCurrentMonth = (dir: number) => {
+        let yy = new Date(Date.now()).getFullYear();
+        let mm = new Date(Date.now()).getMonth();
+
+        if(dir > 0 && !((yy==currentDateByMonth.getFullYear())
+         && (mm<=currentDateByMonth.getMonth()))) {
+            setCurrentDateByMonth(new Date(currentDateByMonth.setMonth(currentDateByMonth.getMonth()+1)))
+        } else if (dir < 0) {
+            setCurrentDateByMonth(new Date(currentDateByMonth.setMonth(currentDateByMonth.getMonth()-1)))
+        }
+    }
 
     //Only Render if we have all our data:
 
@@ -146,10 +172,11 @@ function Overview(props: OverviewProps) {
                            data=          {categoriesData} 
                            exclusions=    {DATA_GRAPH_EXC_FUNC}
                            limit=         {DATA_GRAPH_LIMIT}
-                           title=         {currentMonth}
+                           title=         {consts.properCase(consts.MONTHS[currentDateByMonth.getMonth()])}
                            setHovSegment= {setHovCategory}
                            height={Math.min(winWidth * .40 * .90, 290)}
                            width={Math.min(winWidth * .40 * .90, 300)}
+                           updateDataHyperlink={updateCurrentMonth}
                            />
                         </div>
 
@@ -247,6 +274,7 @@ function Overview(props: OverviewProps) {
     //END REACT OVERVIEW ELEMENT
 }
 
+//Aggregate summary function for subTables
 function sumTableAgg(data: Summary[], aggRowName: string = 'NONE' ) {
 
     let sum = 0;
