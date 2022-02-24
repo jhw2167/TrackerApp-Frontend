@@ -1,6 +1,10 @@
 
 /* CSS for data table designed in components/DataTable.tsx */
 
+.data-table-wrapper {
+  min-width: 450px;
+}
+
 /* Table CSS */
 .transactions-table {
     float: right;

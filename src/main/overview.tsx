@@ -35,7 +35,7 @@ interface OverviewProps {
 function Overview(props: OverviewProps) {
 
     //Constants
-    const MAX_TRANS_PAGE: number = 25;
+    const MAX_TRANS_PAGE: number = 30;
     const DATA_TABLE_HEADERS: Array<string> = [
         "Date", "Vendor", "Amount", "Category"
     ]
@@ -164,9 +164,7 @@ function Overview(props: OverviewProps) {
             <header>
                 <div className="logoImg d-inline header-div">
                     <img id="banner-img" src="img/banner.jpg"/>
-                    <img src="images/logo.png" alt="Tracker"/>
                 </div>
-                <h1 id="title">Tracker</h1>
             </header>
 
             {/*Large div contains entire vertical length page*/}
@@ -188,8 +186,8 @@ function Overview(props: OverviewProps) {
                            limit=         {DATA_GRAPH_LIMIT}
                            title=         {consts.properCase(consts.MONTHS[currentDateByMonth.getMonth()])}
                            setHovSegment= {setHovCategory}
-                           height={Math.min(winWidth * .40 * .90, 290)}
-                           width={Math.min(winWidth * .40 * .90, 300)}
+                           height={Math.min(winWidth * .50 * .90, 310)}
+                           width={Math.min(winWidth * .50 * .90, 340)}
                            updateDataHyperlink={updateCurrentMonth}
                            />
                         </div>

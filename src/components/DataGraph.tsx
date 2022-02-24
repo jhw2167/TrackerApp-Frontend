@@ -48,11 +48,11 @@ const RAD_START = 0;
 const RAD = 1;
 const MAX_DATA_DISPLAY = 8
 
-const STROKE_WIDTH = 3;
-const ANIM_STROKE_WIDTH = 5;
+const STROKE_WIDTH = 4;
+const ANIM_STROKE_WIDTH = 6;
 
-const DEF_CHART_STYLE = {stroke: 'white', strokeWidth: STROKE_WIDTH};
-const ANIM_CHART_STYLE = {stroke: 'black', strokeWidth: ANIM_STROKE_WIDTH};
+const DEF_CHART_STYLE = {stroke: 'black', strokeWidth: STROKE_WIDTH};
+const ANIM_CHART_STYLE = {stroke: 'rgb(255, 80, 10)', strokeWidth: ANIM_STROKE_WIDTH};
     
 
 //Data Legend constants
@@ -61,13 +61,13 @@ const l_STROKE_STYLE = 'solid';
 const PER_LEGEND = 4;
 
 const DEF_LEG_STYLE: CSS.Properties = {
-    ['fontSize' as any]: 11,
-    ['fontWeight' as any]: 400,
+    ['fontSize' as any]: 14,
+    ['fontWeight' as any]: 600,
 };
 
 const ANIM_LEG_STYLE: CSS.Properties = {
-    ['fontSize' as any]: 14,
-    ['fontWeight' as any]: 600,
+    ['fontSize' as any]: 16,
+    ['fontWeight' as any]: 800,
 };
 
 
@@ -149,11 +149,11 @@ function DataGraph(props: DataGraphProps) {
 
         <div className="data-graph-wrapper">
 
-            <div className="row justify-content-center" id="data-graph-full-title">
+            <div className="row justify-content-center content-header" id="data-graph-full-title">
                 <Arrow width={40} color={'#000000'}
                     direction={'left'} size={26} weight={900}
                     onClick={() => arrowFunc(1)}/>
-                <h2 id="data-graph-title">{props.title}</h2>
+                <h2 className="content-header-title" id="data-graph-title">{props.title}</h2>
                 <Arrow width={40} color={'#000000'}
                     direction={'right'} size={26} weight={900}
                     onClick={() => arrowFunc(-1)}/>
