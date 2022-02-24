@@ -11,14 +11,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/components/DataTable.css'
 import * as CSS from 'csstype';
 import { useEffect, useState } from "react";
+import Arrow from "../resources/arrow";
 
 //Define interface for props type
 interface DataTableProps {
+    title: string;
     headers: String[];
     colNames: String[];
     data: Array<any>;
     limit: number;
     hovCellFunc?: Function;
+    updateDataHyperlink?: Function;
 }
 
 /* Styles */ 
@@ -55,7 +58,25 @@ function DataTable(props: DataTableProps) {
     }
     , [extHovCells])
 
-    return (
+    //Utility functions
+    //for hyperlink on arrows
+    const arrowFunc = (a: number) => {
+        if(props.updateDataHyperlink)
+            props.updateDataHyperlink(a)
+    }
+
+    return ( <div className="data-table-wrapper">
+                <div className="row justify-content-center" id="data-graph-full-title">
+
+                <Arrow width={40} color={'#000000'}
+                    direction={'left'} size={26} weight={900}
+                    onClick={() => arrowFunc(-1)}/>
+                <h2 id="data-graph-title">{props.title}</h2>
+                <Arrow width={40} color={'#000000'}
+                    direction={'right'} size={26} weight={900}
+                    onClick={() => arrowFunc(1)}/>
+            </div>
+
             <table className="transactions-table">
                 <tbody>
 
@@ -126,6 +147,8 @@ function DataTable(props: DataTableProps) {
 
                 </tbody>
             </table>
+
+        </div>
     )
     //END RETURN
 }

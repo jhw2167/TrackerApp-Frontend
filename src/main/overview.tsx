@@ -15,6 +15,7 @@ import SubTable from '../components/SubTable';
 
 //CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../css/General.css'
 import '../css/main/Overview.css'
 import { Config } from '@testing-library/react';
 import DataGraph from '../components/DataGraph';
@@ -109,6 +110,11 @@ function Overview(props: OverviewProps) {
         setCategoriesData(consts.aggregateTransactions(monthlyTransactions, categories));
     }, [categories, monthlyTransactions]);
 
+    useEffect( () => {
+        api.getRequest(api.SERVER_ALL_TRANSACTIONS_RECENT(offsetTransactions + MAX_TRANS_PAGE,
+            offsetTransactions), setRecentTransactions);
+    }, [offsetTransactions]);
+
     useEffect( () =>  {
         updateOnDateChange(currentDateByMonth, 
             new Date(currentDateByMonth.getFullYear(), currentDateByMonth.getMonth()+1, 1));
@@ -133,10 +139,17 @@ function Overview(props: OverviewProps) {
 
         if(dir > 0 && !((yy==currentDateByMonth.getFullYear())
          && (mm<=currentDateByMonth.getMonth()))) {
-            setCurrentDateByMonth(new Date(currentDateByMonth.setMonth(currentDateByMonth.getMonth()+1)))
+            setCurrentDateByMonth(new Date(currentDateByMonth.getFullYear(), currentDateByMonth.getMonth()+1, 1))
         } else if (dir < 0) {
-            setCurrentDateByMonth(new Date(currentDateByMonth.setMonth(currentDateByMonth.getMonth()-1)))
+            setCurrentDateByMonth(new Date(currentDateByMonth.getFullYear(), currentDateByMonth.getMonth()-1, 1))
         }
+    }
+
+
+    //positive offset is further back in the logs
+    const updateRecentTransactions = (dir: number) => {
+        const offSet = MAX_TRANS_PAGE * dir;
+        setOffsetTransactions(Math.max(0, offsetTransactions + offSet));
     }
 
     //Only Render if we have all our data:
@@ -150,9 +163,10 @@ function Overview(props: OverviewProps) {
             {/*page title and logo*/}
             <header>
                 <div className="logoImg d-inline header-div">
+                    <img id="banner-img" src="img/banner.jpg"/>
                     <img src="images/logo.png" alt="Tracker"/>
                 </div>
-                <h1>Tracker</h1>
+                <h1 id="title">Tracker</h1>
             </header>
 
             {/*Large div contains entire vertical length page*/}
@@ -247,12 +261,13 @@ function Overview(props: OverviewProps) {
                 <div className="col-6">
 
                     <div className='right-data-table'>
-                        <h4>Recent Transactions</h4>
-                        <DataTable headers={DATA_TABLE_HEADERS} 
+                        <DataTable headers={DATA_TABLE_HEADERS}
+                        title=      {'Recent Transactions'} 
                         colNames=   {DATA_TABLE_COLS}
                         data=       {recentTransactions}
                         limit=      {MAX_TRANS_PAGE}
                         hovCellFunc=   {setHovCellFunc}
+                        updateDataHyperlink={updateRecentTransactions}
                         />
 
                     </div>

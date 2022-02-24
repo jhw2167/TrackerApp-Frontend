@@ -1,5 +1,46 @@
 /* Styling for components that appear in various pages */
 
+element {
+    --primary-col: rgb(255, 80, 10);
+}
+
+/* Most General Styling */
+html, body, .container-table {
+    height: 100%;
+}
+
+/* header div */
+header{
+    margin-top: 1 px;
+    min-height: 4em;
+    min-width: 800px;
+    border-top: 1px solid black;
+}
+
+/* Main Center div, by id */
+.container {
+    width: 60%;
+    background-color: white;
+    padding-bottom: 10px;
+}
+
+
+
+/* Page banner */
+#banner-img {
+    width: 100%;
+}
+
+#title {
+    position: relative;
+    top: -63px;
+    left: 4px;
+
+    color: rgb(255, 51, 0);
+    font-weight: bold;
+    font-size: xx-large;
+}
+
 
 /* Hyperlink Arrows */
 .hyperlink-arrow {
