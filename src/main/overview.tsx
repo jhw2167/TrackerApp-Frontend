@@ -17,6 +17,7 @@ import SubTable from '../components/SubTable';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/General.css'
 import '../css/main/Overview.css'
+import '../css/Background.css'
 import { Config } from '@testing-library/react';
 import DataGraph from '../components/DataGraph';
 import { URLSearchParamsInit } from 'react-router-dom';
@@ -163,7 +164,7 @@ function Overview(props: OverviewProps) {
             {/*page title and logo*/}
             <header>
                 <div className="logoImg d-inline header-div">
-                    <img id="banner-img" src="img/banner.jpg"/>
+                    <img id="banner-img" src="img/banner.png"/>
                 </div>
             </header>
 

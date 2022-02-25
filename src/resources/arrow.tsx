@@ -34,7 +34,7 @@ function Arrow(props: ArrowProps) {
     let symbol = (props.direction && props.direction=='left') ? '<' : '>';
     return(
         <div style={innerStyle} className={'hyperlink-arrow'}
-        onClick={() => {if(props.onClick) props.onClick()}} > {symbol} </div>
+        onClick={() => {if(props.onClick) props.onClick()}} >{symbol}</div>
     );
 }
 

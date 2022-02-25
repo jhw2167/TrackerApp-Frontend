@@ -1,0 +1,49 @@
+/* Animations to add to bring website to life a bit more */
+
+/*
+    - This is for advanced, big animations on page load, like fading in a picture or something
+    - for simple animations just use csss prop: transition:<css-prop> <time>s; //in seconds
+    The facny key-frame stuff is for different browsers
+*/
+
+element {
+    --fade-time: 1s;
+    --fade-opac-0: 0;
+    --fade-opac-1: .5;
+}
+
+.fade-in-light {
+    animation: fadeIn var(--fade-time);
+    -webkit-animation: var(--fade-time);
+    -moz-animation: var(--fade-time);
+    -o-animation: var(--fade-time);
+    -ms-animation: var(--fade-time);
+  }
+
+  @keyframes fadeIn {
+    0% {opacity: var(--fade-opac-0);}
+    100% {opacity: var(--fade-opac-1);}
+  }
+
+  @-moz-keyframes fadeIn {
+    0% {opacity: var(--fade-opac-0);}
+    100% {opacity: var(--fade-opac-1);}
+  }
+
+  @-webkit-keyframes fadeIn {
+    0% {opacity: var(--fade-opac-0);}
+    100% {opacity: var(--fade-opac-1);}
+  }
+
+  @-o-keyframes fadeIn {
+    0% {opacity: var(--fade-opac-0);}
+    100% {opacity: var(--fade-opac-1);}
+  }
+
+  @-ms-keyframes fadeIn {
+    0% {opacity: var(--fade-opac-0);}
+    100% {opacity: var(--fade-opac-1);}
+  }
+
+
+  /* END FADE IN ANIM */
