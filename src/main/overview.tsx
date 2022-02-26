@@ -20,8 +20,6 @@ import '../css/main/Overview.css'
 import '../css/Background.css'
 import { Config } from '@testing-library/react';
 import DataGraph from '../components/DataGraph';
-import { URLSearchParamsInit } from 'react-router-dom';
-import { URLSearchParams } from 'url';
 import useWindowDimensions from '../resources/WindowDims';
 
 //import '../css/Landing.css';
@@ -156,25 +154,24 @@ function Overview(props: OverviewProps) {
     //Only Render if we have all our data:
 
     return (
-        <>
-
-        <div className="container container-table">
 
         <div className='row outer-row'>
-        <div className='col-sm rev-side-anim side-anim'></div>
+        <div className='col rev-side-anim side-anim'></div>
         <div className='col-8 no-padding' id='overview-center-col'>
 
 
         {/*page title and logo*/}
-        <header>
+            <header>
                 <div className="logoImg d-inline header-div">
-                    <img id="banner-img" src="img/banner.png"/>
+                    <div className='nested-banner-img'>
+                        <img id="banner-img" src="img/blank_banner.png"/>
+                    </div>
                 </div>
             </header>
 
             {/*Large div contains entire vertical length page*/}
             <main className="center-div align-items-center">
-            <div className="row">
+            <div className="row  main-content-row">
 
                
                 <div className="col-6 half-portion-wrapper-col">
@@ -288,14 +285,10 @@ function Overview(props: OverviewProps) {
 
 
         </div>
-            <div className='col-sm for-side-anim side-anim'></div>
-        </div>
-        
-            
+            <div className='col for-side-anim side-anim'></div>
 
-        </div>  {/* Container wrapper class */}
-    </>
-    )
+    </div>)
+          {/* OUTTER ROW WRAPPER class */}
     //END REACT OVERVIEW ELEMENT
 }
 

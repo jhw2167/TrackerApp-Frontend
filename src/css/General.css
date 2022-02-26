@@ -2,13 +2,15 @@
 
 :root {
     --primary-col: rgb(255, 80, 10);
-    --secondary-col: black;
+    --secondary-col: rgb(6,6,6);
     --tert-col: white;
 
     --prim-font-col: rgb(255, 255, 255);
     --sec-font-col: var(--primary-col);
 
     --trans-grey: rgba(196, 196, 196, 0.2);
+    --heavy-grey: rgba(18,18,18);
+    --very-heavy-grey: rgba(6,6,6);
 
     --data-font-base: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     --title-font-base: 'Fantasy';
@@ -21,29 +23,50 @@ html, body, .container-table {
 
 /* header div */
 header{
-    min-height: 4em;
+    min-height: 78px;
     min-width: 800px;
     
-    background-color: var(--primary-col);
+    background-image: linear-gradient(
+        -90deg, 
+        var(--primary-col) 0%, 
+        rgb(255, 160, 100) 40%,
+        var(--primary-col) 90%
+      );
+    border-top: 4px solid var(--secondary-col);
+}
+
+
+.nested-banner-img {
+    width: 60%;
+    position: relative;
+    left: 0.45%;
+    top: -1px;
+}
+
+    /* Page banner img */
+#banner-img {
+    width: 100%;
+}
+
+#banner-text {
+
+}
+
+
+/* END HEADER SPECS */
+
+
+/* Main Center div, by id */
+.container {
+    height: 100%;  
+    padding: 0;
 }
 
 .outer-row {
     width: 100%;
+    --bs-gutter-x: 0;
 }
 
-/* Main Center div, by id */
-.container {
-    margin: auto;
-    max-width: max-content;
-    padding-bottom: 10px;
-}
-
-
-
-/* Page banner */
-#banner-img {
-    width: 100%;
-}
 
 /* Hyperlink Arrows */
 
@@ -65,7 +88,7 @@ header{
 
 .overview-arrow {
     position: relative;
-    top: 13px;
+    top: 11px;
     padding: 4px;
     margin: 0 4px;
 
