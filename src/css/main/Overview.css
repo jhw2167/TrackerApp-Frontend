@@ -24,6 +24,9 @@
     /*background-color: var(--secondary-col);*/
 }
 
+.col-6 {
+    padding: 0;
+}
 /* LeftSide Div */
 .left-div {
     width: 85%;
@@ -54,8 +57,9 @@
     float: right;
     margin: auto;
     margin-right: 7%;
-    min-width: 340px;
-    
+
+    position: relative;
+    left: -3%;
 
     text-align: center;
 }

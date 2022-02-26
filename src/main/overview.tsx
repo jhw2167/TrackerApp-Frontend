@@ -18,7 +18,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/General.css'
 import '../css/main/Overview.css'
 import '../css/Background.css'
-import { Config } from '@testing-library/react';
 import DataGraph from '../components/DataGraph';
 import useWindowDimensions from '../resources/WindowDims';
 
@@ -166,6 +165,11 @@ function Overview(props: OverviewProps) {
                     <div className='nested-banner-img'>
                         <img id="banner-img" src="img/blank_banner.png"/>
                     </div>
+                    <div className='banner-text'>Tracker</div>
+                </div>
+
+                <div className="logo-container">
+                    <div className='logo-subcontainer' id='feet1'><img src="img/logo.png"/></div>
                 </div>
             </header>
 
