@@ -28,7 +28,7 @@ interface DataTableProps {
 const HOV_ROW_STYLE: CSS.Properties = {
     ["fontWeight" as any]: 600,
     ["fontSize" as any]: 15,
-    ["border" as any]: 'solid 3px black',
+    ["border" as any]: 'solid 3px ' + c.PRIM_COLOR,
     ["lineHeight" as any]: '1.6em'
 };
 
@@ -68,9 +68,9 @@ function DataTable(props: DataTableProps) {
     return ( <div className="data-table-wrapper">
                 <div className="row justify-content-center content-header" id="data-table-full-title">
 
-                <Arrow direction={'left'} styleClass={'overview-arrow'} onClick={() => arrowFunc(1)}/>
+                <Arrow direction={'left'} styleClass={'overview-arrow'} onClick={() => arrowFunc(-1)}/>
                 <h2 className="content-header-title" id="data-table-title">{props.title}</h2>
-                <Arrow direction={'right'} styleClass={'overview-arrow'} onClick={() => arrowFunc(-1)}/>
+                <Arrow direction={'right'} styleClass={'overview-arrow'} onClick={() => arrowFunc(1)}/>
             </div>
 
             <table className="transactions-table">

@@ -76,8 +76,9 @@
 
 /* Box holds a few legend items */
 .rv-discrete-color-legend-item {
+    color: var(--prim-font-col);
     text-align: center;
-    padding: 5px 8px ;          /* top left */
+    padding: 5px 10px ;          /* top left */
 }
 
 .rv-discrete-color-legend-item.clickable:hover {
@@ -95,8 +96,8 @@
     height: inherit;
 
     display: 'flex';
-    background-color: rgba(20,20,20, 200) !important;
-    border: 1px solid rgba(20,20,20, 200);
+    background-color: rgba(20,20,20, .8) !important;
+    border: 1px solid rgba(20,20,20, .8);
     border-radius: 7px;
     padding: 2px 4px;
 

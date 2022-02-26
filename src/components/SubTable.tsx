@@ -94,9 +94,14 @@ function SubTable(props: SubTableProps) {
     
                         let rowStyle = (isHov > 0 || (!!props.aggFunction && index==data.length-1))
                          ? HOV_ROW_STYLE : undefined;
+                        let aggRowClassName = (!!props.aggFunction && index==data.length-1) ?
+                        ' data-subtable-aggregate-row' : undefined;
+                        let uniqueAggRowClassName = (!!props.aggFunction && index==data.length-1) ?
+                        ' data-subtable-aggregate-row-' + props.title.replace(' ', '-').toLowerCase() : undefined;
+
                         return <tr className= {props.title.replace(' ', '-').toLowerCase() + '-subtable-row' 
-                                + ' data-subtable-row' + ' data-table-row'}
-                         style={rowStyle} key={index}
+                                + ' data-subtable-row' + ' data-table-row' + aggRowClassName + uniqueAggRowClassName}
+                        key={index}
                         onMouseEnter={() => {
                             hovCells.add(value);
                             setHovCells(hovCells); 
@@ -116,8 +121,9 @@ function SubTable(props: SubTableProps) {
                                 switch(col.toString()) {
     
                                     case c.SUMMARY_DATA.aggregate:
-                                        innerStyle = { ['fontWeight' as any]: 500,
-                                        ['paddingLeft' as any]: '3%'};
+                                        innerStyle = { ['fontWeight' as any]: 600,
+                                        ['paddingLeft' as any]: '3%',
+                                        ["borderLeft" as any]: 'solid 3px ' + c.TRANS_GREY };
                                         val += ':';
                                         break;
     
@@ -136,7 +142,7 @@ function SubTable(props: SubTableProps) {
                                         innerStyle= {['width' as any]: '50%'};
                                         break;
                                     }
-                                } else {
+                                } else {    //This is for filler '-' formatting that fill in null rows
                                     innerStyle = {['fontSize' as any]: '1.2em',
                                  ['fontWeight' as any]: 600, ['textAlign' as any]: 'center',
                                  ['textAlign' as any]: 'center'};

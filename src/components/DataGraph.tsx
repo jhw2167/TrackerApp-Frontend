@@ -48,11 +48,11 @@ const RAD_START = 0;
 const RAD = 1;
 const MAX_DATA_DISPLAY = 8
 
-const STROKE_WIDTH = 4;
-const ANIM_STROKE_WIDTH = 6;
+const STROKE_WIDTH = 3;
+const ANIM_STROKE_WIDTH = 4;
 
-const DEF_CHART_STYLE = {stroke: 'black', strokeWidth: STROKE_WIDTH};
-const ANIM_CHART_STYLE = {stroke: 'rgb(255, 80, 10)', strokeWidth: ANIM_STROKE_WIDTH};
+const DEF_CHART_STYLE = {stroke: consts.SEC_COLOR, strokeWidth: STROKE_WIDTH};
+const ANIM_CHART_STYLE = {stroke: consts.PRIM_COLOR, strokeWidth: ANIM_STROKE_WIDTH};
     
 
 //Data Legend constants
@@ -61,13 +61,13 @@ const l_STROKE_STYLE = 'solid';
 const PER_LEGEND = 4;
 
 const DEF_LEG_STYLE: CSS.Properties = {
-    ['fontSize' as any]: 14,
-    ['fontWeight' as any]: 600,
+    ['fontSize' as any]: 15,
+    ['fontWeight' as any]: 500,
 };
 
 const ANIM_LEG_STYLE: CSS.Properties = {
-    ['fontSize' as any]: 16,
-    ['fontWeight' as any]: 800,
+    ['fontSize' as any]: 20,
+    ['fontWeight' as any]: 650,
 };
 
 

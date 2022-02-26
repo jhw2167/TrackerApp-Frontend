@@ -28,6 +28,8 @@ export const SUMMARY_DATA = {
 /* COLORS */
     export const PRIM_COLOR = 'rgb(255, 80, 10)';
     export const SEC_COLOR = 'black';
+    export const TERT_COLOR = 'white';
+    export const TRANS_GREY = 'rgba(196, 196, 196, 0.2)';
 
     export const PRIM_FONT_COLOR = 'white';
     export const SEC_FONT_COLOR = PRIM_COLOR;

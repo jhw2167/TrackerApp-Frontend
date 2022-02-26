@@ -10,20 +10,41 @@
 
 /* Header CSS */
   .data-subtable-header{
-    line-height: 1.5em;
+    line-height: 1.75em;
+    border-bottom: 1px solid var(--trans-grey);
    }
 
 
 /* Row CSS */
 .data-subtable-row {
+    font-size: 0.95em;
+    font-weight: 400;
     text-align: left;
   }
+
+.data-subtable-row:hover {
+  font-weight: 600;
+  font-size: 1.1em;
+  border: solid 2px;
+  border-color: var(--tert-col);
+
+  line-height: 1.6;
+}
+
+.data-subtable-aggregate-row {
+  font-weight: 600;
+  font-size: 1em;
+  line-height: 1.6;
+
+  border: solid 3px;
+  border-color: var(--trans-grey);
+}
   
-  .income-summary-subtable-row:hover {
-    background-color: aquamarine;
-  }
+.income-summary-subtable-row:hover {
+  background-color: darkgreen;
+}
 
 
-  .expense-summary-subtable-row:hover {
-    background-color: darksalmon;
-  }
+.expense-summary-subtable-row:hover {
+  background-color: red;
+}
