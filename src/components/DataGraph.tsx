@@ -150,13 +150,9 @@ function DataGraph(props: DataGraphProps) {
         <div className="data-graph-wrapper">
 
             <div className="row justify-content-center content-header" id="data-graph-full-title">
-                <Arrow width={40} color={'#000000'}
-                    direction={'left'} size={26} weight={900}
-                    onClick={() => arrowFunc(1)}/>
+                <Arrow direction={'left'} styleClass={'overview-arrow'} onClick={() => arrowFunc(1)}/>
                 <h2 className="content-header-title" id="data-graph-title">{props.title}</h2>
-                <Arrow width={40} color={'#000000'}
-                    direction={'right'} size={26} weight={900}
-                    onClick={() => arrowFunc(-1)}/>
+                <Arrow direction={'right'} styleClass={'overview-arrow'} onClick={() => arrowFunc(-1)}/>
             </div>
             
 

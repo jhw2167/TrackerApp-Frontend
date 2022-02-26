@@ -26,6 +26,15 @@ export const SUMMARY_DATA = {
 }
 
 /* COLORS */
+    export const PRIM_COLOR = 'rgb(255, 80, 10)';
+    export const SEC_COLOR = 'black';
+
+    export const PRIM_FONT_COLOR = 'white';
+    export const SEC_FONT_COLOR = PRIM_COLOR;
+
+    export const DATA_FONT = 'Lucida Sans';
+    export const TITLE_FONT = PRIM_COLOR;
+
     export const PASTEL_PALETE = [
         //Blues
         '#3D426B',

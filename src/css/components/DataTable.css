@@ -6,6 +6,13 @@
 }
 
 /* Table CSS */
+table {
+  font-family: var(--data-font-base);
+  color: var(--prim-font-col);
+  border: solid 2px;
+  border-color: var(--trans-grey);
+}
+
 .transactions-table {
     float: right;
     text-align: center;
@@ -15,10 +22,11 @@
 
 /* Header CSS */
   .data-table-header{
-    background-color: rgba(8, 0, 0, 0.2);
-    color: black;
+    background-color: transparent;
+    color: var(--primary-col);
 
-    border: solid 2px rgba(8, 0, 0, 0.2);
+    border: solid 4px;
+    border-color: var(--trans-grey);
     border-bottom: 0;
     line-height: 3em;
 
@@ -33,11 +41,12 @@
 .data-table-row {
     text-align: middle;
     vertical-align:middle;
-    border: solid 2px black;
+
+    border: solid 2px;
+    border-color: var(--trans-grey);
 
     font-weight: 400;
-    font-size: 14px;
-    color: black;
+    font-size: 14px; 
     overflow-x: none;
 
     white-space: nowrap;

@@ -1,19 +1,42 @@
+/* Dynamic Backgroun ideas */
+
+/*URL: https://alvarotrigo.com/blog/animated-backgrounds-css/ */
+
 element {
     --sec-heavy-grey: 18;
     --sec-med-grey: 32;
     --sec-light-grey: 96;
 }
 
-#root {
-    width: 100%;
+.side-anim {
+    width: auto;
     height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-size: 300% 300%;
+    padding: 0;
+
+}
+
+.for-side-anim {
+    
     background-image: linear-gradient(
-          -45deg, 
-          rgba(0,0,0,1) 0%, 
+          -90deg, 
+          rgba(255,240,240,1) 0%, 
+          rgba(18,18,18,1) 51%, 
+          rgba(0,0,0,1) 100%
+    );  
+    animation: AnimateBG 20s ease infinite;
+  }
+  
+  @keyframes AnimateBG { 
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
+
+  .rev-side-anim {
+
+    background-image: linear-gradient(
+          90deg, 
+          rgba(255,240,240,1) 0%, 
           rgba(18,18,18,1) 51%, 
           rgba(0,0,0,1) 100%
     );  

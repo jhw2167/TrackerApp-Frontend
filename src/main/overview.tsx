@@ -160,9 +160,13 @@ function Overview(props: OverviewProps) {
 
         <div className="container container-table">
 
-        
-            {/*page title and logo*/}
-            <header>
+        <div className='row outer-row'>
+        <div className='col-sm rev-side-anim side-anim'></div>
+        <div className='col-8 no-padding' id='overview-center-col'>
+
+
+        {/*page title and logo*/}
+        <header>
                 <div className="logoImg d-inline header-div">
                     <img id="banner-img" src="img/banner.png"/>
                 </div>
@@ -187,8 +191,8 @@ function Overview(props: OverviewProps) {
                            limit=         {DATA_GRAPH_LIMIT}
                            title=         {consts.properCase(consts.MONTHS[currentDateByMonth.getMonth()])}
                            setHovSegment= {setHovCategory}
-                           height={Math.min(winWidth * .50 * .90, 310)}
-                           width={Math.min(winWidth * .50 * .90, 340)}
+                           height={Math.min(winWidth * .60 * .90, 340)}
+                           width={Math.min(winWidth * .60 * .90, 380)}
                            updateDataHyperlink={updateCurrentMonth}
                            />
                         </div>
@@ -281,6 +285,13 @@ function Overview(props: OverviewProps) {
                 <div> {//JSON.stringify(recentTransactions[0], null, 2)
                 } </div>
             </footer>
+
+
+        </div>
+            <div className='col-sm for-side-anim side-anim'></div>
+        </div>
+        
+            
 
         </div>  {/* Container wrapper class */}
     </>

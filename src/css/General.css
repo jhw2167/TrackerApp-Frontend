@@ -1,7 +1,17 @@
 /* Styling for components that appear in various pages */
 
-element {
+:root {
     --primary-col: rgb(255, 80, 10);
+    --secondary-col: black;
+    --tert-col: white;
+
+    --prim-font-col: rgb(255, 255, 255);
+    --sec-font-col: var(--primary-col);
+
+    --trans-grey: rgba(196, 196, 196, 0.2);
+
+    --data-font-base: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    --title-font-base: 'Fantasy';
 }
 
 /* Most General Styling */
@@ -14,13 +24,18 @@ header{
     margin-top: 1 px;
     min-height: 4em;
     min-width: 800px;
-    border-top: 1px solid black;
+    
+    background-color: var(--primary-col);
+}
+
+.outer-row {
+    width: 100%;
 }
 
 /* Main Center div, by id */
 .container {
-    width: 60%;
-    background-color: white;
+    margin: auto;
+    max-width: max-content;
     padding-bottom: 10px;
 }
 
@@ -31,34 +46,52 @@ header{
     width: 100%;
 }
 
-
-.container {
-    background-color: rgba(0,0,0, 0);
-}
-
-#title {
-    position: relative;
-    top: -63px;
-    left: 4px;
-
-    color: rgb(255, 51, 0);
-    font-weight: bold;
-    font-size: xx-large;
-}
-
-
 /* Hyperlink Arrows */
 
 .hyperlink-arrow {
-    padding: 4px;
-    background-color: rgba(0,0,0, 0);
-    transition:background-color 0.4s;
+    width: fit-content;
+    height: 30px;
+
+    font-size: 2em;
+    font-weight: 900;
 }
 
-.hyperlink-arrow:hover {
-    color: white !important;
-    background-color: black;
+/* p inside hyperlink arrow */
+.overview-arrow > p {
+    padding: 0;
+    margin: 0;
+    position: relative;
+    bottom: 16px;
+}
+
+.overview-arrow {
+    position: relative;
+    top: 13px;
+    padding: 4px;
+    margin: 0 4px;
+
+    color: var(--secondary-col);
+    background-color: var(--primary-col);
+    transition:color 0.4s;
+
+    border-radius: 30px;
+
+}
+
+.overview-arrow:hover {
+    color: var(--tert-col) !important;
+    transition:color 0.2s;
+
+    top: 9px;
+    transition: top 0.5s;
+
     cursor: pointer;
 
-    transition:background-color 0.2s;
+}
+
+
+/* Utility */
+
+.no-padding {
+    padding: 0;
 }

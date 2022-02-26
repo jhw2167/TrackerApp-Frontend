@@ -11,11 +11,7 @@ import '../css/General.css'
 import * as CSS from 'csstype';
 
 interface ArrowProps {
-    height?: any,
-    width: any,
-    color: string,
-    size?: number,
-    weight?: number,
+    styleClass?:string
     direction?: string
     onClick?: Function;
 }
@@ -23,18 +19,10 @@ interface ArrowProps {
 
 function Arrow(props: ArrowProps) {
 
-    const innerStyle: CSS.Properties = {
-        ['height' as any]: props.height ? props.height : '100%',
-        ['width' as any]: props.width,
-        ['fontSize' as any]: props.size,
-        ['fontWeight' as any]: props.weight,
-        ['color' as any]: props.color
-    };
-
     let symbol = (props.direction && props.direction=='left') ? '<' : '>';
     return(
-        <div style={innerStyle} className={'hyperlink-arrow'}
-        onClick={() => {if(props.onClick) props.onClick()}} >{symbol}</div>
+        <div className={'hyperlink-arrow ' + props.styleClass}
+        onClick={() => {if(props.onClick) props.onClick()}} ><p>{symbol}</p></div>
     );
 }
 

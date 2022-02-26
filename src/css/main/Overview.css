@@ -1,13 +1,19 @@
 /*
     Styling for major Divs in Overview main component
 */
+#overview-center-col {
+    min-width: 900px;
+}
+
 .center-div {
-    margin-top: 2em;
-    border: 8px solid black;
-    border-top: 0px;
-    border-bottom: 0px;
     min-height: 80vh;
     min-width: 800px;
+
+    border: 8px solid var(--primary-col);
+    border-top: 0px;
+    border-bottom: 0px;
+
+    background-color: black;
 }
 
 /* LeftSide Div */

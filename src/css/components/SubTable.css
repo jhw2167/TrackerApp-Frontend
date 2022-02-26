@@ -27,9 +27,3 @@
   .expense-summary-subtable-row:hover {
     background-color: darksalmon;
   }
-
-  /* cell CSS */
-  .data-table-entry {
-    overflow: unset;
-    word-wrap: unset;
-  }
