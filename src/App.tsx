@@ -9,7 +9,7 @@ import './css/App.css';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename='/finances'>
         <Layout />
     </BrowserRouter>
   );

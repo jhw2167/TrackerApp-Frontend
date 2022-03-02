@@ -1,0 +1,27 @@
+/* PostTransactions specific Style Sheet */
+
+
+/* Main content Styling */
+
+
+/* ------------------ */
+
+
+
+
+/* Add new Transaction */
+
+#add-new-transaction {
+    border: 3px solid var(--primary-col);
+    border-left: 0; border-right: 0;
+}
+
+/* ------------------ */
+
+
+
+
+/* Main content Styling */
+
+
+/* ------------------ */

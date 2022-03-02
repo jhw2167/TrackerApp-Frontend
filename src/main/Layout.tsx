@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes, Navigate, useSearchParams} from "react-router-dom";
+import { Route, Routes, Navigate, useSearchParams, BrowserRouter} from "react-router-dom";
 import Overview from "./Overview";
 import PostTransactions from "./PostTransactions";
 
@@ -10,17 +10,18 @@ function Layout() {
 
   //console.log("SP: %s %s ", searchParams.get("mn"), searchParams.get("yr") );
     return (
-        <Routes>
+      /* BrowserRouter sits in App.tsx */
+          <Routes>
           <Route path="/overview" element={<Overview 
             mn={searchParams.get("mn")} 
             yr={searchParams.get("yr")}
             setSearchParams={setSearchParams} />} />
-            <Route path="/overview" element={<PostTransactions/>} />
+
+          <Route path="/post" element={<PostTransactions/>} />
           <Route path="*" element={<Navigate to="/overview" />} />
 
            {/*  <Route path="summary" element={Overview} /> */}
-        </Routes>
-          
+           </Routes>          
     );
 }
 

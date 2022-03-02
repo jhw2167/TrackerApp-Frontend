@@ -14,7 +14,6 @@ import {DataTuple, Transaction} from '../resources/constants';
 
 //CSS
 import '../css/components/DataGraph.css';
-import '../css/General.css';
 import '../../node_modules/react-vis/dist/style.css';
 
 //React CSS
@@ -152,13 +151,13 @@ function DataGraph(props: DataGraphProps) {
             <div className="row content-header justify-content-center" id="data-graph-full-title">
             <div className="col-8">
             <div className="row no-internal-padding no-internal-flex justify-content-center">
-                    <div className="col no-flex">
+                    <div className="col">
                 <Arrow direction={'left'} styleClass={'overview-arrow'} onClick={() => arrowFunc(1)}/>
                     </div>
-                    <div className="col fit-content no-flex">
+                    <div className="col fit-content">
                  <h2 className="content-header-title" id="data-graph-title">{props.title}</h2>        
                     </div>
-                    <div className="col no-flex">
+                    <div className="col">
                 <Arrow direction={'right'} styleClass={'overview-arrow'} onClick={() => arrowFunc(-1)}/>
                     </div>
             </div>

@@ -10,6 +10,7 @@ import React, { useState, useEffect } from 'react';
 import * as consts from '../resources/constants';
 import {DataTuple, Transaction, Summary} from '../resources/constants';
 import * as api from '../resources/api';
+import useWindowDimensions from '../resources/WindowDims';
 
 import Header from '../components/Header';
 import DataGraph from '../components/DataGraph';
@@ -18,10 +19,8 @@ import SubTable from '../components/SubTable';
 
 //CSS
 import '../css/General.css'
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/main/Overview.css'
 import '../css/Background.css'
-import useWindowDimensions from '../resources/WindowDims';
 
 //import '../css/Landing.css';
 interface OverviewProps {

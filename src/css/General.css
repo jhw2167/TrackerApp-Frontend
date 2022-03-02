@@ -139,12 +139,12 @@ header{
     padding: 0;
     margin: 0;
     position: relative;
-    bottom: 16px;
+    bottom: 17px;
 }
 
 .overview-arrow {
     position: relative;
-    top: 11px;
+    top: 10px;
     padding: 4px;
     margin: auto;
 
@@ -160,8 +160,8 @@ header{
     color: var(--tert-col) !important;
     transition:color 0.2s;
 
-    top: 9px;
-    transition: top 0.5s;
+    top: 7px;
+    transition: top 0.25s;
 
     cursor: pointer;
 
@@ -176,17 +176,17 @@ header{
 
 
 .no-internal-padding > * {
-    padding: 0;
+    padding: 0 !important;
 }
 
 .fit-content {
-    width: fit-content;
+    width: fit-content !important;
 }
 
 .no-flex {
-    flex: 0;
+    flex: 0 !important;
 }
 
 .no-internal-flex > * {
-    flex: 0;
+    flex: 0 !important;
 }

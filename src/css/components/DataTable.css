@@ -14,6 +14,10 @@ table {
   border-color: var(--trans-grey);
 }
 
+#data-table-title {
+  white-space: nowrap;
+}
+
 .transactions-table {
     float: right;
     text-align: center;

@@ -7,7 +7,6 @@ import * as c from '../resources/constants';
 import _ from 'underscore';
 
 //CSS
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/components/DataTable.css'
 import * as CSS from 'csstype';
 import { useEffect, useState } from "react";
@@ -65,12 +64,24 @@ function DataTable(props: DataTableProps) {
             props.updateDataHyperlink(a)
     }
 
-    return ( <div className="data-table-wrapper">
-                <div className="row justify-content-center content-header" id="data-table-full-title">
+    return ( 
+    
+    <div className="data-table-wrapper">
 
+            <div className="row content-header justify-content-center" id="data-table-full-title">
+            <div className="col-12">
+            <div className="row no-internal-padding no-internal-flex justify-content-center">
+                    <div className="col">
                 <Arrow direction={'left'} styleClass={'overview-arrow'} onClick={() => arrowFunc(-1)}/>
-                <h2 className="content-header-title" id="data-table-title">{props.title}</h2>
+                    </div>
+                    <div className="col fit-content">
+                 <h2 className="content-header-title" id="data-table-title">{props.title}</h2>        
+                    </div>
+                    <div className="col">
                 <Arrow direction={'right'} styleClass={'overview-arrow'} onClick={() => arrowFunc(1)}/>
+                    </div>
+            </div>
+            </div>
             </div>
 
             <table className="transactions-table">
