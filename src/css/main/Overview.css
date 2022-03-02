@@ -4,29 +4,9 @@
 #overview-center-col {
     min-width: 900px;
     max-width: 1000px;
-}
-
-.center-div {
-    height: 100vh;
-    padding-top: 2%;
-
-    border: 4px solid;
-    border-image: linear-gradient(
-      to bottom, 
-      var(--primary-col), 
-      rgb(255, 160, 100),
-      var(--primary-col)
-    ) 1 90%;
-
-    border-top: 0px;
-    border-bottom: 0px;
-
-    /*background-color: var(--secondary-col);*/
-}
-
-.col-6 {
     padding: 0;
 }
+
 /* LeftSide Div */
 .left-div {
     width: 85%;

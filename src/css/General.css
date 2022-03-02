@@ -1,4 +1,4 @@
-/* Styling for components that appear in various pages */
+/* General Styling for components that appear in various pages */
 
 :root {
     --primary-col: rgb(255, 80, 10);
@@ -100,6 +100,30 @@ header{
 }
 
 
+.center-div {
+    height: 100vh;
+    padding-top: 2%;
+
+    border: 4px solid;
+    border-image: linear-gradient(
+      to bottom, 
+      var(--primary-col), 
+      rgb(255, 160, 100),
+      var(--primary-col)
+    ) 1 90%;
+
+    border-top: 0px;
+    border-bottom: 0px;
+
+    /*background-color: var(--secondary-col);*/
+}
+
+.col-6 {
+    padding: 0;
+}
+
+
+
 /* Hyperlink Arrows */
 
 .hyperlink-arrow {
@@ -122,7 +146,7 @@ header{
     position: relative;
     top: 11px;
     padding: 4px;
-    margin: 0 4px;
+    margin: auto;
 
     color: var(--secondary-col);
     background-color: var(--primary-col);
@@ -148,4 +172,21 @@ header{
 
 .no-padding {
     padding: 0;
+}
+
+
+.no-internal-padding > * {
+    padding: 0;
+}
+
+.fit-content {
+    width: fit-content;
+}
+
+.no-flex {
+    flex: 0;
+}
+
+.no-internal-flex > * {
+    flex: 0;
 }

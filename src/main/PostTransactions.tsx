@@ -14,9 +14,77 @@ import * as api from '../resources/api';
 import DataGraph from '../components/DataGraph';
 import DataTable from '../components/DataTable';
 import SubTable from '../components/SubTable';
+import Header from '../components/Header';
+
+//CSS
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../css/General.css'
+import '../css/main/PostTransactions.css'
+import '../css/Background.css'
+
 
 
 function PostTransactions() {
+
+        return (
+
+        <div className='row outer-row'>
+        <div className='col rev-side-anim side-anim'></div>
+
+        <div className='col-11 no-padding' id='transactions-center-col'>
+          {/* HEADER */}
+                <Header/>
+        {/*---------------*/}
+
+        <main className="center-div align-items-center">
+                <div className="row  main-content-row">
+                <div className='col-12'>
+
+
+                {/*ADD NEW TRANS*/}
+                <div id='add-new-transaction'>
+                        <div className='section-title'>
+                        <h1>Add New</h1>
+                        <div> + </div>
+                        <div> <p> --- </p> </div>
+                        </div>
+
+                        <div id="transaction-form-div">
+                                {/* Component goes here */}                
+                        </div>
+                </div>
+                {/*---------------*/}
+
+
+                {/*Pending Transactions*/}
+
+
+                {/*---------------*/}
+
+
+
+                {/*Pending Transactions*/}
+
+
+                {/*---------------*/}
+
+
+                {/*Pending Transactions*/}
+
+
+                {/*---------------*/}
+
+                </div>
+                </div>
+                {/* END MAIN CONCNTENT ROW*/}
+        </main>
+        </div> 
+        {/*END MAIN CONTENT DIV*/}
+
+        <div className='col for-side-anim side-anim'></div>
+        </div>  
+        /* END OUTER ROW*/
+)
 
 }
 

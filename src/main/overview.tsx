@@ -10,13 +10,15 @@ import React, { useState, useEffect } from 'react';
 import * as consts from '../resources/constants';
 import {DataTuple, Transaction, Summary} from '../resources/constants';
 import * as api from '../resources/api';
+
+import Header from '../components/Header';
 import DataGraph from '../components/DataGraph';
 import DataTable from '../components/DataTable';
 import SubTable from '../components/SubTable';
 
 //CSS
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/General.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/main/Overview.css'
 import '../css/Background.css'
 import useWindowDimensions from '../resources/WindowDims';
@@ -160,18 +162,7 @@ function Overview(props: OverviewProps) {
 
 
         {/*page title and logo*/}
-            <header>
-                <div className="logoImg d-inline header-div">
-                    <div className='nested-banner-img'>
-                        <img id="banner-img" src="img/blank_banner.png"/>
-                    </div>
-                    <div className='banner-text'>Tracker</div>
-                </div>
-
-                <div className="logo-container">
-                    <div className='logo-subcontainer' id='feet1'><img src="img/logo.png"/></div>
-                </div>
-            </header>
+            <Header />
 
             {/*Large div contains entire vertical length page*/}
             <main className="center-div align-items-center">

@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes, Navigate, useSearchParams} from "react-router-dom";
-import Overview from "./overview";
+import Overview from "./Overview";
 import PostTransactions from "./PostTransactions";
 
 function Layout() {
@@ -15,6 +15,7 @@ function Layout() {
             mn={searchParams.get("mn")} 
             yr={searchParams.get("yr")}
             setSearchParams={setSearchParams} />} />
+            <Route path="/overview" element={<PostTransactions/>} />
           <Route path="*" element={<Navigate to="/overview" />} />
 
            {/*  <Route path="summary" element={Overview} /> */}
