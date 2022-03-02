@@ -4,10 +4,6 @@ import { render } from "react-dom";
 
 //project
 import Layout from './main/Layout';
-
-//Resources
-import logo from './logo.svg';
-
 //css
 import './css/App.css';
 
