@@ -7,7 +7,7 @@ import Layout from './main/Layout';
 
 //css
 import './css/General.css';
-import './css/Background.css'
+import './css/misc/Background.css'
 
 function App() {
   return (
