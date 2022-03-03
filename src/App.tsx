@@ -4,8 +4,10 @@ import { render } from "react-dom";
 
 //project
 import Layout from './main/Layout';
+
 //css
-import './css/App.css';
+import './css/General.css';
+import './css/Background.css'
 
 function App() {
   return (

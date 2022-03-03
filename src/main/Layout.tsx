@@ -1,4 +1,5 @@
-import React from "react";
+/* Layout Module simply lays out our web pages and links them to components */
+
 import { Route, Routes, Navigate, useSearchParams, BrowserRouter} from "react-router-dom";
 import Overview from "./Overview";
 import PostTransactions from "./PostTransactions";
@@ -18,9 +19,8 @@ function Layout() {
             setSearchParams={setSearchParams} />} />
 
           <Route path="/post" element={<PostTransactions/>} />
-          <Route path="*" element={<Navigate to="/overview" />} />
+          <Route path="*" element={<Navigate to="/post" />} />
 
-           {/*  <Route path="summary" element={Overview} /> */}
            </Routes>          
     );
 }

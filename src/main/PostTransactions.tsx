@@ -17,10 +17,7 @@ import SubTable from '../components/SubTable';
 import Header from '../components/Header';
 
 //CSS
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../css/General.css'
 import '../css/main/PostTransactions.css'
-import '../css/Background.css'
 
 
 
@@ -42,7 +39,10 @@ function PostTransactions() {
 
 
                 {/*ADD NEW TRANS*/}
-                <div id='add-new-transaction'>
+                <div className='row' id='add-new-transaction'>
+                        <div className='col-12'>
+
+                        </div>
                         <div className='section-title'>
                         <h1>Add New</h1>
                         <div> + </div>

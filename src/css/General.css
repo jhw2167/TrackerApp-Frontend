@@ -94,6 +94,10 @@ header{
     padding: 0;
 }
 
+.row > *{
+    padding: 0;
+}
+
 .outer-row {
     width: 100%;
     --bs-gutter-x: 0;

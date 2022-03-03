@@ -18,9 +18,7 @@ import DataTable from '../components/DataTable';
 import SubTable from '../components/SubTable';
 
 //CSS
-import '../css/General.css'
 import '../css/main/Overview.css'
-import '../css/Background.css'
 
 //import '../css/Landing.css';
 interface OverviewProps {

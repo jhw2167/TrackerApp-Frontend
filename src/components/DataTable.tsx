@@ -1,4 +1,7 @@
-import { CpuInfo } from "os";
+/* Data Table Component */
+
+//React Imports
+import { useEffect, useState } from "react";
 
 //Project imports
 import * as c from '../resources/constants';
@@ -9,7 +12,6 @@ import _ from 'underscore';
 //CSS
 import '../css/components/DataTable.css'
 import * as CSS from 'csstype';
-import { useEffect, useState } from "react";
 import Arrow from "../resources/arrow";
 
 //Define interface for props type

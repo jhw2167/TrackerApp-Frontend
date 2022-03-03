@@ -8,7 +8,6 @@ import _, { values } from 'underscore';
 
 //CSS
 import '../css/components/SubTable.css'
-import 'bootstrap/dist/css/bootstrap.min.css';
 import * as CSS from 'csstype';
 import { useEffect, useState } from "react";
 
