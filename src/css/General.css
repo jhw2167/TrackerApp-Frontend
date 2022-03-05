@@ -64,42 +64,31 @@ header{
     height: 100px;
 }
 
+.header-container {
+    
+}
+
 .banner-text {
+    font-size: 4em;
+    font-weight: 800;
+    color: var(--primary-col);
+
+    width: fit-content;
+    flex: 0;
+}
+
+.logo-title-container {
     position: relative;
     height: 0;
 
     top: -84px;
-    left: 2%;
+    left: 3%;
 
-    font-size: 4em;
-    font-weight: 800;
-    color: var(--primary-col);
-}
-
-.logo-container {
     height: 0;
     position: relative;
-    left: 28%
+    width: 40%;
 }
 
-.logo-subcontainer {
-    width: 5%;
-}
-
-#feet1 {
-    width: 4%;
-    height: 50px;
-    position: relative;
-    top: -76px
-
-}
-
-#feet2 {
-    width: 4.5%;
-    position: relative;
-    top: -140px;
-    left: 50px;
-}
 
 /* END HEADER SPECS */
 
@@ -145,46 +134,8 @@ header{
 
 
 /* Hyperlink Arrows */
-
-.hyperlink-arrow {
-    width: fit-content;
-    height: 30px;
-
-    font-size: 2em;
-    font-weight: 900;
-}
-
-/* p inside hyperlink arrow */
-.overview-arrow > p {
-    padding: 0;
-    margin: 0;
-    position: relative;
-    bottom: 17px;
-}
-
-.overview-arrow {
-    position: relative;
-    top: 10px;
-    padding: 4px;
-    margin: auto;
-
-    color: var(--secondary-col);
-    background-color: var(--primary-col);
-    transition:color 0.4s;
-
-    border-radius: 30px;
-
-}
-
-.overview-arrow:hover {
-    color: var(--tert-col) !important;
-    transition:color 0.2s;
-
-    top: 7px;
-    transition: top 0.25s;
-
-    cursor: pointer;
-
+.svg-arrow {
+    fill: black;
 }
 
 

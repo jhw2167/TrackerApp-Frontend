@@ -50,3 +50,30 @@
     font-size: large;
     font-weight: 600;
 }
+
+/* Effects */
+
+.overview-arrow {
+    position: relative;
+    top: 10px;
+    padding: 4px;
+    margin: auto;
+
+    background-color: var(--primary-col);
+    fill: var(--secondary-col);
+    transition:fill 0.4s;
+
+    border-radius: 30px;
+
+}
+
+.overview-arrow:hover {
+    fill: var(--tert-col) !important;
+    transition:fill 0.2s;
+
+    top: 7px;
+    transition: top 0.25s;
+
+    cursor: pointer;
+
+}
