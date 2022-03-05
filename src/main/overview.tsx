@@ -1,7 +1,7 @@
 //overview.tsx - website homepage with grahp, summary, and data charts
 
 //react imports
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 //import { useCookies } from "react-cookie";
 //import { Modal, Button } from 'react-bootstrap';
 
@@ -71,11 +71,13 @@ function Overview(props: OverviewProps) {
     const [hovCategory, setHovCategory] = useState<string>("");
     const [hovCellFunc, setHovCellFunc] = useState<Function>();
 
+    const isMounted = useRef(false);
+
     //Grouped functions
-    const updateOnDateChange = (start: Date, end: Date) => {
+    const updateOnDateChange = (start: Date, end: Date): string => {
 
         //transactions
-        console.log("st: %s and end: %s", start, end);
+        //console.log("st: %s and end: %s", start, end);
         api.getRequest(api.SERVER_ALL_TRANSACTIONS_DATES(start, end), setMonthlyTransactions);
         api.getRequest(api.SERVER_ALL_TRANSACTIONS_RECENT(offsetTransactions + MAX_TRANS_PAGE,
              offsetTransactions), setRecentTransactions);
@@ -85,36 +87,53 @@ function Overview(props: OverviewProps) {
 
         const srchParamStr = "?mn=" + consts.MONTHS.at(start.getMonth()) + "&yr=" + start.getFullYear();
         props.setSearchParams(srchParamStr);
-        
+        return srchParamStr;
     }
 
-    //OnLanding
-    useEffect( () => {
+    const onLanding = useCallback( async () => {
         //Date stuff
         const [start, end] = consts.convMnYrToTimeFrame(props.mn, props.yr);
+        //setCurrentDateByMonth(start);
 
         //api Calls
-        updateOnDateChange(start, end);
+        //console.log(1);
         api.getRequest(api.SERVER_ALL_CATEGORIES, setCategories);
-    }, []);
+        const newSearchParams: string = updateOnDateChange(start, end);
+        props.setSearchParams(newSearchParams);
 
+        await sleep(1000);
+        isMounted.current = true;
+    }, [])
 
-    /* On window resize */
-    
+    //OnLanding
+    useEffect( () => {onLanding()}, [onLanding]);
+
 
     //On update to dependencies
     useEffect( () => {
-        setCategoriesData(consts.aggregateTransactions(monthlyTransactions, categories));
+        //console.log(2);
+        if(isMounted.current){
+            //console.log("hello")
+            setCategoriesData(consts.aggregateTransactions(monthlyTransactions, categories));
+        }
     }, [categories, monthlyTransactions]);
 
     useEffect( () => {
-        api.getRequest(api.SERVER_ALL_TRANSACTIONS_RECENT(offsetTransactions + MAX_TRANS_PAGE,
-            offsetTransactions), setRecentTransactions);
+        //console.log(3);
+        if(isMounted.current) {
+            //console.log("hello3")
+            api.getRequest(api.SERVER_ALL_TRANSACTIONS_RECENT(offsetTransactions + MAX_TRANS_PAGE,
+                offsetTransactions), setRecentTransactions);
+        }
     }, [offsetTransactions]);
 
     useEffect( () =>  {
-        updateOnDateChange(currentDateByMonth, 
-            new Date(currentDateByMonth.getFullYear(), currentDateByMonth.getMonth()+1, 1));
+        //console.log(4);
+        if(isMounted.current) {
+            //console.log("hello4")
+            updateOnDateChange(currentDateByMonth, 
+                new Date(currentDateByMonth.getFullYear(), currentDateByMonth.getMonth()+1, 1));
+        }
     }
     , [currentDateByMonth])
     
@@ -129,7 +148,7 @@ function Overview(props: OverviewProps) {
     }, [hovCategory]);
 
 
-    //Other functions
+    /*  Other functions  */
     const updateCurrentMonth = (dir: number) => {
         let yy = new Date(Date.now()).getFullYear();
         let mm = new Date(Date.now()).getMonth();
@@ -297,3 +316,7 @@ function sumTableAgg(data: Summary[], aggRowName: string = 'NONE' ) {
 }
 
 export default Overview;
+
+function sleep(millis: number) {
+    return new Promise(resolve => setTimeout(resolve, millis));
+}

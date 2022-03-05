@@ -138,11 +138,6 @@ function DataGraph(props: DataGraphProps) {
                 props.updateDataHyperlink(a)
         }
         
-
-    if(stateData.length == 0) {
-        return (<div className="loading-data-try"> Loading Data... </div>)
-    }
-
     return (
         
 
@@ -167,6 +162,9 @@ function DataGraph(props: DataGraphProps) {
 
 
         <div className="graph-components-wrapper">
+        
+        {/*<div className="loading-data-try"> No Data this month :/ </div> */}
+
             <div className="data-graph-plot">
                 <XYPlot 
                 xDomain={[-.78, 1]}
