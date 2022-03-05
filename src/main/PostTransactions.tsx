@@ -18,10 +18,12 @@ import Header from '../components/Header';
 
 //CSS
 import '../css/main/PostTransactions.css'
-
+import Arrow from '../resources/arrow';
 
 
 function PostTransactions() {
+
+        const ARROW_DIMS = { h: '30px', w: '40px'}
 
         return (
 
@@ -33,25 +35,45 @@ function PostTransactions() {
                 <Header/>
         {/*---------------*/}
 
-        <main className="center-div align-items-center">
-                <div className="row  main-content-row">
+        <main className="center-div align-items-center" id='post-trans-main-content'>
+                <div className="row  content-row">
                 <div className='col-12'>
 
 
                 {/*ADD NEW TRANS*/}
-                <div className='row' id='add-new-transaction'>
-                        <div className='col-12'>
-
+                <div className='row content-row' id='add-new-transaction'>
+                <div className='col-12'>
+                  <div className='row content-row section-title-row no-internal-flex'>
+                     <div className='col post-trans-subsec-title-item section-title'>
+                        Add New
+                     </div>
+                        <div id='add-new-trans-button' className='col post-trans-plus post-trans-subsec-title-item
+                        post-trans-hoverable'>
+                                 <div>+</div> 
                         </div>
-                        <div className='section-title'>
-                        <h1>Add New</h1>
-                        <div> + </div>
-                        <div> <p> --- </p> </div>
+                        <div className='col post-trans-subsec-title-item post-trans-arrow-outer-div'> 
+                        <div><Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} 
+                        styleClass='post-trans-hoverable post-trans-arrow'/> </div>
                         </div>
-
-                        <div id="transaction-form-div">
+                  </div>
+                        
+                        <div id="transaction-form-div" className='bordered-section'>
                                 {/* Component goes here */}                
                         </div>
+
+                   <div className='row content-row section-footer-row no-internal-flex'>
+                        <div id='add-new-trans-button' className='col post-trans-double-plus post-trans-subsec-title-item
+                        post-trans-hoverable'>
+                                 <div>+</div> 
+                        </div>
+                        <div className='col post-trans-subsec-title-item post-trans-arrow-outer-div'> 
+                        <div><Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} 
+                          styleClass='post-trans-hoverable post-trans-arrow'/> </div>
+                        </div>
+                  </div>
+
+                
+                </div>                        
                 </div>
                 {/*---------------*/}
 

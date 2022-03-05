@@ -1,8 +1,83 @@
 /* PostTransactions specific Style Sheet */
-
+:root {
+    --bordered-sec-width: 94%;
+    --bordered-sec-margin: 3%;
+}
 
 /* Main content Styling */
+#post-trans-main-content {
+    
+}
 
+.content-row {
+    margin: auto;
+    color: var(--primary-col);
+}
+
+.section-title-row {
+    margin-left: var(--bordered-sec-margin);
+}
+
+.section-footer-row {
+    float: right;
+    margin-right: var(--bordered-sec-margin);
+}
+
+.section-title {
+
+    white-space: nowrap;
+    font-weight: 700;
+    font-size: 3em;
+}
+
+.bordered-section {
+    width: var(--bordered-sec-width);
+    margin-left: var(--bordered-sec-margin);
+
+    border: 3px solid var(--primary-col);
+    border-left: 0; border-right: 0;
+}
+/* ------------------ */
+
+
+/* General Utility Object Styling */
+
+.post-trans-plus {
+    font-size: 4em;
+    font-weight: 800;
+
+    transition: color 0.2s;
+
+    height: fit-content;
+}
+
+.post-trans-hoverable:hover {
+    color: var(--tert-col);
+    transition: color 0.4s;
+
+    fill: var(--tert-col);
+    transition: fill 0.2s;
+}
+
+.post-trans-plus > div {
+    height: 0;
+    position: relative;
+    bottom: 10px;
+}
+
+.post-trans-arrow {
+    fill: var(--primary-col);
+    transition: fill 0.2s;
+}
+
+.post-trans-arrow-outer-div > div {
+    position: relative;
+    top: 32px;
+}
+
+.post-trans-double-plus > div{
+    border: 3px solid var(--primary-col);
+}
 
 /* ------------------ */
 
@@ -10,10 +85,16 @@
 
 
 /* Add new Transaction */
+#add-new-transaction {
+    margin-top: 3%;
+}
 
 #transaction-form-div {
-    border: 3px solid var(--primary-col);
-    border-left: 0; border-right: 0;
+    height: 100%;
+}
+
+.post-trans-subsec-title-item {
+    padding-left: 6px;
 }
 
 /* ------------------ */

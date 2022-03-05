@@ -31,10 +31,13 @@ function Arrow(props: ArrowProps) {
 
     let rotate = (props.direction && props.direction=='left') ?
      'rotate(180)' : '';
+
+    const styleClass: string = props.styleClass ? props.styleClass : '';
+
     return(
-        <div className={'hyperlink-arrow-div ' + props.styleClass + '-div'}
+        <div className={'hyperlink-arrow-div ' + styleClass + '-div'}
         onClick={() => {if(props.onClick) props.onClick()}} >   
-        <ArrowSvg className={'svg-arrow ' + props.styleClass} 
+        <ArrowSvg className={'svg-arrow ' + styleClass} 
         fill='black'
         height={height} width={width}
         transform={rotate}
