@@ -102,7 +102,7 @@ function PostTransactions() {
 
                         <div className='row bordered-section' id="transaction-form-div">
                                 <div className='col-12'>
-                                {/* Component goes here */} <div className='sample'></div>               
+                                {/* Component goes here */} <div className='scroll-sample'></div>               
                                 </div>
                         </div>
                 {/* End row section component content */} 
@@ -145,7 +145,7 @@ function PostTransactions() {
 
                         <div className='row bordered-section' id="transaction-form-div">
                                 <div className='col-12'>
-                                {/* Component goes here */} <div className='sample'></div>               
+                                {/* Component goes here */} <div className='scroll-sample'></div>               
                                 </div>
                         </div>
                 {/* End row section component content */} 
@@ -186,7 +186,7 @@ function PostTransactions() {
 
                         <div className='row bordered-section' id="transaction-form-div">
                                 <div className='col-12'>
-                                {/* Component goes here */} <div className='sample'></div>               
+                                {/* Component goes here */} <div className='scroll-sample'></div>               
                                 </div>
                         </div>
                 {/* End row section component content */} 

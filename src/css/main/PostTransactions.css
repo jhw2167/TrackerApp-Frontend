@@ -8,13 +8,20 @@
     height: 100px;
 }
 
+
+.scroll-sample {
+    height: 400px;
+}
+
+
 /* Main content Styling */
 #transactions-center-col {
     min-width: 1400px;
+    height: 100vh;
 }
 
 #post-trans-main-content {
-    
+    height: 100vh;
 }
 
 .content-row {
@@ -51,6 +58,29 @@
 }
 /* ------------------ */
 
+/* Scrollable DIV content styling */
+.scrollable-row {
+    border: 2px red solid;
+    overflow-y: auto;
+}
+
+.main-scrollable-content-row {
+    max-height: 50%;
+}
+
+.rollover-row {
+    position:relative;
+    height:100%;
+    min-height:100%;
+    width:100%;
+    z-index:1000;
+}
+
+#pt-pending-transactions {
+    
+}
+
+/* ------------------ */
 
 /* General Utility Object Styling */
 
@@ -96,12 +126,11 @@
 
 /* ------------------ */
 
-
-
-
 /* Add new Transaction */
 #add-new-transaction {
     margin-top: 3%;
+    min-height: 200px;
+    max-height: 20%;
 }
 
 #transaction-form-div {
