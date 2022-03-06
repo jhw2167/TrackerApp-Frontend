@@ -6,15 +6,13 @@ import React, { useState, useEffect } from 'react';
 //import { Modal, Button } from 'react-bootstrap';
 
 //svg
-import { ReactComponent as ArrowSvg } from './svg/arrow.svg';
-import ArrrowImg from './svg/arrow.svg';
+import { ReactComponent as DoublePlusSVG } from '../svg/double_plus.svg';
 
 //CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../css/General.css'
-import * as CSS from 'csstype';
+import '../../css/General.css'
 
-interface ArrowProps {
+interface DoublePlusProps {
     height?: string;
     width?: string;
     direction?: string
@@ -24,26 +22,24 @@ interface ArrowProps {
 }
 
 
-function Arrow(props: ArrowProps) {
+function DoublePlus(props: DoublePlusProps) {
 
-    const height = props.height ? props.height : '30px';
+    const height = props.height ? props.height : '40px';
     const width = props.width ? props.width : '40px';
-
-    let rotate = (props.direction && props.direction=='left') ?
-     'rotate(180)' : '';
 
     const styleClass: string = props.styleClass ? props.styleClass : '';
 
     return(
-        <div className={'hyperlink-arrow-div ' + styleClass + '-div'}
+        <div className={'hyperlink-double-plus-div ' + styleClass + '-div'}
         onClick={() => {if(props.onClick) props.onClick()}} >   
-        <ArrowSvg className={'svg-arrow ' + styleClass} 
+        <DoublePlusSVG className={'svg-double-plus ' + styleClass} 
         fill='black'
+        stroke='black'
+        stroke-width={1}
         height={height} width={width}
-        transform={rotate}
         />
         </div>
     );
 }
 
-export default Arrow;
+export default DoublePlus;

@@ -134,9 +134,15 @@ header{
 
 
 
-/* Hyperlink Arrows */
+/* Hyperlink Buttons */
 .svg-arrow {
     fill: black;
+}
+
+.svg-double-plus {
+    fill: black;
+    stroke: black;
+    stroke-width: 1;
 }
 
 

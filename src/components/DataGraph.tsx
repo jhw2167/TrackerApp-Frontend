@@ -18,7 +18,7 @@ import '../../node_modules/react-vis/dist/style.css';
 
 //React CSS
 import * as CSS from 'csstype';
-import Arrow from "../resources/arrow";
+import Arrow from "../resources/subcomponents/arrow";
 
 //Define interface for props type
 interface DataGraphProps {

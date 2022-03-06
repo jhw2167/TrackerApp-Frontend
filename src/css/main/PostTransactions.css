@@ -4,7 +4,15 @@
     --bordered-sec-margin: 3%;
 }
 
+.sample {
+    height: 100px;
+}
+
 /* Main content Styling */
+#transactions-center-col {
+    min-width: 1400px;
+}
+
 #post-trans-main-content {
     
 }
@@ -12,6 +20,10 @@
 .content-row {
     margin: auto;
     color: var(--primary-col);
+}
+
+.content-col {
+    height: 100%;
 }
 
 .section-title-row {
@@ -53,10 +65,12 @@
 
 .post-trans-hoverable:hover {
     color: var(--tert-col);
-    transition: color 0.4s;
-
     fill: var(--tert-col);
-    transition: fill 0.2s;
+    stroke: var(--tert-col);
+
+    transition: color fill stroke 0.4s;
+    cursor: pointer;
+    
 }
 
 .post-trans-plus > div {
@@ -70,13 +84,14 @@
     transition: fill 0.2s;
 }
 
-.post-trans-arrow-outer-div > div {
-    position: relative;
-    top: 32px;
-}
+.post-trans-double-plus {
+    color: var(--primary-col);
+    fill:  var(--primary-col);
 
-.post-trans-double-plus > div{
-    border: 3px solid var(--primary-col);
+    stroke: var(--primary-col);
+    stroke-width: 0.5;
+
+    transition: color fill stroke 0.4s;
 }
 
 /* ------------------ */
@@ -95,6 +110,29 @@
 
 .post-trans-subsec-title-item {
     padding-left: 6px;
+}
+
+.post-trans-subsec-footer-item {
+    padding: 0 8px;
+}
+
+    .post-trans-subsec-footer-item.post-trans-arrow-outer-div {
+        padding-right: 2px;
+    }
+
+.section-footer-row {
+    margin-top: 10px;
+}
+
+
+.post-trans-subsec-title-item.post-trans-arrow-outer-div > div {
+    position: relative;
+    top: 30px;
+}
+
+.post-trans-subsec-footer-item.post-trans-arrow-outer-div > div {
+    position: relative;
+    top: 5px;
 }
 
 /* ------------------ */
