@@ -31,7 +31,7 @@ function PostTransactions() {
         <div className='row outer-row'>
         <div className='col rev-side-anim side-anim'></div>
 
-        <div className='col-10 no-padding' id='transactions-center-col'>
+        <div className='col-10 no-padding' id='post-trans-center-col'>
           {/* HEADER */}
                 <Header/>
         {/*---------------*/}
@@ -60,7 +60,7 @@ function PostTransactions() {
                   </div> 
                   {/* End row section header content */} 
                         
-                   <div className='row bordered-section' id="transaction-form-div">
+                   <div className='row pt-bordered-section' id="transaction-form-div">
                         <div className='col-12'>
                         {/* Component goes here */} <div className='sample'></div>               
                         </div>
@@ -86,8 +86,9 @@ function PostTransactions() {
                 {/*-------END ADD NEW--------*/}
                 {/*--------------------------*/}
 
+
                 <div className='row main-scrollable-content-row scrollable-row'>
-                <div className='col-12'>
+                <div className='col-12 main-scrollable-content-col'>
 
                 {/*Pending Transactions*/}
                 <div className='row content-row rollover-row' id='pt-pending-transactions'>
@@ -100,7 +101,7 @@ function PostTransactions() {
                         </div>
                 {/* End row section title content */} 
 
-                        <div className='row bordered-section' id="transaction-form-div">
+                        <div className='row pt-bordered-section pt-table-section' id="transaction-form-div">
                                 <div className='col-12'>
                                 {/* Component goes here */} <div className='scroll-sample'></div>               
                                 </div>
@@ -143,7 +144,7 @@ function PostTransactions() {
                         </div>
                 {/* End row section title content */} 
 
-                        <div className='row bordered-section' id="transaction-form-div">
+                        <div className='row pt-bordered-section pt-table-section' id="transaction-form-div">
                                 <div className='col-12'>
                                 {/* Component goes here */} <div className='scroll-sample'></div>               
                                 </div>
@@ -184,7 +185,7 @@ function PostTransactions() {
                         </div>
                 {/* End row section title content */} 
 
-                        <div className='row bordered-section' id="transaction-form-div">
+                        <div className='row pt-bordered-section pt-table-section' id="transaction-form-div">
                                 <div className='col-12'>
                                 {/* Component goes here */} <div className='scroll-sample'></div>               
                                 </div>
@@ -216,6 +217,12 @@ function PostTransactions() {
                 </div>
                 </div>
                 {/* END MAIN SCROLLABLE ROW*/}
+
+                <div className='row post-trans-tab-down-arrow'>
+                <div className='col-12 justify-contents-center'>
+                        <div className='sample'> ^ </div>
+                </div>
+                </div>
 
 
                 </div>

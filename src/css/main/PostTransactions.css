@@ -6,22 +6,25 @@
 
 .sample {
     height: 100px;
+    text-align: center;
+    font-size: 5em;
+    z-index: 1005;
 }
 
 
 .scroll-sample {
-    height: 400px;
+    height: 100px;
 }
 
 
 /* Main content Styling */
-#transactions-center-col {
+#post-trans-center-col {
     min-width: 1400px;
-    height: 100vh;
 }
 
 #post-trans-main-content {
-    height: 100vh;
+    background-image: none;
+    background-color: black;
 }
 
 .content-row {
@@ -46,39 +49,59 @@
 
     white-space: nowrap;
     font-weight: 700;
-    font-size: 3em;
+    font-size: 4em;
 }
 
-.bordered-section {
+.pt-bordered-section {
     width: var(--bordered-sec-width);
     margin-left: var(--bordered-sec-margin);
 
     border: 3px solid var(--primary-col);
     border-left: 0; border-right: 0;
 }
+
+.pt-table-section {
+    min-height: 20vh;
+}
+
 /* ------------------ */
 
 /* Scrollable DIV content styling */
 .scrollable-row {
-    border: 2px red solid;
     overflow-y: auto;
 }
 
 .main-scrollable-content-row {
-    max-height: 50%;
+    margin: auto;
+    z-index: 1000;
+
+    max-height: 60vh;
 }
 
 .rollover-row {
     position:relative;
-    height:100%;
-    min-height:100%;
-    width:100%;
-    z-index:1000;
+    width: 100%;
+    z-index:100;
+
+    padding-bottom: 3%;
 }
 
 #pt-pending-transactions {
-    
+    z-index: 0;
 }
+
+#pt-prepared-transactions {
+
+}
+
+.scrollable-row::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollable-row {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
 
 /* ------------------ */
 
@@ -130,7 +153,9 @@
 #add-new-transaction {
     margin-top: 3%;
     min-height: 200px;
-    max-height: 20%;
+    max-height: 30%;
+
+    z-index:1000;
 }
 
 #transaction-form-div {

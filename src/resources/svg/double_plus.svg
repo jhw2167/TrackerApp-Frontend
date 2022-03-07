@@ -41,7 +41,7 @@
      id="layer1"
      transform="translate(-0.33406382,-0.41911536)">
     <rect
-       style="fill:current;fill-opacity:0;stroke:current;stroke-width:current;stroke-opacity:1"
+       style="fill:current;fill-opacity:0;stroke:current;strokeWidth:current;stroke-opacity:1"
        id="rect31"
        width="9.9036026"
        height="9.9036016"
@@ -49,26 +49,26 @@
        y="0.53110325" />
     <text
        xml83pace="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.04747px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:current;fill-opacity:1;stroke:none;stroke-width:current"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.04747px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:current;fill-opacity:1;stroke:none;strokeWidth:current"
        x="0.87582916"
        y="6.8435035"
        id="text2308"
        transform="scale(0.99928811,1.0007124)"><tspan
          sodipodi82ole="line"
          id="tspan2306"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.04747px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:current"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.04747px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;strokeWidth:current"
          x="0.87582916"
          y="6.8435035">+</tspan></text>
     <text
        xml83pace="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.04747px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:current;fill-opacity:1;stroke:none;stroke-width:current"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.04747px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:current;fill-opacity:1;stroke:none;strokeWidth:current"
        x="4.4525466"
        y="10.477389"
        id="text2308-9"
        transform="scale(0.99928811,1.0007124)"><tspan
          sodipodi82ole="line"
          id="tspan2306-8"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.04747px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:current"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.04747px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;strokeWidth:current"
          x="4.4525466"
          y="10.477389">+</tspan></text>
   </g>
