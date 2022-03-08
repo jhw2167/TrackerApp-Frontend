@@ -17,19 +17,19 @@
 }
 
 #pt-outer-row {
-    overflow: hidden;
-    height: 100vh;
+    height: 100%
 }
 
 /* Main content Styling */
 #post-trans-center-col {
     min-width: 1400px;
+    height: 100%;
 }
 
 #post-trans-main-content {
     background-image: none;
     background-color: black;
-    border: 2px solid green;
+    height: 100%;
 }
 
 .content-row {
@@ -79,10 +79,8 @@
     margin: auto;
     position: relative;
     z-index: 100;
-
-    min-height: 50vh;
-    max-height: 50vh;
     
+    height: 50vh;
 }
 
 .main-scrollable-content-col {
@@ -91,6 +89,7 @@
 
 .rollover-row {
     position:relative;
+    min-height: 90%;
     width: 100%;
     z-index:-1;
 
@@ -98,12 +97,24 @@
 }
 
 .rollover-row-spacer {
-    height: 100%;
-    opacity: 0.1;
+    height: 0%;
+    padding-bottom: 90%;
+    opacity: 0;
 
     position: relative;
     z-index: 200;
 }
+
+    .rollover-row-ptr-allow {
+        width: 84%;
+        pointer-events: all;
+        border-left: 500px solid red;
+        opacity: 0.6;
+
+        
+        position: relative;
+        z-index: 201;
+    }
 
 #pt-pending-transactions {
     width: 83%;
@@ -143,6 +154,11 @@
     height: fit-content;
 }
 
+.post-trans-hoverable {
+    position: relative;
+    z-index: 1000;
+}
+
 .post-trans-hoverable:hover {
     color: var(--tert-col);
     fill: var(--tert-col);
@@ -150,7 +166,6 @@
 
     transition: color fill stroke 0.4s;
     cursor: pointer;
-    
 }
 
 .post-trans-plus > div {

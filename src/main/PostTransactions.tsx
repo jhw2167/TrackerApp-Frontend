@@ -25,8 +25,8 @@ import DoublePlus from '../resources/subcomponents/double_plus';
 //Constants
 const ROLLOVER_DIV_STYLE: CSS.Properties = {
         ['position' as any]: 'fixed',
-        ['width' as any]: '83%',
-        ['transition' as any]: 'top 1s'
+        ['width' as any]: '82.5%',
+        ['minHeight' as any]: 'unset'
 };
 
 const ROLLOVER_BLANK_STYLE: CSS.Properties = {
@@ -61,7 +61,7 @@ function PostTransactions() {
             h = Number((h as string).split('p')[0]);
             console.log(wheelPos + "  " + h );
             let newStyles = rolloverStyles.map( (v, i) => {
-                console.log("wheelPos+100: %d, i*Number(h): %d,  i: %d", wheelPos+100, i*Number(h), i);
+                console.log("wheelPos+100: %d, i*Number(h): %d,  i: %d", wheelPos+mouseWheelScrollDist, i*Number(h), i);
                 let toRet = ROLLOVER_BLANK_STYLE;
                 if(h) {
                     toRet = (wheelPos+mouseWheelScrollDist >= i*Number(h)) ? {...ROLLOVER_DIV_STYLE,
@@ -72,7 +72,7 @@ function PostTransactions() {
                  return toRet;
         });
             setRollOverStyles(newStyles);
-            console.log("NewStyles: " + JSON.stringify(rolloverStyles));
+            console.log("NewStyles: " + JSON.stringify(newStyles));
         };
 
         useEffect( () => {
@@ -143,7 +143,7 @@ function PostTransactions() {
 
 
                 <div className='row main-scrollable-content-row scrollable-row'
-                        id='transactions-content-row' onWheel={(e) => setMouseWheelScrollDist(e.deltaY)}>
+                        id='transactions-content-row' onWheel={(e) => setMouseWheelScrollDist(e.deltaY+10)}>
                 <div className='col-12 main-scrollable-content-col'>
 
                 {/*Pending Transactions*/}
@@ -231,7 +231,7 @@ function PostTransactions() {
                 {/*-------END PREPARED-------*/}
                 {/*--------------------------*/}
 
-                <div className='row rollover-row-spacer'> </div>
+                <div className='row rollover-row-spacer'> <div className='rollover-row-ptr-allow'></div> </div>
                 
 
                         {/*Posted Transactions*/}
