@@ -16,6 +16,10 @@
     height: 100px;
 }
 
+#pt-outer-row {
+    overflow: hidden;
+    height: 100vh;
+}
 
 /* Main content Styling */
 #post-trans-center-col {
@@ -25,6 +29,7 @@
 #post-trans-main-content {
     background-image: none;
     background-color: black;
+    border: 2px solid green;
 }
 
 .content-row {
@@ -46,7 +51,6 @@
 }
 
 .section-title {
-
     white-space: nowrap;
     font-weight: 700;
     font-size: 4em;
@@ -73,25 +77,48 @@
 
 .main-scrollable-content-row {
     margin: auto;
-    z-index: 1000;
+    position: relative;
+    z-index: 100;
 
-    max-height: 60vh;
+    min-height: 50vh;
+    max-height: 50vh;
+    
+}
+
+.main-scrollable-content-col {
+    
 }
 
 .rollover-row {
     position:relative;
     width: 100%;
-    z-index:100;
+    z-index:-1;
 
-    padding-bottom: 3%;
+    background-color: black;
+}
+
+.rollover-row-spacer {
+    height: 100%;
+    opacity: 0.1;
+
+    position: relative;
+    z-index: 200;
 }
 
 #pt-pending-transactions {
-    z-index: 0;
+    width: 83%;
+    position: fixed;
+    z-index: 101;
+
+    min-width: inherit;
 }
 
 #pt-prepared-transactions {
+    z-index: 102;
+}
 
+#pt-posted-transactions {
+    z-index: 103;
 }
 
 .scrollable-row::-webkit-scrollbar {
@@ -108,7 +135,7 @@
 /* General Utility Object Styling */
 
 .post-trans-plus {
-    font-size: 4em;
+    font-size: 6em;
     font-weight: 800;
 
     transition: color 0.2s;
@@ -149,12 +176,16 @@
 
 /* ------------------ */
 
+
+
+
 /* Add new Transaction */
 #add-new-transaction {
-    margin-top: 3%;
+    margin-top: 1%;
     min-height: 200px;
     max-height: 30%;
 
+    font-size: small;
     z-index:1000;
 }
 
@@ -178,15 +209,24 @@
     margin-top: 10px;
 }
 
-
 .post-trans-subsec-title-item.post-trans-arrow-outer-div > div {
     position: relative;
-    top: 30px;
+    top: 50%;
 }
 
 .post-trans-subsec-footer-item.post-trans-arrow-outer-div > div {
     position: relative;
     top: 5px;
+}
+
+#add-new-trans-button {
+    position: relative;
+    bottom: 6px;
+}
+
+#add-new-trans-title {
+    position: relative;
+    top: 6px;
 }
 
 /* ------------------ */

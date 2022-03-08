@@ -15,20 +15,74 @@ import DataGraph from '../components/DataGraph';
 import DataTable from '../components/DataTable';
 import SubTable from '../components/SubTable';
 import Header from '../components/Header';
+import * as CSS from 'csstype';
 
 //CSS
 import '../css/main/PostTransactions.css'
 import Arrow from '../resources/subcomponents/arrow';
 import DoublePlus from '../resources/subcomponents/double_plus';
 
+//Constants
+const ROLLOVER_DIV_STYLE: CSS.Properties = {
+        ['position' as any]: 'fixed',
+        ['width' as any]: '83%',
+        ['transition' as any]: 'top 1s'
+};
+
+const ROLLOVER_BLANK_STYLE: CSS.Properties = {
+};
+
+const ROLLOVER_PLCHLD_DIV: CSS.Properties = {
+        ['height' as any]: '100%',
+        ['opacity' as any]: 0
+};
+
 
 function PostTransactions() {
 
         const ARROW_DIMS = { h: '30px', w: '40px'}
 
+        /* States */
+        const [rolloverStyles, setRollOverStyles] = useState<Array<any>>([
+                ROLLOVER_BLANK_STYLE, ROLLOVER_BLANK_STYLE, ROLLOVER_BLANK_STYLE
+        ]);
+
+        const [mouseWheelScrollDist, setMouseWheelScrollDist] = useState<number>(0);
+
+        /* Effects */
+        const updateWheelPos = () => {
+           let wheelPos: number = document.querySelector("#transactions-content-row")?.scrollTop as unknown as number;
+            console.log("------------------\nStarting pos: " + wheelPos);
+
+            let topLeft: any = (document.querySelector('.main-scrollable-content-row') as HTMLDivElement).getBoundingClientRect();
+            topLeft = {t: topLeft.top, l: topLeft.left};
+
+            let h: any =  window.getComputedStyle(document.querySelector('.rollover-row-spacer') as Element).height;
+            h = Number((h as string).split('p')[0]);
+            console.log(wheelPos + "  " + h );
+            let newStyles = rolloverStyles.map( (v, i) => {
+                console.log("wheelPos+100: %d, i*Number(h): %d,  i: %d", wheelPos+100, i*Number(h), i);
+                let toRet = ROLLOVER_BLANK_STYLE;
+                if(h) {
+                    toRet = (wheelPos+mouseWheelScrollDist >= i*Number(h)) ? {...ROLLOVER_DIV_STYLE,
+                            ['top' as any]: topLeft.t, ['left' as any]: topLeft.l }
+                                    : ROLLOVER_BLANK_STYLE;
+                }
+                console.log("Returning: " + JSON.stringify(toRet));
+                 return toRet;
+        });
+            setRollOverStyles(newStyles);
+            console.log("NewStyles: " + JSON.stringify(rolloverStyles));
+        };
+
+        useEffect( () => {
+                window.addEventListener("wheel", updateWheelPos);
+        }, []);
+
+
         return (
 
-        <div className='row outer-row'>
+        <div className='row outer-row' id='pt-outer-row'>
         <div className='col rev-side-anim side-anim'></div>
 
         <div className='col-10 no-padding' id='post-trans-center-col'>
@@ -46,7 +100,8 @@ function PostTransactions() {
                 <div className='col-12 content-col'>
 
                   <div className='row content-row section-title-row no-internal-flex'>
-                     <div className='col post-trans-subsec-title-item section-title'>
+                     <div className='col post-trans-subsec-title-item section-title'
+                        id="add-new-trans-title">
                         Add New
                      </div>
                         <div className='col post-trans-plus post-trans-subsec-title-item
@@ -87,11 +142,13 @@ function PostTransactions() {
                 {/*--------------------------*/}
 
 
-                <div className='row main-scrollable-content-row scrollable-row'>
+                <div className='row main-scrollable-content-row scrollable-row'
+                        id='transactions-content-row' onWheel={(e) => setMouseWheelScrollDist(e.deltaY)}>
                 <div className='col-12 main-scrollable-content-col'>
 
                 {/*Pending Transactions*/}
-                <div className='row content-row rollover-row' id='pt-pending-transactions'>
+                <div className='row content-row rollover-row' id='pt-pending-transactions'
+                style={rolloverStyles[0]}>
                 <div className='col-12 content-col'> 
 
                         <div className='row section-title-row no-internal-flex'>
@@ -129,12 +186,13 @@ function PostTransactions() {
                 {/*--------------------------*/}
                 {/*-------END PENDING--------*/}
                 {/*--------------------------*/}
-
+                <div className='row rollover-row-spacer'> </div>
 
 
                 {/*Prepared Transactions*/}
 
-                <div className='row content-row rollover-row' id='pt-prepared-transactions'>
+                <div className='row content-row rollover-row' id='pt-prepared-transactions'
+                        style={rolloverStyles[1]}>
                 <div className='col-12 content-col'> 
 
                         <div className='row section-title-row no-internal-flex'>
@@ -173,9 +231,12 @@ function PostTransactions() {
                 {/*-------END PREPARED-------*/}
                 {/*--------------------------*/}
 
+                <div className='row rollover-row-spacer'> </div>
+                
 
                         {/*Posted Transactions*/}
-                <div className='row content-row rollover-row' id='pt-posted-transactions'>
+                <div className='row content-row rollover-row' id='pt-posted-transactions'
+                        style={rolloverStyles[2]}>
                 <div className='col-12 content-col'> 
 
                         <div className='row section-title-row no-internal-flex'>
@@ -213,6 +274,8 @@ function PostTransactions() {
                 {/*--------------------------*/}
                 {/*-------END POSTED--------*/}
                 {/*--------------------------*/}
+
+                <div className='row rollover-row-spacer'> </div>
 
                 </div>
                 </div>
