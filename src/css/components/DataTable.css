@@ -7,7 +7,7 @@
 }
 
 /* Table CSS */
-table {
+.transactions-table .summary-table {
   font-family: var(--data-font-base);
   color: var(--prim-font-col);
   border: solid 2px;

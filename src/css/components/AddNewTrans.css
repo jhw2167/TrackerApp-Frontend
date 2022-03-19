@@ -1,0 +1,85 @@
+/* CSS for our add new transaction form in Post Transactions */
+
+
+/* General Form Styling */
+form {
+    display: inline-block;
+}
+
+/* Table Styling */
+#add-new-trans-wrapper-table {
+    width: 100%;
+
+    margin-top: 1%;
+    text-align: center;
+
+    border-collapse: separate;
+    border-spacing: 32px 0px;
+}
+
+#add-new-trans-wrapper-table > tr > th {
+    color: var(--primary-col);
+    font-size: medium;
+    vertical-align: top;
+
+    position: relative;
+}
+
+#add-new-trans-wrapper-table > tr > * {
+    max-width: 200px;
+    min-width: 30px;
+
+    overflow-y: auto;
+}
+
+
+/* Specific Form Styling */
+.pt-form-field {
+    width: 100%;
+
+    font-size: medium;
+    font-weight: 500;
+}
+
+#add-new-trans-wrapper-table > tr > td > input {
+    appearance: none ;
+    -webkit-appearance: none ;
+
+    background-color: rgba(0, 0, 0, 1);
+    color: white;
+
+    border: 0px;
+    border-bottom: 2px solid var(--tert-col);
+    box-shadow: none;
+    outline-offset: 0;
+}
+
+#add-new-trans-wrapper-table > tr > td > input:focus-visible {
+    outline: none;
+}
+
+/* Specific Field Styling */
+.pt-data-col {
+    width: 5%;
+}
+
+.pt-purchase-date-tuple {
+    width: 1%;
+}
+
+    input[type="date" i].pt-form-field {
+        max-width: 5.8em;
+        position: relative;
+        top: 1px;
+
+    }
+
+    input[type="date" i].pt-form-field::-webkit-calendar-picker-indicator {
+        display: none;
+    }
+
+    input[type="date" i].pt-form-field::-webkit-calendar-picker-indicator,
+    input[type="date" i].pt-form-field::-webkit-calendar-picker-indicator {
+        -webkit-appearance: none; 
+        margin: 0; 
+    }

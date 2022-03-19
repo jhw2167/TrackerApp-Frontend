@@ -21,6 +21,7 @@ import * as CSS from 'csstype';
 import '../css/main/PostTransactions.css'
 import Arrow from '../resources/subcomponents/arrow';
 import DoublePlus from '../resources/subcomponents/double_plus';
+import AddNewTrans from '../components/AddNewTrans';
 
 //Constants
 const ROLLOVER_DIV_STYLE: CSS.Properties = {
@@ -37,6 +38,36 @@ const ROLLOVER_PLCHLD_DIV: CSS.Properties = {
         ['opacity' as any]: 0
 };
 
+/* Form Constants */
+const FORM_HEADERS = {
+        tid: 'Transaction ID',
+	PURCHDATE: 'Purchase Date', 
+	AMT: 'Amount', 
+	VEND: 'Vendor', 
+	CAT: 'Category',  
+	PMETHOD: 'Pay Method',
+        BOTFOR: 'Bought For', 
+	PSTATUS: 'Pay Status', 
+	INCOME: 'Income', 
+	REIMB: 'Reimburses',
+	POSTDATE: 'Posted Date', 
+	NOTES: 'Notes'
+}
+
+const FORM_INP_TYPES = {
+        tid: 'input-text',
+	PURCHDATE: 'input-date', 
+	AMT: 'input-text', 
+	VEND: 'input-text', 
+	CAT: 'input-search',
+        PMETHOD: 'input-search', 
+	BOTFOR: 'input-search',  
+	PSTATUS: 'input-search', 
+	INCOME: 'input-checkbox', 
+	REIMB: 'input-number',
+	POSTDATE: 'input-date', 
+	NOTES: 'input-text'
+}
 
 function PostTransactions() {
 
@@ -79,6 +110,17 @@ function PostTransactions() {
                 window.addEventListener("wheel", updateWheelPos);
         }, []);
 
+        /* Api Calls */
+        useEffect( () => {
+                
+                //GET Options for
+                        //Category
+                        //Pay Method
+                        //Pay Status
+                        //Bought For
+                        //Vendor (?) dyn search box?
+
+        }, []);
 
         return (
 
@@ -116,8 +158,15 @@ function PostTransactions() {
                   {/* End row section header content */} 
                         
                    <div className='row pt-bordered-section' id="transaction-form-div">
-                        <div className='col-12'>
-                        {/* Component goes here */} <div className='sample'></div>               
+                        <div className='col-12' id='transaction-form-container'>
+                                <AddNewTrans headers={Object.entries(FORM_HEADERS).map(
+                                        ([key, val]) => {return val;}
+                                )}
+                                 inputTypes={Object.entries(FORM_INP_TYPES).map(
+                                        ([key, val]) => {return val;}
+                                 )}
+                                 id='pt-add-new-trans-form'
+                                />  
                         </div>
                    </div>
                    {/* End row section component content */} 
