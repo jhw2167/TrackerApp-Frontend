@@ -16,6 +16,7 @@ import '../css/components/AddNewTrans.css'
 interface FormProps {
     headers: string[];
     data?: Array<any>;
+    setFormValues?: Function;
     inputTypes: string[];
     options?: Array<Array<any>>;
     id: string;
@@ -78,6 +79,10 @@ function AddNewTrans(props: FormProps) {
         setFormValues(formValues.map( (val, ind) => {
             return (i==ind) ? v : val;
         }))
+
+        if(props.setFormValues) {
+            props.setFormValues(formValues);    //setFormValues for containing component as well
+        }
     }
 
 
@@ -96,6 +101,7 @@ function AddNewTrans(props: FormProps) {
        <div className="add-new-trans-wrapper-div" id={props.id + '-div'}>
         <form id={props.id}>
             <table id="add-new-trans-wrapper-table">
+                <tbody>
                 <tr>
                 {
             formValues.map(  (v,i) => {
@@ -107,6 +113,7 @@ function AddNewTrans(props: FormProps) {
                 options: props.options ? props.options[i] : ['none'],
                 subtype: props.inputTypes[i].split('-')[1]
             };
+                //console.log("Val: %s", data.default);
                 return(
                     <td  key={i} id={data.id + '-col'} className={'pt-data-col ' + 
                     'pt-' + data.id + '-tuple'}>
@@ -121,6 +128,7 @@ function AddNewTrans(props: FormProps) {
                  return <th key={i} className={'pt-data-header ' + 'pt-' + id + '-tuple'}
                    id={id +'-header'}><label id={'lb-' + id} htmlFor={id}>
                      {v}</label></th>})} </tr>
+                </tbody>
             </table>
          </form>
        </div>
@@ -159,8 +167,11 @@ function DropDownElem(props: DDProps) {
 }
 
 function InputElem(props: InputProps) {
-    return( <input className='pt-form-field pt-form-Input' id={props.id} 
+    
+    return( <> <input className='pt-form-field pt-form-input' id={props.id} 
     type={props.subtype} onChange={(e) => {onFormUpdate(e.target.value, props.key)}}
     defaultValue={props.default}>
-    </input>)
+    </input>
+    </>
+    )
 }

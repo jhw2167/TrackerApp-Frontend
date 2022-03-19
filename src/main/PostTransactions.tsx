@@ -22,6 +22,7 @@ import '../css/main/PostTransactions.css'
 import Arrow from '../resources/subcomponents/arrow';
 import DoublePlus from '../resources/subcomponents/double_plus';
 import AddNewTrans from '../components/AddNewTrans';
+import { now } from 'underscore';
 
 //Constants
 const ROLLOVER_DIV_STYLE: CSS.Properties = {
@@ -79,6 +80,27 @@ function PostTransactions() {
         ]);
 
         const [mouseWheelScrollDist, setMouseWheelScrollDist] = useState<number>(0);
+
+        //data states
+                const DEF_FORM_VALS = [
+                        "",     //trans id
+                        (new Date(now())).toISOString().split("T")[0],     //Purchased Date
+                        "",     //amount
+                        "",     //vendor
+                        "",     //category
+                        "",     //PayMethod
+                        "",     //BoughtFor
+                        "",     //PayStatus
+                        false,     //Income
+                        "",     //Reimburses
+                        (new Date(now())).toISOString().split("T")[0],     //Posted Date
+                        ""     //Notes
+                ]
+                const [formValues, setFormValues] = useState<any[]>(DEF_FORM_VALS);
+                const [formOptions, setFormOptions] = useState<Array<Array<any>>>([]);  //drop down options for form
+
+        //Stylistic states
+                const [grayedValues, setGrayedValues] = useState<Array<Boolean>>([]);
 
         /* Effects */
         const updateWheelPos = () => {
@@ -166,6 +188,8 @@ function PostTransactions() {
                                         ([key, val]) => {return val;}
                                  )}
                                  id='pt-add-new-trans-form'
+                                 data={formValues}
+                                 setFormValues={setFormValues}
                                 />  
                         </div>
                    </div>
