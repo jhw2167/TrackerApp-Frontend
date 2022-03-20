@@ -18,7 +18,7 @@ interface FormProps {
     data?: Array<any>;
     setFormValues?: Function;
     inputTypes: string[];
-    options?: Array<Array<any>>;
+    options?: Map<string, Array<any>>;  //maps headers[i] to its options
     id: string;
 }
 
@@ -110,7 +110,8 @@ function AddNewTrans(props: FormProps) {
                 key: i,
                 type: props.inputTypes[i].split('-')[0],
                 default: v,
-                options: props.options ? props.options[i] : ['none'],
+                options: props.options ? props.options.get(props.headers[i])
+                 : ['none'],
                 subtype: props.inputTypes[i].split('-')[1]
             };
                 //console.log("Val: %s", data.default);
@@ -145,7 +146,8 @@ function FormElemWrapper(props: FormElemProps) {
 
         case 'input':
           return (<InputElem key={props.key} id={props.id}
-            subtype={props.subtype as string} default={props.default}/>);
+            subtype={props.subtype as string} default={props.default}
+            />);
 
         case 'select':
                 return <DropDownElem key={props.key} id={props.id}

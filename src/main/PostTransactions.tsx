@@ -22,7 +22,7 @@ import '../css/main/PostTransactions.css'
 import Arrow from '../resources/subcomponents/arrow';
 import DoublePlus from '../resources/subcomponents/double_plus';
 import AddNewTrans from '../components/AddNewTrans';
-import { now } from 'underscore';
+import { any, now } from 'underscore';
 
 //Constants
 const ROLLOVER_DIV_STYLE: CSS.Properties = {
@@ -97,7 +97,7 @@ function PostTransactions() {
                         ""     //Notes
                 ]
                 const [formValues, setFormValues] = useState<any[]>(DEF_FORM_VALS);
-                const [formOptions, setFormOptions] = useState<Array<Array<any>>>([]);  //drop down options for form
+                const [formOptions, setFormOptions] = useState<Map<string, Array<any>>>(new Map());  //drop down options for form
 
         //Stylistic states
                 const [grayedValues, setGrayedValues] = useState<Array<Boolean>>([]);
@@ -132,15 +132,31 @@ function PostTransactions() {
                 window.addEventListener("wheel", updateWheelPos);
         }, []);
 
+
         /* Api Calls */
         useEffect( () => {
-                
+
+                const getSetData = (header: string) => {
+                        return (data: Array<string>) => {
+                                formOptions.set(header, data);
+                        }
+                }
                 //GET Options for
-                        //Category
-                        //Pay Method
-                        //Pay Status
-                        //Bought For
-                        //Vendor (?) dyn search box?
+
+                //Category
+                api.getRequest(api.SERVER_ALL_CATEGORIES, getSetData(FORM_HEADERS.CAT));        
+
+                //Pay Method
+                api.getRequest(api.SERVER_ALL_PAYMETHODS, getSetData(FORM_HEADERS.PMETHOD));
+
+                //Pay Status
+                api.getRequest(api.SERVER_ALL_PAYSTATUS, getSetData(FORM_HEADERS.PSTATUS));
+
+                //Bought For
+                api.getRequest(api.SERVER_ALL_BOUGHTFOR, getSetData(FORM_HEADERS.BOTFOR));
+
+                //Vendor (?) dyn search box?
+                api.getRequest(api.SERVER_ALL_VENDORS, getSetData(FORM_HEADERS.VEND));
 
         }, []);
 
@@ -190,6 +206,7 @@ function PostTransactions() {
                                  id='pt-add-new-trans-form'
                                  data={formValues}
                                  setFormValues={setFormValues}
+                                options={formOptions}
                                 />  
                         </div>
                    </div>
