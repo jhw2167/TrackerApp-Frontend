@@ -10,6 +10,11 @@ export const PORT = ":8080/";
 //Server calls
 export const SERVER_ALL_TRANSACTIONS = DOMAIN + PORT + "transactions";
 export const SERVER_ALL_CATEGORIES = SERVER_ALL_TRANSACTIONS + "/categories";
+export const SERVER_ALL_PAYMETHODS = SERVER_ALL_TRANSACTIONS + "/payMethods";
+export const SERVER_ALL_BOUGHTFOR = SERVER_ALL_TRANSACTIONS + "/boughtFor";
+export const SERVER_ALL_PAYSTATUS = SERVER_ALL_TRANSACTIONS + "/payStatus";
+
+export const SERVER_ALL_VENDORS = SERVER_ALL_TRANSACTIONS + "/vendors";
 
 
 /*Utility functions */
@@ -55,6 +60,15 @@ export const SERVER_ALL_CATEGORIES = SERVER_ALL_TRANSACTIONS + "/categories";
         "&offset=" + Math.max(offset, 0);
     }
 
+    export function SERVER_QUERY_VENDOR_NAME(vendor_name: string) {
+        return SERVER_ALL_VENDORS + "/query?name=" + vendor_name;
+    }
+
+    export function SERVER_QUERY_VENDOR_ID(id: string, cc: string) {
+        return SERVER_ALL_VENDORS + "/query?cc_id=" + id 
+        + "&cc=" + cc;
+    }
+
 /* REQUESTS */
 
 export const getRequest = async function getRequest(url: string, setData: Function) {
@@ -75,3 +89,26 @@ export const getRequest = async function getRequest(url: string, setData: Functi
     //end axios call   
 }
 //END GENERAL GET METHOD
+
+
+
+export const psotRequest = async function postRequest(url: string, data: any) {
+
+    
+    const config: AxiosRequestConfig<any> = {
+        method: 'POST',
+        url: url,
+        data: data
+    }
+
+    console.log("Making POST call to: " + url + " with data: " + data)
+    await axios(config).then( (resp) =>
+    {
+        console.log("POST returned: " + resp.status + 
+        " with data: " + resp.data);//+ JSON.stringify(resp.data));
+    }).catch( (reason) => {
+        console.log("Error from POST request from: " + url + " with error: " + reason);
+    });
+    //end axios call   
+
+}

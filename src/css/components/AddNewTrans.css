@@ -114,7 +114,7 @@ form {
         transition: background-color 0.2s;
     }
 
-    #income[type="checkbox" i]:checked.pt-form-field {
+    #income[type="checkbox" i].pt-form-field {
         border-color: white;
     }
 
