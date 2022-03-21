@@ -5,13 +5,13 @@
 
 //project imports
 import * as c from '../resources/constants';
-import {DataTuple, Transaction, Summary} from '../resources/constants';
 import * as api from '../resources/api';
-import { useEffect, useState } from 'react';
-import { DiscreteColorLegendProps } from 'react-vis';
+import { ReactElement, useEffect, useState } from 'react';
 
 //CSS Imports
 import '../css/components/AddNewTrans.css'
+import DropDown from './subcomponents/DropDown';
+import { JsxChild } from 'typescript';
 
 interface FormProps {
     headers: string[];
@@ -26,11 +26,10 @@ interface BaseInput {
     key: any;
     id: string;
     default?: string;
+    options?: string[];
 }
 
 interface DDProps extends BaseInput {
-    options: string[];
-    
 }
 
 interface InputProps extends BaseInput {
@@ -39,7 +38,6 @@ interface InputProps extends BaseInput {
 
 interface FormElemProps extends BaseInput {
     type: string;
-    options?: string[];
     subtype?: string;
 }
 
@@ -67,8 +65,6 @@ interface FormElemProps extends BaseInput {
 let onFormUpdate: Function;
 
 function AddNewTrans(props: FormProps) {
-
-   
 
     /* States */
     const [formValues, setFormValues] = useState<Array<any>>([]);
@@ -115,6 +111,7 @@ function AddNewTrans(props: FormProps) {
                 subtype: props.inputTypes[i].split('-')[1]
             };
                 //console.log("Val: %s", data.default);
+                //console.log("options: %s", JSON.stringify(props.options));
                 return(
                     <td  key={i} id={data.id + '-col'} className={'pt-data-col ' + 
                     'pt-' + data.id + '-tuple'}>
@@ -147,6 +144,7 @@ function FormElemWrapper(props: FormElemProps) {
         case 'input':
           return (<InputElem key={props.key} id={props.id}
             subtype={props.subtype as string} default={props.default}
+            options={props.options as string[]}
             />);
 
         case 'select':
@@ -170,10 +168,15 @@ function DropDownElem(props: DDProps) {
 
 function InputElem(props: InputProps) {
     
+    let dropDown: ReactElement = (!!props.options) ? <DropDown data={props.options as string[]}
+    styleClass={props.id + 'pt'}
+    filterFunction={() => {}}
+    /> : <></>;
     return( <> <input className='pt-form-field pt-form-input' id={props.id} 
     type={props.subtype} onChange={(e) => {onFormUpdate(e.target.value, props.key)}}
     defaultValue={props.default}>
     </input>
+    {dropDown}
     </>
     )
 }

@@ -105,27 +105,27 @@ function PostTransactions() {
         /* Effects */
         const updateWheelPos = () => {
            let wheelPos: number = document.querySelector("#transactions-content-row")?.scrollTop as unknown as number;
-            console.log("------------------\nStarting pos: " + wheelPos);
+            //console.log("------------------\nStarting pos: " + wheelPos);
 
             let topLeft: any = (document.querySelector('.main-scrollable-content-row') as HTMLDivElement).getBoundingClientRect();
             topLeft = {t: topLeft.top, l: topLeft.left};
 
             let h: any =  window.getComputedStyle(document.querySelector('.rollover-row-spacer') as Element).height;
             h = Number((h as string).split('p')[0]);
-            console.log(wheelPos + "  " + h );
+            //console.log(wheelPos + "  " + h );
             let newStyles = rolloverStyles.map( (v, i) => {
-                console.log("wheelPos+100: %d, i*Number(h): %d,  i: %d", wheelPos+mouseWheelScrollDist, i*Number(h), i);
+                //console.log("wheelPos+100: %d, i*Number(h): %d,  i: %d", wheelPos+mouseWheelScrollDist, i*Number(h), i);
                 let toRet = ROLLOVER_BLANK_STYLE;
                 if(h) {
                     toRet = (wheelPos+mouseWheelScrollDist >= i*Number(h)) ? {...ROLLOVER_DIV_STYLE,
                             ['top' as any]: topLeft.t, ['left' as any]: topLeft.l }
                                     : ROLLOVER_BLANK_STYLE;
                 }
-                console.log("Returning: " + JSON.stringify(toRet));
+                //console.log("Returning: " + JSON.stringify(toRet));
                  return toRet;
         });
             setRollOverStyles(newStyles);
-            console.log("NewStyles: " + JSON.stringify(newStyles));
+            //console.log("NewStyles: " + JSON.stringify(newStyles));
         };
 
         useEffect( () => {
@@ -134,30 +134,53 @@ function PostTransactions() {
 
 
         /* Api Calls */
-        useEffect( () => {
+        let map: Map<string, Array<any>> = new Map;
+        const getOptions = async function name() {
 
                 const getSetData = (header: string) => {
                         return (data: Array<string>) => {
-                                formOptions.set(header, data);
+                                map.set(header, data);
                         }
                 }
-                //GET Options for
 
+                let [A, B, C, D, E] = await Promise.all([
+                //GET Options for
                 //Category
-                api.getRequest(api.SERVER_ALL_CATEGORIES, getSetData(FORM_HEADERS.CAT));        
+                api.getRequest(api.SERVER_ALL_CATEGORIES, getSetData(FORM_HEADERS.CAT)),        
 
                 //Pay Method
-                api.getRequest(api.SERVER_ALL_PAYMETHODS, getSetData(FORM_HEADERS.PMETHOD));
+                api.getRequest(api.SERVER_ALL_PAYMETHODS, getSetData(FORM_HEADERS.PMETHOD)),
 
                 //Pay Status
-                api.getRequest(api.SERVER_ALL_PAYSTATUS, getSetData(FORM_HEADERS.PSTATUS));
+                api.getRequest(api.SERVER_ALL_PAYSTATUS, getSetData(FORM_HEADERS.PSTATUS)),
 
                 //Bought For
-                api.getRequest(api.SERVER_ALL_BOUGHTFOR, getSetData(FORM_HEADERS.BOTFOR));
+                api.getRequest(api.SERVER_ALL_BOUGHTFOR, getSetData(FORM_HEADERS.BOTFOR)),
 
                 //Vendor (?) dyn search box?
-                api.getRequest(api.SERVER_ALL_VENDORS, getSetData(FORM_HEADERS.VEND));
+                api.getRequest(api.SERVER_ALL_VENDORS, getSetData(FORM_HEADERS.VEND))
 
+                ]);// END PROMISE.ALL
+        }       
+
+        useEffect( () => {
+                
+                let makeApiCall = (async () => {
+                        await getOptions();
+
+                        let vendorObjectArr: Array<c.Vendor> = map.get(FORM_HEADERS.VEND) as Array<c.Vendor>;
+                        map.set(FORM_HEADERS.VEND, vendorObjectArr?.map( (value: c.Vendor, key) => {
+                                return value.vendor;
+                        }  ));
+        
+                        setFormOptions(map);
+                        console.log("In form options: " );
+                        formOptions.forEach( (val, key) => {
+                                console.log(key + ": " + val.length)
+                        })
+                })
+                makeApiCall();
+               
         }, []);
 
         return (

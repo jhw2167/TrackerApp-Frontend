@@ -19,6 +19,15 @@ export const TRANS_DATA = {
 	NOTES: 'notes'
 }
 
+export const VENDOR_DATA = {
+    cc_id: "cc_id",
+    cc: "cc",
+    vendor: "vendor",
+    amount: "amount",
+    category: "category",
+    typicallyIncome: "typicallyIncome"
+}
+
 export const SUMMARY_DATA = {
     aggregate: 'aggregateCol',
     value: 'value',
@@ -151,6 +160,11 @@ export const MNTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul","aug", "se
     export const properCase = function(a: string): string {
         return a.charAt(0).toUpperCase() + a.slice(1).toLowerCase();
     }
+
+    export const addStyleClass = function(baseName: string, type: string): string {
+        return type + ' ' + baseName + '-' + type;
+    }
+
 /* Interfaces */
 export interface Transaction {
     tId: string;
@@ -166,6 +180,16 @@ export interface Transaction {
     postedDate: Date;
     notes: string;
 }
+
+export interface Vendor {
+    cc_id: string,
+    cc: string,
+    vendor: string,
+    amount: number,
+    category: string,
+    typicallyIncome: boolean
+}
+
 
 export interface DataTuple {
     label: string;
