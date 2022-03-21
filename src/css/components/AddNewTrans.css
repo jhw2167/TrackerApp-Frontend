@@ -139,3 +139,14 @@ form {
     #reimburses[type=number]::-webkit-outer-spin-button { 
         display: none;
     }
+
+
+/* DROP DOWN CSS FOR PT */
+.pt-drop-down-wrapper-div {
+    
+}
+
+.pt-dd-row {
+    font-weight: bold;
+    background-color: var(--secondary-col);
+}

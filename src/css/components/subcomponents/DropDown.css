@@ -1,0 +1,30 @@
+
+/* Styling for generic drop down component */
+
+.drop-down-wrapper-div {
+    position: absolute;
+
+    max-height: 200px;
+    max-width: 100px;
+    z-index: 800;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    background-color: var(--heavy-grey);
+}
+
+.drop-down-wrapper-div::-webkit-scrollbar {
+    display: none;
+}
+.drop-down-table-div {
+    text-align: left;
+    white-space: nowrap;
+}
+
+.dd-row {
+    line-height: 30px;
+
+    border: 1px solid var(--primary-col);
+    border-left: 0px; border-right: 0px;
+}

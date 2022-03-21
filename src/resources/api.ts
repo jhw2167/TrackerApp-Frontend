@@ -83,6 +83,7 @@ export const getRequest = async function getRequest(url: string, setData: Functi
     {
         console.log("Transactions returned: " + url );//+ JSON.stringify(resp.data));
         setData(resp.data);
+        return resp;
     }).catch( (reason) => {
         console.log("Error from GET request from: " + url + " with error: " + reason);
     });

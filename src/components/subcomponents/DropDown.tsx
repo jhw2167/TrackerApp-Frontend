@@ -2,7 +2,7 @@
 import * as c from '../../resources/constants';
 
 //other imports
-import _, { values } from 'underscore';
+import _, { PairValue, values } from 'underscore';
 
 //CSS
 import '../../css/components/subcomponents/DropDown.css'
@@ -15,7 +15,6 @@ interface DropDownProps {
     data: Array<any>;
     filterFunction: Function;
     styleClass: string
-    
 }
 
 /* Global constants */
@@ -65,7 +64,7 @@ function DropDown(props: DropDownProps ) {
                         //console.log("Vals: " + !!props.aggFunction + " : " + index + " : " + (props.limit+1));
     
                         let hovRowStyleClass = (isHov > 0) ? 
-                        c.addStyleClass(props.styleClass, 'dd-hov-row') : undefined;
+                        c.addStyleClass(props.styleClass, 'dd-hov-row') : '';
                         
                         return <tr className= {c.addStyleClass(props.styleClass, 'dd-row')
                         + ' ' + hovRowStyleClass}
