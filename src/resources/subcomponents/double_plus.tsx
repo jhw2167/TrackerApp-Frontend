@@ -35,7 +35,7 @@ function DoublePlus(props: DoublePlusProps) {
         <DoublePlusSVG className={'svg-double-plus ' + styleClass} 
         fill='black'
         stroke='black'
-        stroke-width={1}
+        strokeWidth={1}
         height={height} width={width}
         />
         </div>

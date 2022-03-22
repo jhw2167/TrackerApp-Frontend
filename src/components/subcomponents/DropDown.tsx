@@ -52,10 +52,9 @@ function DropDown(props: DropDownProps ) {
         }
 
         if(props.setFuncSetDDPosExternally) {
+            console.log("set 2")
             props.setFuncSetDDPosExternally((i: number) => (i: number) => setDropDownInc(i));
         }
-        console.log("set");
-        onStartup=false;
     }
     , [])
     

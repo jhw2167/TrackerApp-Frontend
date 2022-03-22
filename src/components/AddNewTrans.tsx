@@ -71,7 +71,10 @@ let onFormUpdate: Function;
 
 let _setDDPosExternally: Function;
 let _setFuncSetDDPosExternally: Function;
-let onStartup=true;
+
+let chat = (v: string) => {
+    console.log(v);
+}
 
 function AddNewTrans(props: FormProps) {
 
@@ -80,14 +83,8 @@ function AddNewTrans(props: FormProps) {
     const activeFields = useRef<Set<any>>(new Set());
     const selectedField = useRef<number>(-1);
     
-    const [setDDPosExternally, setFuncSetDDPosExternally] = useState<Function>(() => {});
+    const [setDDPosExternally, setFuncSetDDPosExternally] = useState<Function>((i: number) => (i: number) => {return;});
 
-    //Set Global values
-    if(onStartup) {
-       
-        onStartup=false;
-    }
-    
     /* Functions */
     onFormUpdate = (v: any, i: number) => {
         formValues.current = formValues.current.map( (val, ind) => {
@@ -106,8 +103,8 @@ function AddNewTrans(props: FormProps) {
         } else if (props.data.length >= props.headers.length) {
             formValues.current = props.data;
         }
-
         _setDDPosExternally = setDDPosExternally;
+        chat("set 1");
         _setFuncSetDDPosExternally = setFuncSetDDPosExternally;
         globalFormValues=formValues;
         globalActiveFields = activeFields;
@@ -121,34 +118,37 @@ function AddNewTrans(props: FormProps) {
         <form id={props.id}>
             <table id="add-new-trans-wrapper-table">
                 <tbody>
-                <tr> {
+                <tr>{
             formValues.current.map(  (v,i) => {
                 const  data: FormElemProps = { 
-                id: props.headers[i].replace(' ', '-').toLowerCase(),
-                index: i,
-                type: props.inputTypes[i].split('-')[0],
-                default: v,
-                options: props.options ? props.options.get(props.headers[i])
-                 : ['none'],
-                subtype: props.inputTypes[i].split('-')[1],
-            };
-                //console.log("Val: %s", data.default);
-                //console.log("options: %s", JSON.stringify(props.options));
-                return(
-                    <td  key={i} id={data.id + '-col'} className={'pt-data-col ' + 
-                    'pt-' + data.id + '-tuple'}    
-                    >
+                    id: props.headers[i].replace(' ', '-').toLowerCase(),
+                    index: i,
+                    type: props.inputTypes[i].split('-')[0],
+                    default: v,
+                    options: props.options ? props.options.get(props.headers[i])
+                     : ['none'],
+                    subtype: props.inputTypes[i].split('-')[1],
+                }
+                  //console.log("Val: %s", data.default);
+                    //console.log("options: %s", JSON.stringify(props.options));
+                    return(
+                        <td  key={i} id={data.id + '-col'} className={'pt-data-col ' + 
+                        'pt-' + data.id + '-tuple'}>
                         {FormElemWrapper(data)}
-                    </td>
-                )
-               
-            })}
-            </tr>
-            <tr> {props.headers.map( (v, i) => {
+                        </td>
+                    )
+            })}</tr>
+            
+            <tr>
+                {props.headers.map( (v, i) => {
                 let id = v.replace(' ', '-').toLowerCase();
-                 return <th key={i} className={'pt-data-header ' + 'pt-' + id + '-tuple'}
-                   id={id +'-header'}><label id={'lb-' + id} htmlFor={id}>
-                     {v}</label></th>})} </tr>
+                 return (<th key={i} className={'pt-data-header ' + 'pt-' + id + '-tuple'}
+                 id={id +'-header'}>
+                     <label id={'lb-' + id} htmlFor={id}>{v}
+                     </label>
+                     </th>)})}
+            </tr>
+
                 </tbody>
             </table>
          </form>
@@ -201,6 +201,8 @@ export default AddNewTrans;
         } : () => {};
 
         //updates which dropDown cell is hovered by arrow keys
+        console.log("compiling func, " + _setDDPosExternally);
+        _setFuncSetDDPosExternally((i: number) => (j: number) => {return;})
         let handleArrowsOnDropDown = (e: KeyboardEvent) => {
             if(e.key=='ArrowDown') {
                 _setDDPosExternally(1);
