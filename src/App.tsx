@@ -8,6 +8,7 @@ import Layout from './main/Layout';
 //css
 import './css/General.css';
 import './css/misc/Background.css'
+import './css/components/subcomponents/DropDown.css'
 
 function App() {
   return (

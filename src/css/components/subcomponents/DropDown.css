@@ -4,8 +4,6 @@
 .drop-down-wrapper-div {
     position: absolute;
 
-    max-height: 200px;
-    max-width: 100px;
     z-index: 800;
 
     overflow-y: auto;
@@ -23,8 +21,18 @@
 }
 
 .dd-row {
-    line-height: 30px;
+    line-height: 28px;
 
     border: 1px solid var(--primary-col);
+    border-left: 0px; border-right: 0px;
+}
+
+.dd-hov-row {
+    line-height: 34px;
+    border: 2px solid var(--primary-col);
+    background-color: var(--med-gray);
+
+    font-weight: bolder;
+    font-size: 1.2em;
     border-left: 0px; border-right: 0px;
 }

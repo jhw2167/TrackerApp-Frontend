@@ -5,9 +5,11 @@ import * as c from '../../resources/constants';
 import _, { PairValue, values } from 'underscore';
 
 //CSS
-import '../../css/components/subcomponents/DropDown.css'
+
 import * as CSS from 'csstype';
-import { useEffect, useState } from "react";
+import React, { KeyboardEvent, MutableRefObject,
+    ReactElement, useEffect, useRef, useState } from 'react';
+
 
 
 /* Interfaces */
@@ -15,9 +17,15 @@ interface DropDownProps {
     data: Array<any>;
     filterFunction: Function;
     styleClass: string
+    hovCellFunc?: Function;
+    setSelectedData?: Function; //sets data selected by DD menu to container
+    setFuncSetDDPosExternally?: Function;   //takes a "setStateFunction" that sets the state of a 
+    /* container with a setState function internally in dropDown, so the dropDownPlace state can
+    be adjusted from outside this component */
 }
 
 /* Global constants */
+let onStartup = true;
 
 function DropDown(props: DropDownProps ) {
 
@@ -27,18 +35,30 @@ function DropDown(props: DropDownProps ) {
     const [deepHovCell, setDeepHovCell] = useState<any>();
 
     const [data, setData] = useState<any[]>(props.data);
+    const [selected, setSelected] = useState<any>('');
+    const [dropDownPlace, setDropDownPlace] = useState<number>(-1);
+    const [dropDownInc, setDropDownInc] = useState<number>(0);
     
+    //set functions
+    if(onStartup) {
+       
+    }
+
     /* EFFECTS */
-    /*  For setting hovered cell from outside this component
-    we can likely use a state for "hovered option" in our form and pass the number
-    of the hovered value into this as a prop
+     /* For setting hovered cell from outside this component */
     useEffect( () => {
         if(props.hovCellFunc) {
             props.hovCellFunc((s: Set<any>) => (s: Set<any>) => setExtHovCells(s));
         }
+
+        if(props.setFuncSetDDPosExternally) {
+            props.setFuncSetDDPosExternally((i: number) => (i: number) => setDropDownInc(i));
+        }
+        console.log("set");
+        onStartup=false;
     }
     , [])
-    */
+    
 
     useEffect( () => {
         if(extHovCells) {
@@ -46,6 +66,54 @@ function DropDown(props: DropDownProps ) {
         }
     }
     , [extHovCells])
+
+
+    //Sets selected data from dropDownPlace
+    useEffect( () => {
+        if(dropDownPlace<0 || dropDownPlace>=data.length) {
+            setSelected(''); //default, no value selected spot
+        } else {
+            setSelected(data.at(dropDownPlace));
+        }
+    }
+    , [dropDownPlace])
+
+
+    //updates dropDownPlace from externally set increment
+    useEffect( () => {
+
+        if(dropDownInc==0) {
+            hovCells.clear();
+            setDropDownPlace(-1);
+        } else if (dropDownInc==Infinity) {
+            return;
+        }
+
+        let newDDPlace = dropDownInc + dropDownPlace;
+        console.log("inc dd place, %d : start: ", newDDPlace, dropDownPlace )
+        if(newDDPlace==dropDownPlace || newDDPlace<0 || newDDPlace==data.length) {
+            return; //no relevant value for this position, keep it
+        } else {
+            hovCells.delete(dropDownPlace)
+            hovCells.add(newDDPlace)
+            setDropDownPlace(newDDPlace);
+        }
+        setDropDownInc(Infinity);
+    }, [dropDownInc])
+
+
+
+    useEffect( () => {
+        if(props.setSelectedData)
+            props.setSelectedData(selected);
+    }, [selected])
+
+    /* Functions */
+
+    //Function that sets dropDownPlace
+    const incDropDownPlace = function (i: number): void {
+       
+    }
 
     if(!data) {
         //console.log("ret nothing!!! %s: " + props.data.length, props.headers);
@@ -59,16 +127,16 @@ function DropDown(props: DropDownProps ) {
                       
                     {/*         Now return data row      */}
                     {data.map( (value: any, index: number) => {
-                        let isHov: number = hovCells.has(value) ? 1 : 0;
+                        let isHov: number = (hovCells.has(value) || hovCells.has(index)) ? 1 : 0;
                         isHov += _.isEqual(deepHovCell, value) ? 1 : 0; //0-no hov, 1-hov, 2-deep hov
                         //console.log("Vals: " + !!props.aggFunction + " : " + index + " : " + (props.limit+1));
-    
+                        //hovCells.forEach((v) => console.log("val: " + v) )
                         let hovRowStyleClass = (isHov > 0) ? 
                         c.addStyleClass(props.styleClass, 'dd-hov-row') : '';
                         
                         return <tr className= {c.addStyleClass(props.styleClass, 'dd-row')
                         + ' ' + hovRowStyleClass}
-                                
+                        onClick={() => setDropDownPlace(index)}
                         key={index}
                         onMouseEnter={() => {
                             hovCells.add(value);
@@ -81,7 +149,7 @@ function DropDown(props: DropDownProps ) {
                             setDeepHovCell(null);}}
                          >
                             {/*         Now return data COLS      */}
-                            <td className={c.addStyleClass(props.styleClass, 'dd-col')}>
+                            <td className={c.addStyleClass(props.styleClass, 'dd-col')} >
                                 {value}
                             </td>
                         </tr>

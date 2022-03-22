@@ -144,6 +144,10 @@ form {
 /* DROP DOWN CSS FOR PT */
 .pt-drop-down-wrapper-div {
     
+    outline: 1px solid white;
+    outline-style: groove;
+    width: fit-content;
+    max-height: 200px;
 }
 
 .pt-dd-row {

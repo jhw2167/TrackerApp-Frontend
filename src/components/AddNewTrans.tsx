@@ -12,7 +12,7 @@ import React, { KeyboardEvent, MutableRefObject,
 //CSS Imports
 import '../css/components/AddNewTrans.css'
 import DropDown from './subcomponents/DropDown';
-import { JsxChild } from 'typescript';
+import { isParameterPropertyDeclaration, JsxChild } from 'typescript';
 
 interface FormProps {
     headers: string[];
@@ -28,7 +28,6 @@ interface BaseInput {
     index: number;
     default?: string;
     options?: string[];
-    activeFields?: MutableRefObject<Set<any>>;
 }
 
 interface DDProps extends BaseInput {
@@ -64,54 +63,66 @@ interface FormElemProps extends BaseInput {
 */
 
 /* Global consts */
+let globalFormValues: React.MutableRefObject<Array<any>>;
+let globalActiveFields: React.MutableRefObject<Set<any>>;
+
+let selectedFormField: React.MutableRefObject<number>;
 let onFormUpdate: Function;
-let setDropDownPlaceOnArrow: Function;
+
+let _setDDPosExternally: Function;
+let _setFuncSetDDPosExternally: Function;
+let onStartup=true;
 
 function AddNewTrans(props: FormProps) {
 
     /* States */
-    const [formValues, setFormValues] = useState<Array<any>>([]);
+    const formValues = useRef<Array<any>>(Array.from (props.headers.map(() => {return ''})));
     const activeFields = useRef<Set<any>>(new Set());
-    const [dropDownPlace, setDropDownPlace] = useState<number>(-1);
+    const selectedField = useRef<number>(-1);
+    
+    const [setDDPosExternally, setFuncSetDDPosExternally] = useState<Function>(() => {});
 
+    //Set Global values
+    if(onStartup) {
+       
+        onStartup=false;
+    }
+    
     /* Functions */
     onFormUpdate = (v: any, i: number) => {
-        setFormValues(formValues.map( (val, ind) => {
+        formValues.current = formValues.current.map( (val, ind) => {
             return (i==ind) ? v : val;
-        }))
+        })
 
         if(props.setFormValues) {
-            props.setFormValues(formValues);    //setFormValues for containing component as well
+            props.setFormValues(formValues.current);    //setFormValues for containing component as well
         }
     }
 
-    setDropDownPlaceOnArrow = (inc: number, max: number) => {
-        if(inc==0) {
-            setDropDownPlace(-1); //default, no value selected spot
-        } else {
-            setDropDownPlace(Math.min(Math.max(dropDownPlace+inc, 0), max));
-        }
-    };
-
-
     /* Effects */
     useEffect(() => {
-        if(props.data) {
-            setFormValues(props.data)
-        } else {
-            setFormValues(props.headers.map(() => {return ''}))
+        if(!props.data) {
+            //nothing
+        } else if (props.data.length >= props.headers.length) {
+            formValues.current = props.data;
         }
 
+        _setDDPosExternally = setDDPosExternally;
+        _setFuncSetDDPosExternally = setFuncSetDDPosExternally;
+        globalFormValues=formValues;
+        globalActiveFields = activeFields;
+        selectedFormField = selectedField;
+
     }, [])
+
 
    return (
        <div className="add-new-trans-wrapper-div" id={props.id + '-div'}>
         <form id={props.id}>
             <table id="add-new-trans-wrapper-table">
                 <tbody>
-                <tr>
-                {
-            formValues.map(  (v,i) => {
+                <tr> {
+            formValues.current.map(  (v,i) => {
                 const  data: FormElemProps = { 
                 id: props.headers[i].replace(' ', '-').toLowerCase(),
                 index: i,
@@ -120,7 +131,6 @@ function AddNewTrans(props: FormProps) {
                 options: props.options ? props.options.get(props.headers[i])
                  : ['none'],
                 subtype: props.inputTypes[i].split('-')[1],
-                activeFields: activeFields
             };
                 //console.log("Val: %s", data.default);
                 //console.log("options: %s", JSON.stringify(props.options));
@@ -158,7 +168,6 @@ export default AddNewTrans;
             case 'input':
               return (<InputElem index={props.index} id={props.id}
                 subtype={props.subtype as string} default={props.default}
-                activeFields={props.activeFields}
                 options={props.options as string[]}
                 />);
     
@@ -182,40 +191,46 @@ export default AddNewTrans;
     }
     
     function InputElem(props: InputProps) {
-        
-        //Custom searchable DropDown menu conditionally rendered depending on if options are provided
-        let dropDown: ReactElement = (!!props.options && props.activeFields && 
-            props.activeFields.current.has(props.index)) ?
-         <DropDown data={props.options as string[]}
-        styleClass={'dd-' + props.id + ' pt'}
-        filterFunction={() => {}}
-        /> : <></>;
+
 
         //updates when drop down menu displays
-        let handleActiveFieldsOnChange = (props.activeFields) ? (fieldVal: string) => {
-            props.activeFields?.current.add(props.index)
+        let handleActiveFieldsOnChange = (globalActiveFields) ? (fieldVal: string) => {
+            globalActiveFields.current.add(props.index)
             if(fieldVal.length==0)
-                props.activeFields?.current.delete(props.index);
+                globalActiveFields?.current.delete(props.index);
         } : () => {};
 
         //updates which dropDown cell is hovered by arrow keys
-        let handleArrowsOnDropDown = (props.options) ? (e: KeyboardEvent) => {
+        let handleArrowsOnDropDown = (e: KeyboardEvent) => {
             if(e.key=='ArrowDown') {
-                setDropDownPlaceOnArrow(1, props.options?.length);
-            } else if (e.key=='Arrowup'){
-                setDropDownPlaceOnArrow(-1, props.options?.length);
+                _setDDPosExternally(1);
+            } else if (e.key=='ArrowUp'){
+                _setDDPosExternally(-1);
             }
-        } : () => {};
+        };
+
+
+        //Custom searchable DropDown menu conditionally rendered depending on if options are provided
+        let dropDown: ReactElement = (!!props.options && (selectedFormField.current==props.index)) ?
+         <DropDown data={props.options as string[]}
+        styleClass={'dd-' + props.id + ' pt'}
+        filterFunction={() => {}}
+        setSelectedData = {(val: any) => onFormUpdate(val, props.index)}
+        setFuncSetDDPosExternally = {_setFuncSetDDPosExternally}
+        /> : <></>;
+
+        //console.log("val: " + globalFormValues.current.at(props.index))
 
         return( <> <input className='pt-form-field pt-form-input' id={props.id} 
-        type={props.subtype} 
+        type={props.subtype}
+        //value={globalFormValues.current.at(props.index)}
         onChange={(e) => { handleActiveFieldsOnChange(e.target.value)
             onFormUpdate(e.target.value, props.index)}
         }
-        onBlur={ () => {if(props.activeFields) props.activeFields?.current.delete(props.index)
-            onFormUpdate('', -1); //just to trigger state update
-        }}
-        onKeyDown={ (e: KeyboardEvent) => handleArrowsOnDropDown(e)}
+        onFocus={() => {selectedFormField.current = props.index; onFormUpdate('', -1);}}
+        onBlur={ () => {if(globalActiveFields) globalActiveFields.current.delete(props.index)
+            onFormUpdate('', -1);}} //just to trigger state update
+        onKeyDown={(e) => handleArrowsOnDropDown(e)}
         defaultValue={props.default}>
         </input>
         {dropDown}
