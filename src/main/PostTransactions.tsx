@@ -5,24 +5,23 @@
 import React, { useState, useEffect } from 'react';
 //import { useCookies } from "react-cookie";
 //import { Modal, Button } from 'react-bootstrap';
-
+import { any, now } from 'underscore';
 
 //project imports
 import * as c from '../resources/constants';
 import {DataTuple, Transaction, Summary} from '../resources/constants';
 import * as api from '../resources/api';
-import DataGraph from '../components/DataGraph';
 import DataTable from '../components/DataTable';
 import SubTable from '../components/SubTable';
 import Header from '../components/Header';
 import * as CSS from 'csstype';
 
-//CSS
-import '../css/main/PostTransactions.css'
 import Arrow from '../resources/subcomponents/arrow';
 import DoublePlus from '../resources/subcomponents/double_plus';
 import AddNewTrans from '../components/AddNewTrans';
-import { any, now } from 'underscore';
+
+//CSS
+
 
 //Constants
 const ROLLOVER_DIV_STYLE: CSS.Properties = {

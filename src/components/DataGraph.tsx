@@ -12,10 +12,6 @@ import { XYPlot, ArcSeries, ArcSeriesPoint,
 import * as consts from '../resources/constants';
 import {DataTuple, Transaction} from '../resources/constants';
 
-//CSS
-import '../css/components/DataGraph.css';
-import '../../node_modules/react-vis/dist/style.css';
-
 //React CSS
 import * as CSS from 'csstype';
 import Arrow from "../resources/subcomponents/arrow";

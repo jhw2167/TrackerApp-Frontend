@@ -8,10 +8,9 @@ import * as c from '../resources/constants';
 import * as api from '../resources/api';
 import React, { KeyboardEvent, MutableRefObject,
      ReactElement, useEffect, useRef, useState } from 'react';
+     import DropDown from './subcomponents/DropDown';
 
 //CSS Imports
-import '../css/components/AddNewTrans.css'
-import DropDown from './subcomponents/DropDown';
 import { isParameterPropertyDeclaration, JsxChild } from 'typescript';
 
 interface FormProps {
@@ -72,7 +71,7 @@ let onFormUpdate: Function;
 let _setDDPosExternally: Function;
 let _setFuncSetDDPosExternally: Function;
 
-let chat = (v: string) => {
+let chat = (v: any) => {
     console.log(v);
 }
 
@@ -83,7 +82,7 @@ function AddNewTrans(props: FormProps) {
     const activeFields = useRef<Set<any>>(new Set());
     const selectedField = useRef<number>(-1);
     
-    const [setDDPosExternally, setFuncSetDDPosExternally] = useState<Function>((i: number) => (i: number) => {return;});
+    [_setDDPosExternally, _setFuncSetDDPosExternally] = useState<Function>((i: number) => (i: number) => {return;});
 
     /* Functions */
     onFormUpdate = (v: any, i: number) => {
@@ -103,10 +102,9 @@ function AddNewTrans(props: FormProps) {
         } else if (props.data.length >= props.headers.length) {
             formValues.current = props.data;
         }
-        _setDDPosExternally = setDDPosExternally;
-        chat("set 1");
-        _setFuncSetDDPosExternally = setFuncSetDDPosExternally;
+        
         globalFormValues=formValues;
+        //chat(formValues.current + ".");
         globalActiveFields = activeFields;
         selectedFormField = selectedField;
 
@@ -201,8 +199,6 @@ export default AddNewTrans;
         } : () => {};
 
         //updates which dropDown cell is hovered by arrow keys
-        console.log("compiling func, " + _setDDPosExternally);
-        _setFuncSetDDPosExternally((i: number) => (j: number) => {return;})
         let handleArrowsOnDropDown = (e: KeyboardEvent) => {
             if(e.key=='ArrowDown') {
                 _setDDPosExternally(1);
@@ -211,13 +207,21 @@ export default AddNewTrans;
             }
         };
 
+        let currentFieldVal: string = (globalFormValues) ? globalFormValues.current.at(props.index) : 
+                                ((props.default) ? props.default : '');
+
+        let setSelectedData = (val: any) => {
+            if(currentFieldVal.length > 0 && val.length==0)
+                return; //dont reset the val
+            onFormUpdate(val, props.index)
+        }
 
         //Custom searchable DropDown menu conditionally rendered depending on if options are provided
         let dropDown: ReactElement = (!!props.options && (selectedFormField.current==props.index)) ?
          <DropDown data={props.options as string[]}
         styleClass={'dd-' + props.id + ' pt'}
         filterFunction={() => {}}
-        setSelectedData = {(val: any) => onFormUpdate(val, props.index)}
+        setSelectedData = {(val: any) => setSelectedData(val)}
         setFuncSetDDPosExternally = {_setFuncSetDDPosExternally}
         /> : <></>;
 
@@ -225,15 +229,14 @@ export default AddNewTrans;
 
         return( <> <input className='pt-form-field pt-form-input' id={props.id} 
         type={props.subtype}
-        //value={globalFormValues.current.at(props.index)}
+        value={currentFieldVal}
         onChange={(e) => { handleActiveFieldsOnChange(e.target.value)
             onFormUpdate(e.target.value, props.index)}
         }
         onFocus={() => {selectedFormField.current = props.index; onFormUpdate('', -1);}}
         onBlur={ () => {if(globalActiveFields) globalActiveFields.current.delete(props.index)
             onFormUpdate('', -1);}} //just to trigger state update
-        onKeyDown={(e) => handleArrowsOnDropDown(e)}
-        defaultValue={props.default}>
+        onKeyDown={(e) => handleArrowsOnDropDown(e)}>
         </input>
         {dropDown}
         </>

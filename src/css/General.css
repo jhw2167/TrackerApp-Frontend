@@ -9,6 +9,7 @@
     --sec-font-col: var(--primary-col);
 
     --trans-grey: rgba(196, 196, 196, 0.2);
+    --very-trans-grey: rgba(196, 196, 196, 0.8);
     --med-grey: rgba(48,48,48);
     --heavy-grey: rgba(18,18,18);
     --very-heavy-grey: rgba(6,6,6);

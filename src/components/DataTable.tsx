@@ -10,7 +10,7 @@ import * as c from '../resources/constants';
 import _ from 'underscore';
 
 //CSS
-import '../css/components/DataTable.css'
+
 import * as CSS from 'csstype';
 import Arrow from "../resources/subcomponents/arrow";
 

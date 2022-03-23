@@ -5,9 +5,6 @@ import * as c from '../resources/constants';
 
 //other imports
 import _, { values } from 'underscore';
-
-//CSS
-import '../css/components/SubTable.css'
 import * as CSS from 'csstype';
 import { useEffect, useState } from "react";
 

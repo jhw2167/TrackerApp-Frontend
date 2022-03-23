@@ -3,9 +3,6 @@ import * as c from '../../resources/constants';
 
 //other imports
 import _, { PairValue, values } from 'underscore';
-
-//CSS
-
 import * as CSS from 'csstype';
 import React, { KeyboardEvent, MutableRefObject,
     ReactElement, useEffect, useRef, useState } from 'react';

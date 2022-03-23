@@ -9,18 +9,17 @@
     overflow-y: auto;
     overflow-x: hidden;
 
-    background-color: var(--heavy-grey);
+    background-color: transparent;
 }
 
-.drop-down-wrapper-div::-webkit-scrollbar {
-    display: none;
-}
 .drop-down-table-div {
     text-align: left;
     white-space: nowrap;
 }
 
 .dd-row {
+    z-index: 800;
+
     line-height: 28px;
 
     border: 1px solid var(--primary-col);
@@ -28,6 +27,8 @@
 }
 
 .dd-hov-row {
+    z-index: 800;
+
     line-height: 34px;
     border: 2px solid var(--primary-col);
     background-color: var(--med-gray);

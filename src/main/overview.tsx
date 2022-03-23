@@ -17,10 +17,6 @@ import DataGraph from '../components/DataGraph';
 import DataTable from '../components/DataTable';
 import SubTable from '../components/SubTable';
 
-//CSS
-import '../css/main/Overview.css'
-
-//import '../css/Landing.css';
 interface OverviewProps {
     mn?: string | null;
     yr?: string | null;
