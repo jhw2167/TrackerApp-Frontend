@@ -18,7 +18,6 @@
 }
 
 .dd-row {
-    z-index: 800;
 
     line-height: 28px;
 
@@ -27,11 +26,10 @@
 }
 
 .dd-hov-row {
-    z-index: 800;
 
     line-height: 34px;
     border: 2px solid var(--primary-col);
-    background-color: var(--med-gray);
+    background-color: var(--heavy-grey);
 
     font-weight: bolder;
     font-size: 1.2em;

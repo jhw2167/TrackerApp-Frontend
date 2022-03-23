@@ -12,6 +12,7 @@ import './css/misc/Background.css'
   //high level
   import './css/main/PostTransactions.css'
   import './css/main/Overview.css'
+  import './css/components/subcomponents/DropDown.css'
 
   //lib components
   import '../node_modules/react-vis/dist/style.css';
@@ -24,9 +25,6 @@ import './css/misc/Background.css'
 
   //Sub components
 
-
-
-import './css/components/subcomponents/DropDown.css'
 
 function App() {
   return (

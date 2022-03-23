@@ -236,7 +236,9 @@ export default AddNewTrans;
         onFocus={() => {selectedFormField.current = props.index; onFormUpdate('', -1);}}
         onBlur={ () => {if(globalActiveFields) globalActiveFields.current.delete(props.index)
             onFormUpdate('', -1);}} //just to trigger state update
-        onKeyDown={(e) => handleArrowsOnDropDown(e)}>
+        onKeyDown={(e) => handleArrowsOnDropDown(e)}
+       
+        >
         </input>
         {dropDown}
         </>

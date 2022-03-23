@@ -14,7 +14,11 @@ form {
     text-align: center;
 
     border-collapse: separate;
-    border-spacing: 32px 0px;
+    border-spacing: 20px 0px;
+}
+
+#add-new-trans-wrapper-table > tbody {
+    display: table;
 }
 
 #add-new-trans-wrapper-table > tbody > tr > th {
@@ -37,7 +41,7 @@ form {
 .pt-form-field {
     width: 100%;
 
-    font-size: medium;
+    font-size: 1.2em;
     font-weight: 500;
 }
 
@@ -59,8 +63,9 @@ form {
 }
 
 /* Specific Field Styling */
+
 .pt-data-col {
-    width: 5%;
+    width: 8%;
 }
 
 .pt-purchase-date-tuple {
@@ -83,6 +88,41 @@ form {
         -webkit-appearance: none; 
         margin: 0; 
     }
+
+    /* VENDOR TUPLE */
+    .pt-amount-tuple {
+        width: 4%;
+    }
+
+    /* VENDOR TUPLE */
+    .pt-vendor-tuple {
+        width: 14%;
+    }
+
+    /* CATEGORY TUPLE */
+    .pt-category-tuple {
+        width: 12%;
+    }
+
+    /* Reimbursements */
+    #reimburses.pt-form-field {
+
+    }
+
+    #reimburses[type=number]::-webkit-inner-spin-button, 
+    #reimburses[type=number]::-webkit-outer-spin-button { 
+        display: none;
+    }
+
+    /* PAY STATUS */
+    .pt-pay-status-tuple {
+        width: 10%;
+    }
+
+    /* INCOME TUPLE */
+.pt-income-tuple {
+    width: 1%;
+}
 
 #income.pt-form-field {
     position: relative;
@@ -131,21 +171,16 @@ form {
 
      }
 
+/* END INCOME CSS */
+
+
+        /* FORM ADJUSTMENTS */
 input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-results-button,
 input[type="search"]::-webkit-search-results-decoration {
     -webkit-appearance:none;
 }
-/* END INCOME CSS */
-
-#reimburses.pt-form-field {
-
-}
-    #reimburses[type=number]::-webkit-inner-spin-button, 
-    #reimburses[type=number]::-webkit-outer-spin-button { 
-        display: none;
-    }
 
 
 /* DROP DOWN CSS FOR PT */
@@ -185,9 +220,6 @@ input[type="search"]::-webkit-search-results-decoration {
             border-radius: 20px;
         }
 
-
-
 .pt-dd-row {
     font-weight: bold;
-    background-color: var(--secondary-col);
 }

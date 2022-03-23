@@ -22,7 +22,7 @@ interface DropDownProps {
 }
 
 /* Global constants */
-let onStartup = true;
+
 
 function DropDown(props: DropDownProps ) {
 
@@ -35,11 +35,6 @@ function DropDown(props: DropDownProps ) {
     const [selected, setSelected] = useState<any>('');
     const [dropDownPlace, setDropDownPlace] = useState<number>(-1);
     const [dropDownInc, setDropDownInc] = useState<number>(0);
-    
-    //set functions
-    if(onStartup) {
-       
-    }
 
     /* EFFECTS */
      /* For setting hovered cell from outside this component */
@@ -49,7 +44,6 @@ function DropDown(props: DropDownProps ) {
         }
 
         if(props.setFuncSetDDPosExternally) {
-            console.log("set 2")
             props.setFuncSetDDPosExternally((i: number) => (i: number) => setDropDownInc(i));
         }
     }
@@ -86,7 +80,7 @@ function DropDown(props: DropDownProps ) {
         }
 
         let newDDPlace = dropDownInc + dropDownPlace;
-        console.log("inc dd place, %d : start: ", newDDPlace, dropDownPlace )
+       // console.log("inc dd place, %d : start: ", newDDPlace, dropDownPlace )
         if(newDDPlace==dropDownPlace || newDDPlace<0 || newDDPlace==data.length) {
             return; //no relevant value for this position, keep it
         } else {
