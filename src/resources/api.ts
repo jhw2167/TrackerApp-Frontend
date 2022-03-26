@@ -78,10 +78,10 @@ export const getRequest = async function getRequest(url: string, setData: Functi
         url: url
     }
 
-    console.log("Making call to: " + url)
+   //console.log("Making call to: " + url)
     await axios(config).then( (resp) =>
     {
-        console.log("Transactions returned: " + url );//+ JSON.stringify(resp.data));
+        //console.log("Transactions returned: " + url );//+ JSON.stringify(resp.data));
         setData(resp.data);
         return resp;
     }).catch( (reason) => {

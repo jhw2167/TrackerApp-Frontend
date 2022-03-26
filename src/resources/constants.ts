@@ -168,7 +168,7 @@ export const MNTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul","aug", "se
 /* Interfaces */
 export interface Transaction {
     tId: string;
-    purchasedate: Date;
+    purchaseDate: Date;
     amount: number;
     vendor: string;
     category: string;

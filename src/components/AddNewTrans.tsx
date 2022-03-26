@@ -7,16 +7,18 @@
 import * as c from '../resources/constants';
 import * as api from '../resources/api';
 import React, { KeyboardEvent, MutableRefObject,
-     ReactElement, useEffect, useRef, useState } from 'react';
+     ReactElement, RefObject, useEffect, useRef, useState } from 'react';
      import DropDown from './subcomponents/DropDown';
-
-//CSS Imports
 import { isParameterPropertyDeclaration, JsxChild } from 'typescript';
+
 
 interface FormProps {
     headers: string[];
     data?: Array<any>;
-    setFormValues?: Function;
+    setFormValues?: ((fields: Array<any>) => void);
+    onFormSubmit: ((fields: Array<any>) => void);
+    formRef: RefObject<HTMLFormElement>;
+    fieldValidation: Array<((field: string) => boolean)>;
     inputTypes: string[];
     options?: Map<string, Array<any>>;  //maps headers[i] to its options
     id: string;
@@ -79,8 +81,11 @@ function AddNewTrans(props: FormProps) {
 
     /* States */
     const formValues = useRef<Array<any>>(Array.from (props.headers.map(() => {return ''})));
+    const formValueStates = useRef<Array<string>>(Array.from (props.headers.map(() => {return ''})));
+        //Fields can be VISITED, UNVISTED, COMPLETE, ERROR
     const activeFields = useRef<Set<any>>(new Set());
     const selectedField = useRef<number>(-1);
+    //const formRef = useRef<HTMLFormElement>(null);
     
     [_setDDPosExternally, _setFuncSetDDPosExternally] = useState<Function>((i: number) => (i: number) => {return;});
 
@@ -95,13 +100,36 @@ function AddNewTrans(props: FormProps) {
         }
     }
 
+    let onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        console.log('insideOnFormSubmit');
+
+        let validFields = formValues.current.map( (v, i) => {
+            return props.fieldValidation[i](v);
+        })
+
+        if(validFields.every((v) => {return v;})) {
+            props.onFormSubmit(formValues.current);
+        }
+        else {  //some fields have errors, lets demarcate them
+            formValueStates.current = validFields.map( (v, i) => {
+                return (v) ? formValueStates.current[i] : 'ERROR';
+            })
+        }
+        //End if-else
+
+        console.log('End form submit-addNewTrans method');
+    }
+
     /* Effects */
     useEffect(() => {
         if(!props.data) {
             //nothing
         } else if (props.data.length >= props.headers.length) {
             formValues.current = props.data;
+            if(props.setFormValues)
+                props.setFormValues(formValues.current)
         }
+
         
         globalFormValues=formValues;
         //chat(formValues.current + ".");
@@ -111,21 +139,25 @@ function AddNewTrans(props: FormProps) {
     }, [])
 
 
+
    return (
        <div className="add-new-trans-wrapper-div" id={props.id + '-div'}>
-        <form id={props.id}>
+        <form ref={props.formRef} id={props.id} onSubmit={(e) => {
+            e.preventDefault();
+            onFormSubmit(e);}}>
             <table id="add-new-trans-wrapper-table">
                 <tbody>
                 <tr>{
             formValues.current.map(  (v,i) => {
+                let typeArr = props.inputTypes[i].split('-');
                 const  data: FormElemProps = { 
                     id: props.headers[i].replace(' ', '-').toLowerCase(),
                     index: i,
-                    type: props.inputTypes[i].split('-')[0],
+                    type: typeArr[0],
                     default: v,
                     options: props.options ? props.options.get(props.headers[i])
                      : ['none'],
-                    subtype: props.inputTypes[i].split('-')[1],
+                    subtype: typeArr[1]
                 }
                   //console.log("Val: %s", data.default);
                     //console.log("options: %s", JSON.stringify(props.options));
@@ -217,7 +249,8 @@ export default AddNewTrans;
         }
 
         //Custom searchable DropDown menu conditionally rendered depending on if options are provided
-        let dropDown: ReactElement = (!!props.options && (selectedFormField.current==props.index)) ?
+        let dropDown: ReactElement = (!!props.options && (selectedFormField.current) && 
+        (selectedFormField.current==props.index)) ?
          <DropDown data={props.options as string[]}
         styleClass={'dd-' + props.id + ' pt'}
         filterFunction={() => {}}

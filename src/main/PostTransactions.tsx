@@ -2,7 +2,7 @@
         // will integrate a connection with Plaid at some point as well
 
 //react imports
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 //import { useCookies } from "react-cookie";
 //import { Modal, Button } from 'react-bootstrap';
 import { any, now } from 'underscore';
@@ -69,6 +69,8 @@ const FORM_INP_TYPES = {
 	NOTES: 'input-text'
 }
 
+const ADD_NEW_TRANS_FORM_ID = 'pt-add-new-trans-form'
+
 function PostTransactions() {
 
         const ARROW_DIMS = { h: '30px', w: '40px'}
@@ -97,9 +99,10 @@ function PostTransactions() {
                 ]
                 const [formValues, setFormValues] = useState<any[]>(DEF_FORM_VALS);
                 const [formOptions, setFormOptions] = useState<Map<string, Array<any>>>(new Map());  //drop down options for form
+                const addNewFormRef = useRef<HTMLFormElement>(null);
 
         //Stylistic states
-                const [grayedValues, setGrayedValues] = useState<Array<Boolean>>([]);
+                
 
         /* Effects */
         const updateWheelPos = () => {
@@ -173,14 +176,60 @@ function PostTransactions() {
                         }  ));
         
                         setFormOptions(map);
-                        console.log("In form options: " );
+                        //console.log("In form options: " );
                         formOptions.forEach( (val, key) => {
-                                console.log(key + ": " + val.length)
+                                //console.log(key + ": " + val.length)
                         })
                 })
                 makeApiCall();
                
         }, []);
+
+
+        /* Other Functions */
+        let onAddNewTransSubmit = (action: string ) => {
+                console.log('Submit Fired');
+                //build transaction if form clears
+                let i: number =0;
+                let t: c.Transaction = {
+                        tId: formValues[i++],
+                        purchaseDate: formValues[i++],
+                        amount: formValues[i++],
+                        vendor: formValues[i++],
+                        category: formValues[i++],
+                        payMethod: formValues[i++],
+                        boughtFor: formValues[i++],
+                        payStatus: formValues[i++],
+                        isIncome: formValues[i++],
+                        reimburses: formValues[i++],
+                        postedDate: formValues[i++],
+                        notes: formValues[i++]
+                }
+
+                //Submitting the form tells form to validate entries and clear
+                addNewFormRef.current?.submit();
+                console.log('after firing form submit');
+               if(!formValues.every( (v: string) => {return v=='';}))
+                        return; //form didn't clear, form will mark existing errors
+
+                //if condition - post or don't post
+                switch(action)
+                {
+                        case 'POST':
+                                //post results
+                                console.log('Post Results')
+                                break;
+                        
+                        case 'PREPARE':
+                                //push results to prepared table
+                                console.log('Prep results')
+                                break;
+                        default:
+                                console.log('Form cleared with no action')
+                                break;
+                }
+                //END SWITCH
+        }
 
         return (
 
@@ -225,9 +274,14 @@ function PostTransactions() {
                                  inputTypes={Object.entries(FORM_INP_TYPES).map(
                                         ([key, val]) => {return val;}
                                  )}
-                                 id='pt-add-new-trans-form'
+                                 id={ADD_NEW_TRANS_FORM_ID}
                                  data={formValues}
                                  setFormValues={setFormValues}
+                                 fieldValidation={Object.entries(FORM_HEADERS).map(
+                                       ([key, val]) => {return (val: string) => {return true;}}
+                                )}
+                                 onFormSubmit={()=> {}}
+                                 formRef={addNewFormRef}
                                 options={formOptions}
                                 />  
                         </div>
@@ -237,11 +291,12 @@ function PostTransactions() {
                    <div className='row content-row section-footer-row no-internal-flex'>
                         <div className='col post-trans-double-plus post-trans-subsec-footer-item
                         post-trans-hoverable'>
-                                 <div> <DoublePlus
+                                 <div onClick={() => onAddNewTransSubmit('POST')}> <DoublePlus
                                  styleClass='post-trans-hoverable post-trans-double-plus' /> </div> 
                         </div>
                         <div className='col post-trans-subsec-footer-item post-trans-arrow-outer-div'> 
-                        <div><Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} 
+                        <div onClick={() => onAddNewTransSubmit('Prepare')}>
+                                <Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} 
                           styleClass='post-trans-hoverable post-trans-arrow'/> </div>
                         </div>
                   </div>
