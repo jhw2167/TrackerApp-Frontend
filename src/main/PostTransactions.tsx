@@ -5,14 +5,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 //import { useCookies } from "react-cookie";
 //import { Modal, Button } from 'react-bootstrap';
-import { any, now } from 'underscore';
+import {contains, now } from 'underscore';
 
 //project imports
 import * as c from '../resources/constants';
-import {DataTuple, Transaction, Summary} from '../resources/constants';
+import {Transaction} from '../resources/constants';
 import * as api from '../resources/api';
-import DataTable from '../components/DataTable';
-import SubTable from '../components/SubTable';
+//import DataTable from '../components/DataTable';
+//import SubTable from '../components/SubTable';
 import Header from '../components/Header';
 import * as CSS from 'csstype';
 
@@ -33,10 +33,10 @@ const ROLLOVER_DIV_STYLE: CSS.Properties = {
 const ROLLOVER_BLANK_STYLE: CSS.Properties = {
 };
 
-const ROLLOVER_PLCHLD_DIV: CSS.Properties = {
-        ['height' as any]: '100%',
-        ['opacity' as any]: 0
-};
+// const ROLLOVER_PLCHLD_DIV: CSS.Properties = {
+//         ['height' as any]: '100%',
+//         ['opacity' as any]: 0
+// };
 
 /* Form Constants */
 const FORM_HEADERS = {
@@ -68,6 +68,24 @@ const FORM_INP_TYPES = {
 	POSTDATE: 'input-date', 
 	NOTES: 'input-text'
 }
+
+const BAD_CHARS = ['-', "'", '"', '.', '/', "\\", ','];      //we don't want our form to include these chars
+const BOT_FOR_VALS = ['PERSONAL', 'GROUP', 'FAMILY', 'DATE', ''];
+const PAY_STAT_VALS = ['COMPLETE', 'COVERED', 'OWED', 'PENDING', 'OWED_PARTIAL', ''];
+const FORM_VALD_FUNCS: ((val: string) => boolean)[]  = [
+        (val: string) => {return (!isNaN(Number(val)) && Number(val) >= 0);},     //trans id - not recommended
+        (val: string) => {return true;},     //Purchased Date
+        (val: string) => {return (!isNaN(Number(val)) && Number(val) >= 0);},     //amount, Must be an actual number and be >= 0                                                
+        (val: string) => {return BAD_CHARS.every( (c: string) => {return !val.includes(c)});},     //vendor
+        (val: string) => {return BAD_CHARS.every( (c: string) => {return !val.includes(c)});},     //category
+        (val: string) => {return BAD_CHARS.every( (c: string) => {return !val.includes(c)});},     //PayMethod
+        (val: string) => {return contains(BOT_FOR_VALS, val);},     //BoughtFor - must be one of provided vals
+        (val: string) => {return contains(PAY_STAT_VALS, val);},     //PayStatus
+        (val: string) => {return true;},     //Income
+        (val: string) => {return (!isNaN(Number(val)) && Number(val) >= 0);},     //Reimburses
+        (val: string) => {return true;},     //Posted Date
+        (val: string) => {return true;}     //Notes
+]
 
 const ADD_NEW_TRANS_FORM_ID = 'pt-add-new-trans-form'
 
@@ -101,6 +119,9 @@ function PostTransactions() {
                 const [formOptions, setFormOptions] = useState<Map<string, Array<any>>>(new Map());  //drop down options for form
                 const addNewFormRef = useRef<HTMLFormElement>(null);
 
+                const [, updateState] = React.useState<Object>();
+                const forceUpdate = React.useCallback(() => updateState({}), []);
+
         //Stylistic states
                 
 
@@ -132,11 +153,11 @@ function PostTransactions() {
 
         useEffect( () => {
                 window.addEventListener("wheel", updateWheelPos);
-        }, []);
+        }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 
         /* Api Calls */
-        let map: Map<string, Array<any>> = new Map;
+        let map: Map<string, Array<any>> = new Map();
         const getOptions = async function name() {
 
                 const getSetData = (header: string) => {
@@ -145,7 +166,7 @@ function PostTransactions() {
                         }
                 }
 
-                let [A, B, C, D, E] = await Promise.all([
+                let [] = await Promise.all([ // eslint-disable-line no-empty-pattern
                 //GET Options for
                 //Category
                 api.getRequest(api.SERVER_ALL_CATEGORIES, getSetData(FORM_HEADERS.CAT)),        
@@ -183,7 +204,7 @@ function PostTransactions() {
                 })
                 makeApiCall();
                
-        }, []);
+        }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 
         /* Other Functions */
@@ -193,7 +214,7 @@ function PostTransactions() {
                 let i: number =0;
                 let fv = (formValues) ? formValues.current : [];
 
-                let t: c.Transaction = {
+                let t: Transaction = {
                         tId: fv[i++],
                         purchaseDate: fv[i++],
                         amount: fv[i++],
@@ -210,10 +231,10 @@ function PostTransactions() {
 
                 //Submitting the form tells form to validate entries and clear
                 addNewFormRef.current?.requestSubmit();
-                console.log('after request')
+
+                //if form validated, all entries will be empty string
                 fv = (formValues) ? formValues.current : [];
-                if(!fv.every( (v: string) => { console.log(v);
-                        return v=='';}))
+                if(!fv.every( (v: string) => {return v==="";}))
                         return; //form didn't clear, form will mark existing errors
                         
                 console.log('after firing form submit');
@@ -223,7 +244,7 @@ function PostTransactions() {
                         case 'POST':
                                 //post results
                                 console.log('Post Results')
-                                api.postRequest(api.SERVER_ALL_TRANSACTIONS, [t]);
+                                //api.postRequest(api.SERVER_ALL_TRANSACTIONS, [t]);
                                 break;
                         
                         case 'PREPARE':
@@ -235,6 +256,10 @@ function PostTransactions() {
                                 break;
                 }
                 //END SWITCH
+                forceUpdate();
+
+                if(formValues)
+                        formValues.current = DEF_FORM_VALS;              
         }
 
         return (
@@ -283,9 +308,7 @@ function PostTransactions() {
                                  id={ADD_NEW_TRANS_FORM_ID}
                                  data={DEF_FORM_VALS}
                                  setFormValuesRef={setFormValues}
-                                 fieldValidation={Object.entries(FORM_HEADERS).map(
-                                       ([key, val]) => {return (val: string) => {return true;}}
-                                )}
+                                 fieldValidation={FORM_VALD_FUNCS}
                                 onFormSubmit={(fields: React.MutableRefObject<Array<any>>) => {
                                         fields.current = fields.current.map((v) => {return '';});
                                 }}

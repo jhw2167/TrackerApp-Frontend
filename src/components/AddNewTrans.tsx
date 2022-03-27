@@ -4,13 +4,12 @@
 */
 
 //project imports
-import * as c from '../resources/constants';
-import * as api from '../resources/api';
+//import * as c from '../resources/constants';
+//import * as api from '../resources/api';
 import React, { KeyboardEvent, MutableRefObject,
      ReactElement, RefObject, useEffect, useRef, useState } from 'react';
+import { contains } from 'underscore';
      import DropDown from './subcomponents/DropDown';
-import { isParameterPropertyDeclaration, JsxChild } from 'typescript';
-
 
 interface FormProps {
     headers: string[];
@@ -43,26 +42,6 @@ interface FormElemProps extends BaseInput {
     subtype?: string;
 }
 
-//id, "for" = headers, replace ' ' with '-'
-
-/* Form input types to handle:
-
-<input>
-    - text
-<label>
-<select>
-    <option, label>
-<textarea>
-<button>
-<fieldset>
-<legend>
-<datalist>
-<output>
-<option>
-<optgroup>
-
-*/
-
 /* Global consts */
 let globalFormValues: React.MutableRefObject<Array<any>>;
 let globalActiveFields: React.MutableRefObject<Set<any>>;
@@ -73,7 +52,7 @@ let onFormUpdate: Function;
 let _setDDPosExternally: Function;
 let _setFuncSetDDPosExternally: Function;
 
-let chat = (v: any) => {
+let chat = (v: any) => {    //eslint-disable-line @typescript-eslint/no-unused-vars
     console.log(v);
 }
 
@@ -94,7 +73,7 @@ function AddNewTrans(props: FormProps) {
     /* Functions */
     onFormUpdate = (v: any, i: number) => {
         formValues.current = formValues.current.map( (val, ind) => {
-            return (i==ind) ? v : val;
+            return (i===ind) ? v : val;
         })
         forceUpdate();  //forces component updated each time form is changed
     }
@@ -120,6 +99,7 @@ function AddNewTrans(props: FormProps) {
 
         forceUpdate();  //forces component updated each time form submit is attempted
     }
+
 
     /* Effects */
     useEffect(() => {
@@ -160,7 +140,8 @@ function AddNewTrans(props: FormProps) {
                      : ['none'],
                     subtype: typeArr[1]
                 }
-                  //console.log("Val: %s", data.default);
+                  console.log("Val: %s : ValState: %s \n -----------------",
+                   props.headers[i], formValueStates.current[i]);
                     //console.log("options: %s", JSON.stringify(props.options));
                     return(
                         <td  key={i} id={data.id + '-col'} className={'pt-data-col ' + 
@@ -227,15 +208,16 @@ export default AddNewTrans;
         //updates when drop down menu displays
         let handleActiveFieldsOnChange = (globalActiveFields) ? (fieldVal: string) => {
             globalActiveFields.current.add(props.index)
-            if(fieldVal.length==0)
+            if(fieldVal.length===0)
                 globalActiveFields?.current.delete(props.index);
         } : () => {};
 
         //updates which dropDown cell is hovered by arrow keys
         let handleArrowsOnDropDown = (e: KeyboardEvent) => {
-            if(e.key=='ArrowDown') {
+            selectedFormField.current=props.index;
+            if(e.key==='ArrowDown') {
                 _setDDPosExternally(1);
-            } else if (e.key=='ArrowUp'){
+            } else if (e.key==='ArrowUp'){
                 _setDDPosExternally(-1);
             }
         };
@@ -244,7 +226,7 @@ export default AddNewTrans;
                                 ((props.default) ? props.default : '');
 
         let setSelectedData = (val: any) => {
-            if(currentFieldVal.length > 0 && val.length==0)
+            if(currentFieldVal.length > 0 && val.length===0)
                 return; //dont reset the val
             onFormUpdate(val, props.index)
         }
@@ -253,7 +235,8 @@ export default AddNewTrans;
         let dropDown: ReactElement = <></>;
         if(props.options && !(typeof(selectedFormField)=='undefined')) {
             if (selectedFormField.current===props.index) {   
-            dropDown = <DropDown data={props.options as string[]}
+            dropDown = <DropDown 
+            data={props.options as string[]}
             styleClass={'dd-' + props.id + ' pt'}
             filterFunction={() => {}}
             setSelectedData = {(val: any) => setSelectedData(val)}
@@ -266,14 +249,14 @@ export default AddNewTrans;
         return( <> <input className='pt-form-field pt-form-input' id={props.id} 
         type={props.subtype}
         value={currentFieldVal}
-        onChange={(e) => { handleActiveFieldsOnChange(e.target.value)
+        onChange={(e) => { handleActiveFieldsOnChange(e.target.value);
             onFormUpdate(e.target.value, props.index)}
         }
         onFocus={() => {selectedFormField.current = props.index; onFormUpdate('', -1);}}
         onBlur={ () => {if(globalActiveFields) globalActiveFields.current.delete(props.index)
             onFormUpdate('', -1);}} //just to trigger state update
         onKeyDown={(e) => handleArrowsOnDropDown(e)}
-       
+       onClick= { () => {selectedFormField.current=-1;}}//turn off Drop Down}
         >
         </input>
         {dropDown}
