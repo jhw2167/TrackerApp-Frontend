@@ -86,10 +86,10 @@ function PostTransactions() {
                 const DEF_FORM_VALS = [
                         "",     //trans id
                         (new Date(now())).toISOString().split("T")[0],     //Purchased Date
-                        "",     //amount
-                        "",     //vendor
-                        "",     //category
-                        "",     //PayMethod
+                        "75.24",     //amount
+                        "The Jon",     //vendor
+                        "Dinner",     //category
+                        "JB",     //PayMethod
                         "",     //BoughtFor
                         "",     //PayStatus
                         false,     //Income
@@ -97,7 +97,7 @@ function PostTransactions() {
                         (new Date(now())).toISOString().split("T")[0],     //Posted Date
                         ""     //Notes
                 ]
-                const [formValues, setFormValues] = useState<any[]>(DEF_FORM_VALS);
+                let [formValues, setFormValues] = useState<React.MutableRefObject<any[]>>();
                 const [formOptions, setFormOptions] = useState<Map<string, Array<any>>>(new Map());  //drop down options for form
                 const addNewFormRef = useRef<HTMLFormElement>(null);
 
@@ -191,33 +191,39 @@ function PostTransactions() {
                 console.log('Submit Fired');
                 //build transaction if form clears
                 let i: number =0;
+                let fv = (formValues) ? formValues.current : [];
+
                 let t: c.Transaction = {
-                        tId: formValues[i++],
-                        purchaseDate: formValues[i++],
-                        amount: formValues[i++],
-                        vendor: formValues[i++],
-                        category: formValues[i++],
-                        payMethod: formValues[i++],
-                        boughtFor: formValues[i++],
-                        payStatus: formValues[i++],
-                        isIncome: formValues[i++],
-                        reimburses: formValues[i++],
-                        postedDate: formValues[i++],
-                        notes: formValues[i++]
+                        tId: fv[i++],
+                        purchaseDate: fv[i++],
+                        amount: fv[i++],
+                        vendor: fv[i++],
+                        category: fv[i++],
+                        payMethod: fv[i++],
+                        boughtFor: fv[i++],
+                        payStatus: fv[i++],
+                        isIncome: fv[i++],
+                        reimburses: fv[i++],
+                        postedDate: fv[i++],
+                        notes: fv[i++]
                 }
 
                 //Submitting the form tells form to validate entries and clear
-                addNewFormRef.current?.submit();
-                console.log('after firing form submit');
-               if(!formValues.every( (v: string) => {return v=='';}))
+                addNewFormRef.current?.requestSubmit();
+                console.log('after request')
+                fv = (formValues) ? formValues.current : [];
+                if(!fv.every( (v: string) => { console.log(v);
+                        return v=='';}))
                         return; //form didn't clear, form will mark existing errors
-
+                        
+                console.log('after firing form submit');
                 //if condition - post or don't post
                 switch(action)
                 {
                         case 'POST':
                                 //post results
                                 console.log('Post Results')
+                                api.postRequest(api.SERVER_ALL_TRANSACTIONS, [t]);
                                 break;
                         
                         case 'PREPARE':
@@ -275,12 +281,14 @@ function PostTransactions() {
                                         ([key, val]) => {return val;}
                                  )}
                                  id={ADD_NEW_TRANS_FORM_ID}
-                                 data={formValues}
-                                 setFormValues={setFormValues}
+                                 data={DEF_FORM_VALS}
+                                 setFormValuesRef={setFormValues}
                                  fieldValidation={Object.entries(FORM_HEADERS).map(
                                        ([key, val]) => {return (val: string) => {return true;}}
                                 )}
-                                 onFormSubmit={()=> {}}
+                                onFormSubmit={(fields: React.MutableRefObject<Array<any>>) => {
+                                        fields.current = fields.current.map((v) => {return '';});
+                                }}
                                  formRef={addNewFormRef}
                                 options={formOptions}
                                 />  
@@ -291,11 +299,12 @@ function PostTransactions() {
                    <div className='row content-row section-footer-row no-internal-flex'>
                         <div className='col post-trans-double-plus post-trans-subsec-footer-item
                         post-trans-hoverable'>
-                                 <div onClick={() => onAddNewTransSubmit('POST')}> <DoublePlus
+                                 <div onClick={() => { console.log("calling " + JSON.stringify(formValues));
+                                 onAddNewTransSubmit('POST');}}> <DoublePlus
                                  styleClass='post-trans-hoverable post-trans-double-plus' /> </div> 
                         </div>
                         <div className='col post-trans-subsec-footer-item post-trans-arrow-outer-div'> 
-                        <div onClick={() => onAddNewTransSubmit('Prepare')}>
+                        <div onClick={() => onAddNewTransSubmit('PREPARE')}>
                                 <Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} 
                           styleClass='post-trans-hoverable post-trans-arrow'/> </div>
                         </div>
