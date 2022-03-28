@@ -112,7 +112,7 @@ function PostTransactions() {
                         "JB",     //PayMethod
                         "",     //BoughtFor
                         "",     //PayStatus
-                        true,     //Income
+                        "",     //Income
                         "",     //Reimburses
                         todayISO,     //Posted Date
                         ""     //Notes

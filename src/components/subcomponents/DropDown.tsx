@@ -19,6 +19,7 @@ interface DropDownProps {
     setFuncSetDDPosExternally?: Function;   //takes a "setStateFunction" that sets the state of a 
     /* container with a setState function internally in dropDown, so the dropDownPlace state can
     be adjusted from outside this component */
+    afterClick?: (val: string) => void;  //sets drop down items to do something after they are clicked
 }
 
 /* Global constants */
@@ -35,6 +36,8 @@ function DropDown(props: DropDownProps ) {
     const [selected, setSelected] = useState<any>('');
     const [dropDownPlace, setDropDownPlace] = useState<number>(-1);
     const [dropDownInc, setDropDownInc] = useState<number>(0);
+
+    const parentAfterClick = (props.afterClick) ? props.afterClick : (v: any) => {};
 
     /* EFFECTS */
      /* For setting hovered cell from outside this component */
@@ -126,7 +129,9 @@ function DropDown(props: DropDownProps ) {
                         
                         return <tr className= {c.addStyleClass(props.styleClass, 'dd-row')
                         + ' ' + hovRowStyleClass}
-                        onClick={() => setDropDownPlace(index)}
+                        onClick={() => {console.log('here');
+                            parentAfterClick(value);
+                            setDropDownPlace(index)}}
                         key={index}
                         onMouseEnter={() => {
                             hovCells.add(value);

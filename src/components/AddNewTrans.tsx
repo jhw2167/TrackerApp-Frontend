@@ -270,6 +270,7 @@ export default AddNewTrans;
             filterFunction={() => {}}
             setSelectedData = {(val: any) => setSelectedData(val)}
             setFuncSetDDPosExternally = {_setFuncSetDDPosExternally}
+            afterClick = { (v: string) => {selectedFormField.current=-1;}}//turn off Drop Down}
             />}
         }
 
@@ -283,7 +284,6 @@ export default AddNewTrans;
         onBlur={ () => {if(activeFields) activeFields.current.delete(props.index)
             onFormUpdate('', -1);}} //just to trigger state update
         onKeyDown={(e) => handleArrowsOnDropDown(e)}
-       onMouseUp= { () => {selectedFormField.current=-1;}}//turn off Drop Down}
         >
         </input>
         {dropDown}
