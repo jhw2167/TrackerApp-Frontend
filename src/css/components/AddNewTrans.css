@@ -7,7 +7,7 @@ form {
 }
 
 /* Table Styling */
-#add-new-trans-wrapper-table {
+.pt-add-new-trans-form-wrapper-table {
     width: 100%;
 
     margin-top: 1%;
@@ -17,11 +17,11 @@ form {
     border-spacing: 20px 0px;
 }
 
-#add-new-trans-wrapper-table > tbody {
+.pt-add-new-trans-form-wrapper-table > tbody {
     display: table;
 }
 
-#add-new-trans-wrapper-table > tbody > tr > th {
+.pt-add-new-trans-form-wrapper-table > tbody > tr > th {
     color: var(--primary-col);
     font-size: medium;
     vertical-align: top;
@@ -29,7 +29,7 @@ form {
     position: relative;
 }
 
-#add-new-trans-wrapper-table > tbody > tr > * {
+.pt-add-new-trans-form-wrapper-table > tbody > tr > * {
     max-width: 200px;
     min-width: 30px;
 
@@ -45,11 +45,15 @@ form {
     font-weight: 500;
 }
 
-#add-new-trans-wrapper-table > tbody > tr > td > input {
-    appearance: none ;
-    -webkit-appearance: none ;
+#pt-add-new-trans-form-wrapper-table > tbody > tr > td > input {
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+}
 
-    background-color: rgba(0, 0, 0, 1);
+.pt-add-new-trans-form-wrapper-table > tbody > tr > td > input {
+    
+    background-color: transparent;
     color: white;
 
     border: 0px;
@@ -58,9 +62,51 @@ form {
     outline-offset: 0;
 }
 
-#add-new-trans-wrapper-table > tbody > tr > td > input:focus-visible {
-    outline: none;
+
+
+/* Errors */
+
+.pt-data-col::after {
+    position: absolute;
+    padding-top: 2px;
+    padding-left: 3px;
+    font-size: medium;
+    font-weight: 400;
 }
+
+.pt-data-col-error > input {
+    border-bottom: 2px solid var(--error-red) !important;
+}
+
+.pt-data-header-error {
+    color: var(--error-red) !important;
+}
+
+.pt-data-col-error::after {
+    color: var(--error-red);
+    content: "\26A0";
+}
+
+/* Check */
+.pt-data-col-complete > input {
+    border-bottom: 2px solid var(--check-green);
+}
+
+.pt-data-col-complete::after {
+  color: var(--check-green);
+  content: "\2611";
+}
+
+/* Unvisited */
+
+.pt-data-col-unvisited > input {
+    border-bottom: 2px solid var(--trans-grey) !important;
+}
+
+.pt-data-header-unvisited {
+    color: var(--trans-grey) !important;
+}
+
 
 /* Specific Field Styling */
 
@@ -127,8 +173,7 @@ form {
 #income.pt-form-field {
     position: relative;
     border: 0px;
-    bottom: -6px;
-    
+    bottom: -6px;    
 }
     .pt-data-col::-webkit-scrollbar {
         display: none;
@@ -159,7 +204,7 @@ form {
     }
 
 
-    #income[type=checkbox]:checked:after {
+    #income[type=checkbox i]:checked:after {
         content:"\2713";
         color: var(--secondary-col);
         padding: initial;
@@ -168,7 +213,6 @@ form {
         position: absolute;
         bottom: -3px;
         left: 3px;
-
      }
 
 /* END INCOME CSS */

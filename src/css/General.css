@@ -14,6 +14,9 @@
     --heavy-grey: rgba(18,18,18);
     --very-heavy-grey: rgba(6,6,6);
 
+    --error-red: red;
+    --check-green: rgb(11, 211, 11);
+
     --data-font-base: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     --title-font-base: 'Fantasy';
 }

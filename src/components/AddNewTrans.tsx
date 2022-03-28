@@ -8,7 +8,7 @@
 //import * as api from '../resources/api';
 import React, { KeyboardEvent, MutableRefObject,
      ReactElement, RefObject, useEffect, useRef, useState } from 'react';
-import { contains } from 'underscore';
+import { contains, now } from 'underscore';
      import DropDown from './subcomponents/DropDown';
 
 interface FormProps {
@@ -21,6 +21,7 @@ interface FormProps {
     inputTypes: string[];
     options?: Map<string, Array<any>>;  //maps headers[i] to its options
     id: string;
+    styleNamespace?: string;     //short string that namespaces all classes
 }
 
 interface BaseInput {
@@ -43,14 +44,24 @@ interface FormElemProps extends BaseInput {
 }
 
 /* Global consts */
-let globalFormValues: React.MutableRefObject<Array<any>>;
-let globalActiveFields: React.MutableRefObject<Set<any>>;
+let formValues: React.MutableRefObject<Array<any>>;
+let formValueStates: React.MutableRefObject<Array<any>>;
+let activeFields: React.MutableRefObject<Set<any>>;
 
 let selectedFormField: React.MutableRefObject<number>;
 let onFormUpdate: Function;
 
 let _setDDPosExternally: Function;
 let _setFuncSetDDPosExternally: Function;
+
+let style_ns: string = '';
+
+const FORM_STATES = {
+    cmpt: 'COMPLETE',
+    vis: 'VISITED',
+    unvis: 'UNVISITED',
+    err: 'ERROR'
+}
 
 let chat = (v: any) => {    //eslint-disable-line @typescript-eslint/no-unused-vars
     console.log(v);
@@ -59,12 +70,13 @@ let chat = (v: any) => {    //eslint-disable-line @typescript-eslint/no-unused-v
 function AddNewTrans(props: FormProps) {
 
     /* States */
-    const formValues = useRef<Array<any>>(Array.from (props.headers.map(() => {return ''})));
-    const formValueStates = useRef<Array<string>>(Array.from (props.headers.map(() => {return ''})));
+    formValues = useRef<Array<any>>(Array.from (props.headers.map(() => {return ''})));
+    formValueStates = useRef<Array<string>>(Array.from (props.headers.map(() => {return FORM_STATES.unvis})));
         //Fields can be VISITED, UNVISTED, COMPLETE, ERROR
-    const activeFields = useRef<Set<any>>(new Set());
-    const selectedField = useRef<number>(-1);
+    activeFields = useRef<Set<any>>(new Set());
+    selectedFormField = useRef<number>(-1);
     
+    [style_ns] = useState<string>( (props.styleNamespace) ? props.styleNamespace+'-' : '');
     const [, updateState] = React.useState<Object>();
     const forceUpdate = React.useCallback(() => updateState({}), []);
     
@@ -92,7 +104,7 @@ function AddNewTrans(props: FormProps) {
         }
         else {  //some fields have errors, lets demarcate them
             formValueStates.current = validFields.map( (v, i) => {
-                return (v) ? formValueStates.current[i] : 'ERROR';
+                return (v) ? FORM_STATES.cmpt : FORM_STATES.err;
             })
         }
         //End if-else
@@ -106,27 +118,25 @@ function AddNewTrans(props: FormProps) {
         if(!props.data) {
             //nothing
         } else if (props.data.length >= props.headers.length) {
-            formValues.current = props.data;
+            formValues.current = props.data.map( (v, i) => {
+                formValueStates.current[i] = (v==='') ? FORM_STATES.unvis : FORM_STATES.vis;
+                return v;
+            });
         }
 
         if(props.setFormValuesRef) {
             props.setFormValuesRef(formValues);    //setFormValues for containing component as well
             console.log('set form values');
         }
-        
-        globalFormValues=formValues;
-        //chat(formValues.current + ".");
-        globalActiveFields = activeFields;
-        selectedFormField = selectedField;
 
     }, [])
 
 
 
    return (
-       <div className="add-new-trans-wrapper-div" id={props.id + '-div'}>
+       <div className={props.id + "-wrapper-div"} id={props.id + '-div'}>
         <form ref={props.formRef} id={props.id} onSubmit={onFormSubmit}>
-            <table id="add-new-trans-wrapper-table">
+            <table className={props.id + "-wrapper-table"} id={props.id + "-wrapper-table"}>
                 <tbody>
                 <tr>{
             formValues.current.map(  (v,i) => {
@@ -140,12 +150,13 @@ function AddNewTrans(props: FormProps) {
                      : ['none'],
                     subtype: typeArr[1]
                 }
-                  console.log("Val: %s : ValState: %s \n -----------------",
-                   props.headers[i], formValueStates.current[i]);
+                  //console.log("Val: %s : ValState: %s \n -----------------",
+                   //props.headers[i], formValueStates.current[i]);
                     //console.log("options: %s", JSON.stringify(props.options));
+                    let stateClass = style_ns + 'data-col-' + formValueStates.current[i].toLowerCase()
                     return(
-                        <td  key={i} id={data.id + '-col'} className={'pt-data-col ' + 
-                        'pt-' + data.id + '-tuple'}>
+                        <td  key={i} id={data.id + '-col'} className={style_ns + 'data-col ' + 
+                        style_ns + data.id + '-tuple ' + stateClass}>
                         {FormElemWrapper(data)}
                         </td>
                     )
@@ -154,7 +165,11 @@ function AddNewTrans(props: FormProps) {
             <tr>
                 {props.headers.map( (v, i) => {
                 let id = v.replace(' ', '-').toLowerCase();
-                 return (<th key={i} className={'pt-data-header ' + 'pt-' + id + '-tuple'}
+
+                let errSt = formValueStates.current[i].toLowerCase();
+                let baseClass = style_ns + 'data-header ' + style_ns + ' ' + id + '-tuple ';
+                let stateClass = style_ns + 'data-header-' + errSt;
+                 return (<th key={i} className={baseClass + stateClass}
                  id={id +'-header'}>
                      <label id={'lb-' + id} htmlFor={id}>{v}
                      </label>
@@ -196,7 +211,7 @@ export default AddNewTrans;
     function DropDownElem(props: DDProps) {
     
         return(
-            <select className='pt-form-field pt-form-select' id={props.id}
+            <select className={style_ns + 'form-field pt-form-select'} id={props.id}
         onChange={(e) => {onFormUpdate(e.target.value, props.index)}}
         defaultValue={props.default}>
         </select>)
@@ -204,12 +219,13 @@ export default AddNewTrans;
     
     function InputElem(props: InputProps) {
 
+        let inputRef = useRef<HTMLInputElement>(null);
 
         //updates when drop down menu displays
-        let handleActiveFieldsOnChange = (globalActiveFields) ? (fieldVal: string) => {
-            globalActiveFields.current.add(props.index)
+        let handleActiveFieldsOnChange = (activeFields) ? (fieldVal: string) => {
+            activeFields.current.add(props.index)
             if(fieldVal.length===0)
-                globalActiveFields?.current.delete(props.index);
+                activeFields?.current.delete(props.index);
         } : () => {};
 
         //updates which dropDown cell is hovered by arrow keys
@@ -222,13 +238,26 @@ export default AddNewTrans;
             }
         };
 
-        let currentFieldVal: string = (globalFormValues) ? globalFormValues.current.at(props.index) : 
+        let currentFieldVal: any = (formValues) ? formValues.current.at(props.index) : 
                                 ((props.default) ? props.default : '');
 
         let setSelectedData = (val: any) => {
             if(currentFieldVal.length > 0 && val.length===0)
                 return; //dont reset the val
             onFormUpdate(val, props.index)
+        }
+
+        let handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            handleActiveFieldsOnChange(e.target.value);
+            if(formValueStates) formValueStates.current[props.index] = FORM_STATES.vis;
+            let newVal = (props.subtype=='checkbox') ? e.target.checked : e.target.value;
+            onFormUpdate(newVal, props.index)
+        }
+
+        let handleOnFocus = () => {
+            selectedFormField.current = props.index;
+            if(formValueStates) formValueStates.current[props.index] = FORM_STATES.vis;
+            onFormUpdate('', -1);
         }
 
         //Custom searchable DropDown menu conditionally rendered depending on if options are provided
@@ -244,19 +273,17 @@ export default AddNewTrans;
             />}
         }
 
-        //console.log("val: " + globalFormValues.current.at(props.index))
-
-        return( <> <input className='pt-form-field pt-form-input' id={props.id} 
+        return( <> <input className={style_ns + 'form-field ' + style_ns + 'form-input'} id={props.id} 
         type={props.subtype}
         value={currentFieldVal}
-        onChange={(e) => { handleActiveFieldsOnChange(e.target.value);
-            onFormUpdate(e.target.value, props.index)}
-        }
-        onFocus={() => {selectedFormField.current = props.index; onFormUpdate('', -1);}}
-        onBlur={ () => {if(globalActiveFields) globalActiveFields.current.delete(props.index)
+        ref={inputRef}
+        checked={(props.subtype=='checkbox') ? (currentFieldVal as boolean) : undefined}
+        onChange={handleOnChange}
+        onFocus={handleOnFocus}
+        onBlur={ () => {if(activeFields) activeFields.current.delete(props.index)
             onFormUpdate('', -1);}} //just to trigger state update
         onKeyDown={(e) => handleArrowsOnDropDown(e)}
-       onClick= { () => {selectedFormField.current=-1;}}//turn off Drop Down}
+       onMouseUp= { () => {selectedFormField.current=-1;}}//turn off Drop Down}
         >
         </input>
         {dropDown}

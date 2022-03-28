@@ -26,7 +26,7 @@ import AddNewTrans from '../components/AddNewTrans';
 //Constants
 const ROLLOVER_DIV_STYLE: CSS.Properties = {
         ['position' as any]: 'fixed',
-        ['width' as any]: '82.5%',
+        ['width' as any]: '90%',
         ['minHeight' as any]: 'unset'
 };
 
@@ -101,18 +101,20 @@ function PostTransactions() {
         const [mouseWheelScrollDist, setMouseWheelScrollDist] = useState<number>(0);
 
         //data states
+        const todayISO: string = new Date((new Date(now())).toLocaleString('en-US', { timeZone: 'America/Chicago' }).
+        split(",")[0]).toISOString().split('T')[0];
                 const DEF_FORM_VALS = [
                         "",     //trans id
-                        (new Date(now())).toISOString().split("T")[0],     //Purchased Date
+                        todayISO,     //Purchased Date
                         "75.24",     //amount
                         "The Jon",     //vendor
                         "Dinner",     //category
                         "JB",     //PayMethod
                         "",     //BoughtFor
                         "",     //PayStatus
-                        false,     //Income
+                        true,     //Income
                         "",     //Reimburses
-                        (new Date(now())).toISOString().split("T")[0],     //Posted Date
+                        todayISO,     //Posted Date
                         ""     //Notes
                 ]
                 let [formValues, setFormValues] = useState<React.MutableRefObject<any[]>>();
@@ -305,7 +307,6 @@ function PostTransactions() {
                                  inputTypes={Object.entries(FORM_INP_TYPES).map(
                                         ([key, val]) => {return val;}
                                  )}
-                                 id={ADD_NEW_TRANS_FORM_ID}
                                  data={DEF_FORM_VALS}
                                  setFormValuesRef={setFormValues}
                                  fieldValidation={FORM_VALD_FUNCS}
@@ -314,6 +315,8 @@ function PostTransactions() {
                                 }}
                                  formRef={addNewFormRef}
                                 options={formOptions}
+                                id={ADD_NEW_TRANS_FORM_ID}
+                                styleNamespace={'pt'}
                                 />  
                         </div>
                    </div>
