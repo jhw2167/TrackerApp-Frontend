@@ -229,8 +229,7 @@ export const aggregateTransactions = function(data: Transaction[], categories: s
 }
 
 //to 'Title Case'
-let sr = new RegExp("/S*");
-function toTitles(s: string){ return s.replace(/\w\S*/g + "|" + sr, function(t) { return t.charAt(0).toUpperCase() + t.substring(1).toLowerCase(); }); }
+function toTitles(s: string){ return s.replace(/\w\S*/g, function(t) { return t.charAt(0).toUpperCase() + t.substring(1).toLowerCase(); }); }
 
 //Formats data of certain object type properly
 export const formatData = function(data: Array<any>, type: string): Array<any> {
@@ -253,7 +252,10 @@ export const formatData = function(data: Array<any>, type: string): Array<any> {
 
         case 'Summary':
             return data.map( (v: Summary) => {
-                v.categories = toTitles(v.categories);
+                v.categories = (v.categories.split('/').length < 2) ? toTitles(v.categories)
+                 : v.categories.split('/').map( (v) => {return toTitles(v);}).reduce( (prev: string, v: string) => {
+                    return prev += '/' + v;
+                });
                 v.aggregateCol = toTitles(v.aggregateCol);
                 return v;
             })
