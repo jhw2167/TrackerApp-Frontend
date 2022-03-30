@@ -132,7 +132,7 @@ function SubTable(props: SubTableProps) {
                                     case c.SUMMARY_DATA.categories:
                                         val = c.properCase(val);
                                         if(val.length > MAX_VENDOR_DISP_LEN ) {
-                                            val = val.slice(0, 12);
+                                            val = (deepHovCell==value) ? val.slice(0, 9) : val.slice(0, 12);
                                             val += '...'
                                         }
                                         innerStyle= {['width' as any]: '50%'};

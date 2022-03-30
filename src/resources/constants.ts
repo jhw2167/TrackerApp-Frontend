@@ -1,5 +1,6 @@
-import { validateLocaleAndSetLanguage } from "typescript";
-import { filter } from "underscore";
+/*
+
+*/
 
 export const axios = require('axios').default;
 
@@ -227,3 +228,44 @@ export const aggregateTransactions = function(data: Transaction[], categories: s
     return res;
 }
 
+//to 'Title Case'
+let sr = new RegExp("/S*");
+function toTitles(s: string){ return s.replace(/\w\S*/g + "|" + sr, function(t) { return t.charAt(0).toUpperCase() + t.substring(1).toLowerCase(); }); }
+
+//Formats data of certain object type properly
+export const formatData = function(data: Array<any>, type: string): Array<any> {
+
+    switch(type) {
+        case 'Transaction':
+            return data.map( (v: Transaction) => {
+                v.vendor = toTitles(v.vendor);
+                v.category = toTitles(v.category);
+                v.boughtFor = toTitles(v.boughtFor);
+                return v;
+            })
+        
+        case 'Vendor':
+            return data.map( (v: Vendor) => {
+                v.vendor = toTitles(v.vendor);
+                v.category = toTitles(v.category);
+                return v;
+            })
+
+        case 'Summary':
+            return data.map( (v: Summary) => {
+                v.categories = toTitles(v.categories);
+                v.aggregateCol = toTitles(v.aggregateCol);
+                return v;
+            })
+
+        case 'string':
+            return data.map( (v: string) => {
+                return toTitles(v);
+            })
+    
+        default:
+            return [];
+        
+    }
+
+}

@@ -7,7 +7,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 
 //project imports
-import * as consts from '../resources/constants';
+import * as c from '../resources/constants';
 import {DataTuple, Transaction, Summary} from '../resources/constants';
 import * as api from '../resources/api';
 import useWindowDimensions from '../resources/WindowDims';
@@ -34,10 +34,10 @@ function Overview(props: OverviewProps) {
     ]
 
     const DATA_TABLE_COLS: Array<string> = [
-        consts.TRANS_DATA.PURCHDATE,
-        consts.TRANS_DATA.VEND,
-        consts.TRANS_DATA.AMT,
-        consts.TRANS_DATA.CAT
+        c.TRANS_DATA.PURCHDATE,
+        c.TRANS_DATA.VEND,
+        c.TRANS_DATA.AMT,
+        c.TRANS_DATA.CAT
     ]
 
     const DATA_GRAPH_EXCLUSIONS = new Set<string>(['Income', 'Returns']);
@@ -70,34 +70,37 @@ function Overview(props: OverviewProps) {
     const isMounted = useRef(false);
 
     //Grouped functions
-    const updateOnDateChange = (start: Date, end: Date): string => {
+    const updateOnDateChange = async (start: Date, end: Date) => {
 
         //transactions
         //console.log("st: %s and end: %s", start, end);
-        api.getRequest(api.SERVER_ALL_TRANSACTIONS_DATES(start, end), setMonthlyTransactions);
+        let [] = await Promise.all([ // eslint-disable-line no-empty-pattern
+        api.getRequest(api.SERVER_ALL_TRANSACTIONS_DATES(start, end), 
+        (data: Array<Transaction>) => {setMonthlyTransactions(c.formatData(data, 'Transaction'))}),
         api.getRequest(api.SERVER_ALL_TRANSACTIONS_RECENT(offsetTransactions + MAX_TRANS_PAGE,
-             offsetTransactions), setRecentTransactions);
+             offsetTransactions), (data: Array<Transaction>) => {setRecentTransactions(c.formatData(data, 'Transaction'))}),
 
-        api.getRequest(api.SERVER_INCOME_SUMMARY(start, end), setIncomeSummary);
-        api.getRequest(api.SERVER_EXPENSE_SUMMARY(start, end), setExpenseSummary);
-
-        const srchParamStr = "?mn=" + consts.MONTHS.at(start.getMonth()) + "&yr=" + start.getFullYear();
-        props.setSearchParams(srchParamStr);
-        return srchParamStr;
+        api.getRequest(api.SERVER_INCOME_SUMMARY(start, end),
+        (data: Array<Summary>) => {setIncomeSummary(c.formatData(data, 'Summary'))}),
+        api.getRequest(api.SERVER_EXPENSE_SUMMARY(start, end), 
+        (data: Array<Summary>) => {setExpenseSummary(c.formatData(data, 'Summary'))})
+        ]);
     }
 
     const onLanding = useCallback( async () => {
         //Date stuff
-        const [start, end] = consts.convMnYrToTimeFrame(props.mn, props.yr);
+        const [start, end] = c.convMnYrToTimeFrame(props.mn, props.yr);
         //setCurrentDateByMonth(start);
 
         //api Calls
         //console.log(1);
-        api.getRequest(api.SERVER_ALL_CATEGORIES, setCategories);
-        const newSearchParams: string = updateOnDateChange(start, end);
-        props.setSearchParams(newSearchParams);
+        await api.getRequest(api.SERVER_ALL_CATEGORIES, 
+            (data: Array<Summary>) => {setCategories(c.formatData(data, 'string'))});
 
-        await sleep(1000);
+        updateOnDateChange(start, end);
+        const srchParamStr = "?mn=" + c.MONTHS.at(start.getMonth()) + "&yr=" + start.getFullYear();
+        props.setSearchParams(srchParamStr);
+
         isMounted.current = true;
     }, [])
 
@@ -110,7 +113,7 @@ function Overview(props: OverviewProps) {
         //console.log(2);
         if(isMounted.current){
             //console.log("hello")
-            setCategoriesData(consts.aggregateTransactions(monthlyTransactions, categories));
+            setCategoriesData(c.aggregateTransactions(monthlyTransactions, categories));
         }
     }, [categories, monthlyTransactions]);
 
@@ -193,7 +196,7 @@ function Overview(props: OverviewProps) {
                            data=          {categoriesData} 
                            exclusions=    {DATA_GRAPH_EXC_FUNC}
                            limit=         {DATA_GRAPH_LIMIT}
-                           title=         {consts.properCase(consts.MONTHS[currentDateByMonth.getMonth()])}
+                           title=         {c.properCase(c.MONTHS[currentDateByMonth.getMonth()])}
                            setHovSegment= {setHovCategory}
                            height={Math.min(winWidth * .60 * .90, 340)}
                            width={Math.min(winWidth * .60 * .90, 380)}
@@ -216,7 +219,7 @@ function Overview(props: OverviewProps) {
                                 <SubTable 
                                     title={'Expense Summary'}
                                     headers={['Expense Summary']}
-                                    colNames={Object.values(consts.SUMMARY_DATA)}
+                                    colNames={Object.values(c.SUMMARY_DATA)}
                                     aggFunction={sumTableAgg}
                                     aggOtherRow={true}
                                     minRows={3}
@@ -237,7 +240,7 @@ function Overview(props: OverviewProps) {
                                 <SubTable 
                                     title={'Income Summary'}
                                     headers={['Income Summary']}
-                                    colNames={Object.values(consts.SUMMARY_DATA)}
+                                    colNames={Object.values(c.SUMMARY_DATA)}
                                     aggFunction={sumTableAgg}
                                     minRows={3}
                                     aggOtherRow={true}
@@ -305,9 +308,9 @@ function sumTableAgg(data: Summary[], aggRowName: string = 'NONE' ) {
     let sum = 0;
     data.forEach(curr => { sum += curr.value as number }); 
     return  {
-        [consts.SUMMARY_DATA.aggregate]: aggRowName,
-        [consts.SUMMARY_DATA.value]: sum,
-        [consts.SUMMARY_DATA.categories]: 'None'
+        [c.SUMMARY_DATA.aggregate]: aggRowName,
+        [c.SUMMARY_DATA.value]: sum,
+        [c.SUMMARY_DATA.categories]: 'None'
     }
 }
 

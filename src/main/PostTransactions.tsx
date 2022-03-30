@@ -164,7 +164,7 @@ function PostTransactions() {
 
                 const getSetData = (header: string) => {
                         return (data: Array<string>) => {
-                                map.set(header, data);
+                                map.set(header, c.formatData(data, 'string'));
                         }
                 }
 

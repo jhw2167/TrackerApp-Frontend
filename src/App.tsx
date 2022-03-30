@@ -9,19 +9,21 @@ import Layout from './main/Layout';
 import './css/General.css';
 import './css/misc/Background.css'
 
+//lib components
+  import '../node_modules/react-vis/dist/style.css';
+
+
   //high level
   import './css/main/PostTransactions.css'
   import './css/main/Overview.css'
   import './css/components/subcomponents/DropDown.css'
 
-  //lib components
-  import '../node_modules/react-vis/dist/style.css';
-
   //Main components
-  import './css/components/SubTable.css'
-  import './css/components/DataTable.css'
-  import './css/components/DataGraph.css';
   import './css/components/AddNewTrans.css'
+  import './css/components/DataTable.css'
+  import './css/components/SubTable.css'
+  import './css/components/DataGraph.css';
+  
 
   //Sub components
 
