@@ -8,6 +8,7 @@
 //import * as api from '../resources/api';
 import React, { KeyboardEvent, MutableRefObject,
      ReactElement, RefObject, useEffect, useRef, useState } from 'react';
+import { StringMappingType } from 'typescript';
 import { contains, now } from 'underscore';
      import DropDown from './subcomponents/DropDown';
 
@@ -51,6 +52,9 @@ let activeFields: React.MutableRefObject<Set<any>>;
 let selectedFormField: React.MutableRefObject<number>;
 let onFormUpdate: Function;
 
+let filterableDDOptions: React.MutableRefObject<Map<string, Array<string>>>
+let globalHeaders: Array<string>;
+
 let _setDDPosExternally: Function;
 let _setFuncSetDDPosExternally: Function;
 
@@ -75,6 +79,8 @@ function AddNewTrans(props: FormProps) {
         //Fields can be VISITED, UNVISTED, COMPLETE, ERROR
     activeFields = useRef<Set<any>>(new Set());
     selectedFormField = useRef<number>(-1);
+    filterableDDOptions = 
+        useRef<Map<string, Array<string>>>((props.options) ? props.options : new Map());
     
     [style_ns] = useState<string>( (props.styleNamespace) ? props.styleNamespace+'-' : '');
     const [, updateState] = React.useState<Object>();
@@ -126,8 +132,9 @@ function AddNewTrans(props: FormProps) {
 
         if(props.setFormValuesRef) {
             props.setFormValuesRef(formValues);    //setFormValues for containing component as well
-            console.log('set form values');
         }
+
+        globalHeaders = props.headers;
 
     }, [])
 
@@ -249,7 +256,16 @@ export default AddNewTrans;
 
         let handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             handleActiveFieldsOnChange(e.target.value);
-            if(formValueStates) formValueStates.current[props.index] = FORM_STATES.vis;
+
+            //handle filter update on change
+            if(props.options)
+                filterableDDOptions.current.set(globalHeaders[props.index],
+                    props.options.filter( (str: string) => {
+                        return (currentFieldVal.length > 0) ? str.includes(currentFieldVal): true;
+                    }));
+
+            if(formValueStates) 
+                formValueStates.current[props.index] = FORM_STATES.vis;
             let newVal = (props.subtype=='checkbox') ? e.target.checked : e.target.value;
             onFormUpdate(newVal, props.index)
         }
@@ -261,18 +277,28 @@ export default AddNewTrans;
         }
 
         //Custom searchable DropDown menu conditionally rendered depending on if options are provided
+        if(props.id=='vendor') console.log("ddPos in filter: ");
+        let options = (props.options) ? props.options.filter( (str: string) => {
+            return (currentFieldVal.length > 0) ? str.includes(currentFieldVal): true;
+        }) : [];
         let dropDown: ReactElement = <></>;
         if(props.options && !(typeof(selectedFormField)=='undefined')) {
-            if (selectedFormField.current===props.index) {   
+            if (selectedFormField.current===props.index) {
             dropDown = <DropDown 
-            data={props.options as string[]}
+            key={props.id+ '-' + options.length}  /* we can force child to update each time key changes */
+            data={filterableDDOptions.current.get(globalHeaders[props.index]) as string[]}
+            charLimit={12}
             styleClass={'dd-' + props.id + ' pt'}
-            filterFunction={() => {}}
-            setSelectedData = {(val: any) => setSelectedData(val)}
+            setSelectedData = {setSelectedData}
             setFuncSetDDPosExternally = {_setFuncSetDDPosExternally}
             afterClick = { (v: string) => {selectedFormField.current=-1;}}//turn off Drop Down}
             />}
         }
+        if(props.id=='vendor') {
+            console.log("ddPos after child: ");
+            console.log('\n------------------END RENDER OF PARENT---------------------\n' + currentFieldVal);
+        }
+
 
         return( <> <input className={style_ns + 'form-field ' + style_ns + 'form-input'} id={props.id} 
         type={props.subtype}

@@ -174,8 +174,9 @@ form {
 
 #income.pt-form-field {
     position: relative;
+    outline: 2px solid var(--tert-col);
     border: 0px;
-    bottom: -6px;    
+    bottom: -5px;    
 }
     .pt-data-col::-webkit-scrollbar {
         display: none;
@@ -187,10 +188,8 @@ form {
     }
 
     #income[type="checkbox" i].pt-form-field {
-        
         height: 20px;
         width: 20px;
-        border: 1px solid var(--primary-col);
         border-radius: 2px;
         background-color: var(--primary-col);
     }
@@ -201,15 +200,10 @@ form {
         transition: background-color 0.2s;
     }
 
-    #income[type="checkbox" i].pt-form-field {
-        border-color: white;
-    }
-
 
     #income[type=checkbox i]:checked:after {
         content:"\2713";
         color: var(--secondary-col);
-        padding: initial;
         font-weight: bold;
 
         position: absolute;
@@ -231,14 +225,15 @@ input[type="search"]::-webkit-search-results-decoration {
 
 /* DROP DOWN CSS FOR PT */
 .pt-drop-down-wrapper-div {
-    max-width: 190px;
-    min-width: 150px;
+    max-width: 200px;
+    min-width: 180px;
     max-height: 200px;
 
     padding-right: 10px;
-
     border: solid 1px;
-    border-image: linear-gradient(to right, white 92%, var(--secondary-col) 92%) 1;
+    --d: 92%;
+    border-image: linear-gradient(to right, white var(--d),
+     var(--secondary-col) var(--d)) 1;
     border-right: 0px; border-left: 0px;                
 }
 
@@ -251,9 +246,10 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 
 .pt-drop-down-table {
-    min-width: 100%;
-    width: fit-content;
-    
+    min-width: fit-content;
+    padding-right: 50px;
+    width: 100%;
+    font-size: 1.2em;
 }
 
 /* fiddle: https://jsfiddle.net/z728ukxg/16/

@@ -12,7 +12,7 @@ import React, { KeyboardEvent, MutableRefObject,
 /* Interfaces */
 interface DropDownProps {
     data: Array<any>;
-    filterFunction: Function;
+    charLimit?: number;
     styleClass: string
     hovCellFunc?: Function;
     setSelectedData?: Function; //sets data selected by DD menu to container
@@ -120,13 +120,15 @@ function DropDown(props: DropDownProps ) {
                     <tbody>
                       
                     {/*         Now return data row      */}
-                    {data.map( (value: any, index: number) => {
+                    {data.map( (value: string, index: number) => {
                         let isHov: number = (hovCells.has(value) || hovCells.has(index)) ? 1 : 0;
                         isHov += _.isEqual(deepHovCell, value) ? 1 : 0; //0-no hov, 1-hov, 2-deep hov
                         //console.log("Vals: " + !!props.aggFunction + " : " + index + " : " + (props.limit+1));
                         //hovCells.forEach((v) => console.log("val: " + v) )
                         let hovRowStyleClass = (isHov > 0) ? 
                         c.addStyleClass(props.styleClass, 'dd-hov-row') : '';
+                        let displayVal = (props.charLimit && value.length > props.charLimit) ?
+                        value.slice(0, props.charLimit) + '...' : value;
                         
                         return <tr className= {c.addStyleClass(props.styleClass, 'dd-row')
                         + ' ' + hovRowStyleClass}
@@ -146,7 +148,7 @@ function DropDown(props: DropDownProps ) {
                          >
                             {/*         Now return data COLS      */}
                             <td className={c.addStyleClass(props.styleClass, 'dd-col')} >
-                                {value}
+                                {displayVal}
                             </td>
                         </tr>
                         })}
