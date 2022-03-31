@@ -108,9 +108,20 @@ function DropDown(props: DropDownProps ) {
        
     }
 
-    if(!data) {
+    if(!data || data.length<1) {
         //console.log("ret nothing!!! %s: " + props.data.length, props.headers);
-        return (<div className="empty-drop-down"> No Options </div>);
+        return ( 
+            <div className={c.addStyleClass(props.styleClass, 'drop-down-wrapper-div')}>
+        <div className={c.addStyleClass(props.styleClass, 'drop-down-nested-wrapper-div')}>
+            <table className={c.addStyleClass(props.styleClass, 'drop-down-table')}>
+                    <tbody>
+                        <tr className={c.addStyleClass(props.styleClass, 'dd-row') + ' empty-drop-down'}>
+                             <td>No Options</td> </tr>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+        )
     } else {
 
     return (

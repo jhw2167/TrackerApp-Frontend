@@ -54,10 +54,12 @@ let onFormUpdate: Function;
 
 let filterableDDOptions: React.MutableRefObject<Map<string, Array<string>>>
 let globalHeaders: Array<string>;
+let usingDropDown: React.MutableRefObject<boolean>;
 
 let _setDDPosExternally: Function;
 let _setFuncSetDDPosExternally: Function;
 
+let forceUpdate: Function;
 let style_ns: string = '';
 
 const FORM_STATES = {
@@ -79,12 +81,14 @@ function AddNewTrans(props: FormProps) {
         //Fields can be VISITED, UNVISTED, COMPLETE, ERROR
     activeFields = useRef<Set<any>>(new Set());
     selectedFormField = useRef<number>(-1);
+    usingDropDown = useRef<boolean>(false);
     filterableDDOptions = 
         useRef<Map<string, Array<string>>>((props.options) ? props.options : new Map());
+
     
     [style_ns] = useState<string>( (props.styleNamespace) ? props.styleNamespace+'-' : '');
     const [, updateState] = React.useState<Object>();
-    const forceUpdate = React.useCallback(() => updateState({}), []);
+    forceUpdate = React.useCallback(() => updateState({}), []);
     
     [_setDDPosExternally, _setFuncSetDDPosExternally] = useState<Function>((i: number) => (i: number) => {return;});
 
@@ -228,6 +232,19 @@ export default AddNewTrans;
 
         let inputRef = useRef<HTMLInputElement>(null);
 
+        let handleDropDownFilter = () => {
+            if(props.options && !usingDropDown.current) {
+            console.log("Current: %s, val: %s, includes: %s", currentFieldVal, props.options.at(5),
+            props.options.at(5)?.includes(currentFieldVal));
+            filterableDDOptions.current.set(globalHeaders[props.index],
+                props.options.filter( (str: string) => {
+                    return (currentFieldVal.length > 0) ? 
+                    str.slice(0, currentFieldVal.length).toLowerCase().includes(currentFieldVal.toLowerCase())
+                    : true;
+                }));
+            }
+        }
+
         //updates when drop down menu displays
         let handleActiveFieldsOnChange = (activeFields) ? (fieldVal: string) => {
             activeFields.current.add(props.index)
@@ -238,10 +255,13 @@ export default AddNewTrans;
         //updates which dropDown cell is hovered by arrow keys
         let handleArrowsOnDropDown = (e: KeyboardEvent) => {
             selectedFormField.current=props.index;
+            usingDropDown.current=true;
             if(e.key==='ArrowDown') {
                 _setDDPosExternally(1);
             } else if (e.key==='ArrowUp'){
                 _setDDPosExternally(-1);
+            } else {
+                usingDropDown.current=false;
             }
         };
 
@@ -258,12 +278,8 @@ export default AddNewTrans;
             handleActiveFieldsOnChange(e.target.value);
 
             //handle filter update on change
-            if(props.options)
-                filterableDDOptions.current.set(globalHeaders[props.index],
-                    props.options.filter( (str: string) => {
-                        return (currentFieldVal.length > 0) ? str.includes(currentFieldVal): true;
-                    }));
-
+           handleDropDownFilter();
+           usingDropDown.current=false;
             if(formValueStates) 
                 formValueStates.current[props.index] = FORM_STATES.vis;
             let newVal = (props.subtype=='checkbox') ? e.target.checked : e.target.value;
@@ -278,15 +294,15 @@ export default AddNewTrans;
 
         //Custom searchable DropDown menu conditionally rendered depending on if options are provided
         if(props.id=='vendor') console.log("ddPos in filter: ");
-        let options = (props.options) ? props.options.filter( (str: string) => {
-            return (currentFieldVal.length > 0) ? str.includes(currentFieldVal): true;
-        }) : [];
         let dropDown: ReactElement = <></>;
         if(props.options && !(typeof(selectedFormField)=='undefined')) {
             if (selectedFormField.current===props.index) {
+            handleDropDownFilter();
+            let options: Array<string> = (filterableDDOptions.current) ? 
+            filterableDDOptions.current.get(globalHeaders[props.index]) as string[] : [];
             dropDown = <DropDown 
             key={props.id+ '-' + options.length}  /* we can force child to update each time key changes */
-            data={filterableDDOptions.current.get(globalHeaders[props.index]) as string[]}
+            data={options}
             charLimit={12}
             styleClass={'dd-' + props.id + ' pt'}
             setSelectedData = {setSelectedData}

@@ -106,10 +106,10 @@ function PostTransactions() {
                 const DEF_FORM_VALS = [
                         "",     //trans id
                         todayISO,     //Purchased Date
-                        "75.24",     //amount
-                        "The Jon",     //vendor
-                        "Dinner",     //category
-                        "JB",     //PayMethod
+                        "",     //amount
+                        "",     //vendor
+                        "",     //category
+                        "",     //PayMethod
                         "",     //BoughtFor
                         "",     //PayStatus
                         "",     //Income
