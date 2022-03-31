@@ -12,9 +12,13 @@
     background-color: transparent;
 }
 
-.drop-down-table-div {
+.drop-down-table {
     text-align: left;
     white-space: nowrap;
+}
+
+.drop-down-nested-wrapper-div {
+    width: 90%;
 }
 
 .dd-row {

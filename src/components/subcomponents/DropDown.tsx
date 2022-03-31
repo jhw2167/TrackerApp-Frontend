@@ -115,7 +115,8 @@ function DropDown(props: DropDownProps ) {
 
     return (
         <div className={c.addStyleClass(props.styleClass, 'drop-down-wrapper-div')}>
-            <table className={c.addStyleClass(props.styleClass, 'drop-down-table-div')}>
+        <div className={c.addStyleClass(props.styleClass, 'drop-down-nested-wrapper-div')}>
+            <table className={c.addStyleClass(props.styleClass, 'drop-down-table')}>
                     <tbody>
                       
                     {/*         Now return data row      */}
@@ -153,7 +154,7 @@ function DropDown(props: DropDownProps ) {
     
                     </tbody>
                 </table>
-    
+        </div>
         </div>
     );
     } // end ELSE

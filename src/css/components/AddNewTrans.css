@@ -43,6 +43,8 @@ form {
 
     font-size: 1.2em;
     font-weight: 500;
+
+   
 }
 
 #pt-add-new-trans-form-wrapper-table > tbody > tr > td > input {
@@ -229,22 +231,38 @@ input[type="search"]::-webkit-search-results-decoration {
 
 /* DROP DOWN CSS FOR PT */
 .pt-drop-down-wrapper-div {
-    width: fit-content;
+    max-width: 190px;
+    min-width: 150px;
     max-height: 200px;
-    background-color: black;
-    border: 1px solid white;
-    border-left: 0px; border-right: 0px;
+
+    padding-right: 10px;
+
+    border: solid 1px;
+    border-image: linear-gradient(to right, white 92%, var(--secondary-col) 92%) 1;
+    border-right: 0px; border-left: 0px;                
 }
 
-.pt-drop-down-table-div {
+.pt-drop-down-nested-wrapper-div {
+    min-width: 100%;
+    width: fit-content;
+    background: var(--secondary-col);
     border: 1px solid white;
-    border-top: 0px; border-bottom: 0px;
+    border-bottom: 0px;    
 }
 
+.pt-drop-down-table {
+    min-width: 100%;
+    width: fit-content;
+    
+}
+
+/* fiddle: https://jsfiddle.net/z728ukxg/16/
+    stack: 
+*/
 
 /* Scrollbar */
         .pt-drop-down-wrapper-div::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
             border-radius: 10px;
             background-color: transparent;
         }
@@ -254,8 +272,8 @@ input[type="search"]::-webkit-search-results-decoration {
             background-color: transparent;
         }
 
-        ::-webkit-scrollbar-track:hover {
-            background-color: var(--heavy-gray);
+        .pt-drop-down-wrapper-div::-webkit-scrollbar:hover {
+            background-color: var(--heavy-gray) ;
         }
         
         /* Handle */

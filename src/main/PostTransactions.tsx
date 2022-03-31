@@ -166,8 +166,10 @@ function PostTransactions() {
                         return (data: Array<string>) => {
                                 if(header == FORM_HEADERS.VEND)
                                         map.set(header, c.formatData(data, 'Vendor'));
+                                else if(header==FORM_HEADERS.PMETHOD)
+                                map.set(header, data);
                                 else
-                                map.set(header, c.formatData(data, 'string'));
+                                        map.set(header, c.formatData(data, 'string'));
                         }
                 }
 
