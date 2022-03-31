@@ -164,6 +164,9 @@ function PostTransactions() {
 
                 const getSetData = (header: string) => {
                         return (data: Array<string>) => {
+                                if(header == FORM_HEADERS.VEND)
+                                        map.set(header, c.formatData(data, 'Vendor'));
+                                else
                                 map.set(header, c.formatData(data, 'string'));
                         }
                 }
