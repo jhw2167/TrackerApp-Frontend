@@ -59,6 +59,7 @@
 .pt-bordered-section {
     width: var(--bordered-sec-width);
     margin-left: var(--bordered-sec-margin);
+    margin-right: 0;
 
     border: 3px solid var(--primary-col);
     border-left: 0; border-right: 0;

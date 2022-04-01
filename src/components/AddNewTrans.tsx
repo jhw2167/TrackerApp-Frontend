@@ -12,6 +12,9 @@ import { StringMappingType } from 'typescript';
 import { contains, now } from 'underscore';
      import DropDown from './subcomponents/DropDown';
 
+import { Link, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
+
+     /* Definitions */
 interface FormProps {
     headers: string[];
     data?: Array<any>;
@@ -234,8 +237,8 @@ export default AddNewTrans;
 
         let handleDropDownFilter = () => {
             if(props.options && !usingDropDown.current) {
-            console.log("Current: %s, val: %s, includes: %s", currentFieldVal, props.options.at(5),
-            props.options.at(5)?.includes(currentFieldVal));
+            
+            
             filterableDDOptions.current.set(globalHeaders[props.index],
                 props.options.filter( (str: string) => {
                     return (currentFieldVal.length > 0) ? 
@@ -258,8 +261,10 @@ export default AddNewTrans;
             usingDropDown.current=true;
             if(e.key==='ArrowDown') {
                 _setDDPosExternally(1);
+                //scroll.scrollMore(-100);
             } else if (e.key==='ArrowUp'){
                 _setDDPosExternally(-1);
+                //scroll.scrollMore(100);
             } else {
                 usingDropDown.current=false;
             }
@@ -293,7 +298,6 @@ export default AddNewTrans;
         }
 
         //Custom searchable DropDown menu conditionally rendered depending on if options are provided
-        if(props.id=='vendor') console.log("ddPos in filter: ");
         let dropDown: ReactElement = <></>;
         if(props.options && !(typeof(selectedFormField)=='undefined')) {
             if (selectedFormField.current===props.index) {
@@ -308,13 +312,9 @@ export default AddNewTrans;
             setSelectedData = {setSelectedData}
             setFuncSetDDPosExternally = {_setFuncSetDDPosExternally}
             afterClick = { (v: string) => {selectedFormField.current=-1;}}//turn off Drop Down}
+            animCellHeight={35}
             />}
         }
-        if(props.id=='vendor') {
-            console.log("ddPos after child: ");
-            console.log('\n------------------END RENDER OF PARENT---------------------\n' + currentFieldVal);
-        }
-
 
         return( <> <input className={style_ns + 'form-field ' + style_ns + 'form-input'} id={props.id} 
         type={props.subtype}

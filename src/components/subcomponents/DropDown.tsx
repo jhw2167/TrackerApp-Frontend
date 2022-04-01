@@ -19,11 +19,12 @@ interface DropDownProps {
     setFuncSetDDPosExternally?: Function;   //takes a "setStateFunction" that sets the state of a 
     /* container with a setState function internally in dropDown, so the dropDownPlace state can
     be adjusted from outside this component */
+    animCellHeight?: number;
+    cellHeight?: number;
     afterClick?: (val: string) => void;  //sets drop down items to do something after they are clicked
 }
 
 /* Global constants */
-
 
 function DropDown(props: DropDownProps ) {
 
@@ -36,6 +37,15 @@ function DropDown(props: DropDownProps ) {
     const [selected, setSelected] = useState<any>('');
     const [dropDownPlace, setDropDownPlace] = useState<number>(-1);
     const [dropDownInc, setDropDownInc] = useState<number>(0);
+    const [scrollPos, setScrollPos] = useState<number>(0);
+
+    const scrollableDivRef = useRef<HTMLDivElement>(null);
+    const CELL_HEIGHT = (props.cellHeight) ? props.cellHeight : scrollableDivRef.current?.
+    children.item(0)?.  //inner div
+    children.item(0)?. //inner table;
+    children.item(0)?.  //inner tbody
+    children.item(data.length-1)?.clientHeight as number;
+    const ANIM_CELL_HEIGHT = (props.animCellHeight) ? props.animCellHeight : 0;
 
     const parentAfterClick = (props.afterClick) ? props.afterClick : (v: any) => {};
 
@@ -78,6 +88,7 @@ function DropDown(props: DropDownProps ) {
         if(dropDownInc==0) {
             hovCells.clear();
             setDropDownPlace(-1);
+            scrollableDivRef.current?.scroll({top: 0});
         } else if (dropDownInc==Infinity) {
             return;
         }
@@ -87,6 +98,20 @@ function DropDown(props: DropDownProps ) {
         if(newDDPlace==dropDownPlace || newDDPlace<0 || newDDPlace==data.length) {
             return; //no relevant value for this position, keep it
         } else {
+            
+            //when going down, IF(scrollPos + () > h / 2)
+            const H = scrollableDivRef.current?.clientHeight as number;
+            let n = (H - ANIM_CELL_HEIGHT) / (CELL_HEIGHT)-3;
+            let d = ((n-1)*CELL_HEIGHT + ANIM_CELL_HEIGHT) / n;
+            d*=dropDownInc;
+            
+            console.log("------------------------------------")
+            console.log("n, %s", n);
+            console.log("d: " + d);
+            setScrollPos(scrollPos+d);
+
+            scrollableDivRef.current?.scroll(0, Math.max((scrollPos - 3*CELL_HEIGHT), 0));
+        
             hovCells.delete(dropDownPlace)
             hovCells.add(newDDPlace)
             setDropDownPlace(newDDPlace);
@@ -103,15 +128,10 @@ function DropDown(props: DropDownProps ) {
 
     /* Functions */
 
-    //Function that sets dropDownPlace
-    const incDropDownPlace = function (i: number): void {
-       
-    }
-
     if(!data || data.length<1) {
         //console.log("ret nothing!!! %s: " + props.data.length, props.headers);
         return ( 
-            <div className={c.addStyleClass(props.styleClass, 'drop-down-wrapper-div')}>
+            <div ref={scrollableDivRef} className={c.addStyleClass(props.styleClass, 'drop-down-wrapper-div')}>
         <div className={c.addStyleClass(props.styleClass, 'drop-down-nested-wrapper-div')}>
             <table className={c.addStyleClass(props.styleClass, 'drop-down-table')}>
                     <tbody>
@@ -125,7 +145,7 @@ function DropDown(props: DropDownProps ) {
     } else {
 
     return (
-        <div className={c.addStyleClass(props.styleClass, 'drop-down-wrapper-div')}>
+        <div ref={scrollableDivRef} className={c.addStyleClass(props.styleClass, 'drop-down-wrapper-div')}>
         <div className={c.addStyleClass(props.styleClass, 'drop-down-nested-wrapper-div')}>
             <table className={c.addStyleClass(props.styleClass, 'drop-down-table')}>
                     <tbody>
@@ -134,8 +154,6 @@ function DropDown(props: DropDownProps ) {
                     {data.map( (value: string, index: number) => {
                         let isHov: number = (hovCells.has(value) || hovCells.has(index)) ? 1 : 0;
                         isHov += _.isEqual(deepHovCell, value) ? 1 : 0; //0-no hov, 1-hov, 2-deep hov
-                        //console.log("Vals: " + !!props.aggFunction + " : " + index + " : " + (props.limit+1));
-                        //hovCells.forEach((v) => console.log("val: " + v) )
                         let hovRowStyleClass = (isHov > 0) ? 
                         c.addStyleClass(props.styleClass, 'dd-hov-row') : '';
                         let displayVal = (props.charLimit && value.length > props.charLimit) ?

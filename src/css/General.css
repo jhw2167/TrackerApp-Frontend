@@ -38,7 +38,7 @@ body {
   
 
 /* Most General Styling */
-html, body, .container-table {
+html, body, .container-table, #root {
     height: 100%;
 }
 

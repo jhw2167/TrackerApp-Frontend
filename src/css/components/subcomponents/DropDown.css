@@ -33,7 +33,7 @@
 
     line-height: 34px;
     border: 2px solid var(--primary-col);
-    background-color: var(--heavy-grey);
+    background-color: var(--tert-col) !important;
 
     font-weight: bolder;
     font-size: 1.2em;

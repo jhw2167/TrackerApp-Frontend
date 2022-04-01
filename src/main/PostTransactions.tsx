@@ -26,7 +26,7 @@ import AddNewTrans from '../components/AddNewTrans';
 //Constants
 const ROLLOVER_DIV_STYLE: CSS.Properties = {
         ['position' as any]: 'fixed',
-        ['width' as any]: '90%',
+        ['width' as any]: '82.5%',
         ['minHeight' as any]: 'unset'
 };
 

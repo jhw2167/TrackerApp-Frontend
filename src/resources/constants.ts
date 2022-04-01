@@ -204,6 +204,7 @@ export interface Summary {
 }
 
 /* FUNCTION CONSTANTS */
+export const avg = (arr: Array<number>) => { return arr.reduce((a, b) => a + b) / arr.length };
 
 //Returns object parsed by categories
 export const aggregateTransactions = function(data: Transaction[], categories: string[] | Set<string>, limit: number = Infinity): DataTuple[]  {
