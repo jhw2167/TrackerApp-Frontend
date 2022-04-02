@@ -69,23 +69,6 @@ const FORM_INP_TYPES = {
 	NOTES: 'input-text'
 }
 
-const BAD_CHARS = ['-', "'", '"', '.', '/', "\\", ','];      //we don't want our form to include these chars
-const BOT_FOR_VALS = ['PERSONAL', 'GROUP', 'FAMILY', 'DATE', ''];
-const PAY_STAT_VALS = ['COMPLETE', 'COVERED', 'OWED', 'PENDING', 'OWED_PARTIAL', ''];
-const FORM_VALD_FUNCS: ((val: string) => boolean)[]  = [
-        (val: string) => {return (!isNaN(Number(val)) && Number(val) >= 0);},     //trans id - not recommended
-        (val: string) => {return true;},     //Purchased Date
-        (val: string) => {return (!isNaN(Number(val)) && Number(val) >= 0);},     //amount, Must be an actual number and be >= 0                                                
-        (val: string) => {return BAD_CHARS.every( (c: string) => {return !val.includes(c)});},     //vendor
-        (val: string) => {return BAD_CHARS.every( (c: string) => {return !val.includes(c)});},     //category
-        (val: string) => {return BAD_CHARS.every( (c: string) => {return !val.includes(c)});},     //PayMethod
-        (val: string) => {return contains(BOT_FOR_VALS, val);},     //BoughtFor - must be one of provided vals
-        (val: string) => {return contains(PAY_STAT_VALS, val);},     //PayStatus
-        (val: string) => {return true;},     //Income
-        (val: string) => {return (!isNaN(Number(val)) && Number(val) >= 0);},     //Reimburses
-        (val: string) => {return true;},     //Posted Date
-        (val: string) => {return true;}     //Notes
-]
 
 const ADD_NEW_TRANS_FORM_ID = 'pt-add-new-trans-form'
 
@@ -99,8 +82,26 @@ function PostTransactions() {
         ]);
 
         const [mouseWheelScrollDist, setMouseWheelScrollDist] = useState<number>(0);
-
+        const [countFormRefresh, setCountFormRefresh] = useState<number>(0);
         //data states
+        const BAD_CHARS = ['-', "'", '"', '.', '/', "\\", ','];      //we don't want our form to include these chars
+        //let BOT_FOR_VALS: string[]; // = ['PERSONAL', 'GROUP', 'FAMILY', 'DATE', ''];
+        //let PAY_STAT_VALS: string[]; //= ['COMPLETE', 'COVERED', 'OWED', 'PENDING', 'OWED_PARTIAL', ''];
+        const FORM_VALD_FUNCS: ((val: string) => boolean)[]  = [
+                (val: string) => {return (!isNaN(Number(val)) && Number(val) >= 0);},     //trans id - not recommended
+                (val: string) => {return true;},     //Purchased Date
+                (val: string) => {return (!isNaN(Number(val)) && Number(val) >= 0);},     //amount, Must be an actual number and be >= 0                                                
+                (val: string) => {return BAD_CHARS.every( (c: string) => {return val && !val.includes(c)});},     //vendor
+                (val: string) => {return BAD_CHARS.every( (c: string) => {return val && !val.includes(c)});},     //category
+                (val: string) => {return BAD_CHARS.every( (c: string) => {return val && !val.includes(c)});},     //PayMethod
+                (val: string) => {return (val) ? contains(formOptions.get(FORM_HEADERS.BOTFOR) as string[], val) : true; },     //BoughtFor - must be one of provided vals, or empty
+                (val: string) => {return (val) ? contains(formOptions.get(FORM_HEADERS.PSTATUS) as string[], val) : true;},     //PayStatus
+                (val: string) => {return true;},     //Income, boolean, default false
+                (val: string) => {return (!isNaN(Number(val)) && Number(val) >= 0);},     //Reimburses
+                (val: string) => {return true;},     //Posted Date
+                (val: string) => {return true;}     //Notes
+        ];
+
         const todayISO: string = new Date((new Date(now())).toLocaleString('en-US', { timeZone: 'America/Chicago' }).
         split(",")[0]).toISOString().split('T')[0];
                 const DEF_FORM_VALS = [
@@ -260,13 +261,14 @@ function PostTransactions() {
                                 break;
                         default:
                                 console.log('Form cleared with no action')
-                                break;
+                                return;
                 }
                 //END SWITCH
-                forceUpdate();
-
+                
                 if(formValues)
                         formValues.current = DEF_FORM_VALS;              
+
+                setCountFormRefresh(countFormRefresh+1);        //will force addNewTrans form refresh
         }
 
         return (
@@ -306,7 +308,8 @@ function PostTransactions() {
                         
                    <div className='row pt-bordered-section' id="transaction-form-div">
                         <div className='col-12' id='transaction-form-container'>
-                                <AddNewTrans headers={Object.entries(FORM_HEADERS).map(
+                                <AddNewTrans key={ADD_NEW_TRANS_FORM_ID + countFormRefresh}
+                                headers={Object.entries(FORM_HEADERS).map(
                                         ([key, val]) => {return val;}
                                 )}
                                  inputTypes={Object.entries(FORM_INP_TYPES).map(

@@ -105,7 +105,6 @@ function AddNewTrans(props: FormProps) {
 
     let onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         let validFields = formValues.current.map( (v, i) => {
             return props.fieldValidation[i](v);
         })
@@ -113,15 +112,11 @@ function AddNewTrans(props: FormProps) {
         if(validFields.every((v) => {return v;})) {
             if(props.onFormSubmit) props.onFormSubmit(formValues);
             formValues.current.forEach( (v: any) => console.log(v));
-            onFormUpdate('', -1);
         }
-        else {  //some fields have errors, lets demarcate them
-            formValueStates.current = validFields.map( (v, i) => {
-                return (v) ? FORM_STATES.cmpt : FORM_STATES.err;
-            })
-        }
-        //End if-else
-
+        //some fields may have errors, lets demarcate them
+        formValueStates.current = validFields.map( (v, i) => {
+            return (v) ? FORM_STATES.cmpt : FORM_STATES.err;
+        })
         forceUpdate();  //forces component updated each time form submit is attempted
     }
 

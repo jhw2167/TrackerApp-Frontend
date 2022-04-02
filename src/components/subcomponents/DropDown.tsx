@@ -111,7 +111,6 @@ function DropDown(props: DropDownProps ) {
             scrollableDivRef.current?.scroll(0, Math.max((scrollPos - 3*CELL_HEIGHT), 0));
            
             setPrevScrollDir(dropDownInc);
-        
             hovCells.delete(dropDownPlace)
             hovCells.add(newDDPlace)
             setDropDownPlace(newDDPlace);
