@@ -38,6 +38,7 @@ function DropDown(props: DropDownProps ) {
     const [dropDownPlace, setDropDownPlace] = useState<number>(-1);
     const [dropDownInc, setDropDownInc] = useState<number>(0);
     const [scrollPos, setScrollPos] = useState<number>(0);
+    const [prevScrollDir, setPrevScrollDir] = useState<number>(0);
 
     const scrollableDivRef = useRef<HTMLDivElement>(null);
     const CELL_HEIGHT = (props.cellHeight) ? props.cellHeight : scrollableDivRef.current?.
@@ -101,16 +102,15 @@ function DropDown(props: DropDownProps ) {
             
             //when going down, IF(scrollPos + () > h / 2)
             const H = scrollableDivRef.current?.clientHeight as number;
-            let n = (H - ANIM_CELL_HEIGHT) / (CELL_HEIGHT)-3;
+            let n = (H - ANIM_CELL_HEIGHT) / (CELL_HEIGHT)-2;
             let d = ((n-1)*CELL_HEIGHT + ANIM_CELL_HEIGHT) / n;
-            d*=dropDownInc;
-            
-            console.log("------------------------------------")
-            console.log("n, %s", n);
-            console.log("d: " + d);
-            setScrollPos(scrollPos+d);
 
+            d*=dropDownInc;
+            setScrollPos(scrollPos+d);
+            if(dropDownInc==prevScrollDir)
             scrollableDivRef.current?.scroll(0, Math.max((scrollPos - 3*CELL_HEIGHT), 0));
+           
+            setPrevScrollDir(dropDownInc);
         
             hovCells.delete(dropDownPlace)
             hovCells.add(newDDPlace)
@@ -149,7 +149,6 @@ function DropDown(props: DropDownProps ) {
         <div className={c.addStyleClass(props.styleClass, 'drop-down-nested-wrapper-div')}>
             <table className={c.addStyleClass(props.styleClass, 'drop-down-table')}>
                     <tbody>
-                      
                     {/*         Now return data row      */}
                     {data.map( (value: string, index: number) => {
                         let isHov: number = (hovCells.has(value) || hovCells.has(index)) ? 1 : 0;
@@ -169,7 +168,6 @@ function DropDown(props: DropDownProps ) {
                             hovCells.add(value);
                             setHovCells(hovCells); 
                             setDeepHovCell(value); }}
-    
                         onMouseLeave={() => {
                             hovCells.delete(value);
                             setHovCells(hovCells); 
@@ -177,7 +175,7 @@ function DropDown(props: DropDownProps ) {
                          >
                             {/*         Now return data COLS      */}
                             <td className={c.addStyleClass(props.styleClass, 'dd-col')} >
-                                {displayVal}
+                            {displayVal}
                             </td>
                         </tr>
                         })}
