@@ -135,7 +135,7 @@ function DropDown(props: DropDownProps ) {
             <table className={c.addStyleClass(props.styleClass, 'drop-down-table')}>
                     <tbody>
                         <tr className={c.addStyleClass(props.styleClass, 'dd-row') + ' empty-drop-down'}>
-                             <td>No Options</td> </tr>
+                             <td>No Options</td></tr>
                     </tbody>
                     </table>
                 </div>
@@ -159,7 +159,7 @@ function DropDown(props: DropDownProps ) {
                         
                         return <tr className= {c.addStyleClass(props.styleClass, 'dd-row')
                         + ' ' + hovRowStyleClass}
-                        onClick={() => {console.log('here');
+                        onClick={() => {
                             parentAfterClick(value);
                             setDropDownPlace(index)}}
                         key={index}
@@ -179,7 +179,6 @@ function DropDown(props: DropDownProps ) {
                         </tr>
                         })}
                     {/* END PRINT DATA */}
-    
                     </tbody>
                 </table>
         </div>
