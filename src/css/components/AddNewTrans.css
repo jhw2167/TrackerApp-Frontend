@@ -268,8 +268,9 @@ input[type="search"]::-webkit-search-results-decoration {
             background-color: transparent;
         }
 
-        .pt-drop-down-wrapper-div::-webkit-scrollbar:hover {
-            background-color: var(--heavy-gray) ;
+        .pt-drop-down-wrapper-div::-webkit-scrollbar-track:hover {
+            background-color: var(--med-grey) ;
+            border-radius: 10px;
         }
         
         /* Handle */
