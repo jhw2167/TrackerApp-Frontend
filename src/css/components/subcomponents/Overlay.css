@@ -1,6 +1,9 @@
 /* Overlay bubles float around our app, general styling */
 
 .tooltip {
-    color: white;
-    border: 1px solid yellow;
+    color: white;  
 }
+
+.tooltip > .tooltip-arrow::before {
+    border-right-color: white;      /* The arrow is simply a tilted shape */
+}                                     /* Change color with this */

@@ -32,7 +32,6 @@ function OverlaySub(props: OverlayProps) {
     //Declare Tooltip
     const renderTooltip = (props: any) => (
         <Tooltip  {...props}
-        arrowProps={{className: c.addStyleClass(sc, 'tooltip-arrow')}}
         className={c.addStyleClass(sc, 'tooltip')}>{tip}</Tooltip>
       );
 
@@ -40,30 +39,12 @@ function OverlaySub(props: OverlayProps) {
         <OverlayTrigger
         placement={props.placement}
         overlay={renderTooltip}
-        ><Button variant='none'>{props.element}</Button>
+        ><div
+        className={c.addStyleClass(sc, 'btn-tooltip')}
+         >{props.element}</div>
         </OverlayTrigger>
       );
 
 }
-
-
-// function OverlaySub(props: OverlayProps) {
-//   const renderTooltip = (props: any) => (
-//     <Tooltip id="button-tooltip" {...props}>
-//       Simple tooltip
-//     </Tooltip>
-//   );
-  
-//   return(
-//     <OverlayTrigger
-//       placement="right"
-//       delay={{ show: 250, hide: 400 }}
-//       overlay={renderTooltip}
-//     >
-//       <Button variant='none'>{props.element}</Button>
-//     </OverlayTrigger>
-//   );
-// }
-
 
 export default OverlaySub;

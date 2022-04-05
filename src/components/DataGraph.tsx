@@ -15,7 +15,6 @@ import {DataTuple, Transaction} from '../resources/constants';
 //React CSS
 import * as CSS from 'csstype';
 import Arrow from "../resources/subcomponents/arrow";
-import { Overlay, OverlayTriggerProps } from "react-bootstrap";
 import OverlaySub from "./subcomponents/OverlaySub";
 
 //Define interface for props type
