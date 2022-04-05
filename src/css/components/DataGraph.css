@@ -115,3 +115,30 @@
     height: '10px';
     width: '10px';
 }
+
+/*Popover Styles*/
+#arrow,
+#arrow::before {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: white;
+}
+
+#tooltip {
+    background-color: white;
+}
+
+#arrow {
+  visibility: hidden;
+}
+
+#arrow::before {
+  visibility: visible;
+  content: '';
+  transform: rotate(45deg);
+}
+
+#tooltip[data-popper-placement^='top'] > #arrow {
+    bottom: -4px;
+  }

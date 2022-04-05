@@ -1,0 +1,6 @@
+/* Overlay bubles float around our app, general styling */
+
+.tooltip {
+    color: white;
+    border: 1px solid yellow;
+}

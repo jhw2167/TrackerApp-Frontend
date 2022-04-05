@@ -17,6 +17,7 @@ import './css/misc/Background.css'
   import './css/main/PostTransactions.css'
   import './css/main/Overview.css'
   import './css/components/subcomponents/DropDown.css'
+  import './css/components/subcomponents/Overlay.css'
 
   //Main components
   import './css/components/AddNewTrans.css'

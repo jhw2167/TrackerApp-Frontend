@@ -15,6 +15,8 @@ import {DataTuple, Transaction} from '../resources/constants';
 //React CSS
 import * as CSS from 'csstype';
 import Arrow from "../resources/subcomponents/arrow";
+import { Overlay, OverlayTriggerProps } from "react-bootstrap";
+import OverlaySub from "./subcomponents/OverlaySub";
 
 //Define interface for props type
 interface DataGraphProps {
@@ -63,6 +65,13 @@ const DEF_LEG_STYLE: CSS.Properties = {
 const ANIM_LEG_STYLE: CSS.Properties = {
     ['fontSize' as any]: 20,
     ['fontWeight' as any]: 650,
+};
+
+const POP_STYLE: CSS.Properties = {
+    ['position' as any]: 'absolute',
+    ['left' as any]: 50,
+    ['top' as any]: 50,
+    ['background-color' as any]: 'yellow'
 };
 
 
@@ -149,7 +158,15 @@ function DataGraph(props: DataGraphProps) {
                  <h2 className="content-header-title" id="data-graph-title">{props.title}</h2>        
                     </div>
                     <div className="col">
-                <Arrow direction={'right'} styleClass={'overview-arrow'} onClick={() => arrowFunc(-1)}/>
+                        <OverlaySub
+                        index={1}
+                        placement="right"
+                        tipcontent="This is a toolTip"
+                        element={ <Arrow direction={'right'} styleClass={'overview-arrow'} onClick={() => arrowFunc(-1)}/>}
+                        styleclass='o'
+                        />
+
+               
                     </div>
             </div>
             </div>
