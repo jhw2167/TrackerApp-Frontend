@@ -67,17 +67,11 @@
 
 
   /* Data Overlay styling */
-.dt-overlay-btn-tooltip {
+.dt-tooltip > .tooltip-inner {
+  border: 1px solid var(--primary-col);
+  margin-left: 5px
 }
 
-.dt-overlay-row {
-    position: absolute;
-    display: block;
-    
-    color: white;
-    background-color: transparent;
-    border-color: yellow;
-    height: 10px;
-    width: 50px;
-    background-color: rgba(50,150,50, 50);
+.dt-tooltip > *{
+  text-align: left;
 }

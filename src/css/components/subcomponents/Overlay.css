@@ -1,9 +1,17 @@
 /* Overlay bubles float around our app, general styling */
 
 .tooltip {
-    color: white;  
+    color: white;
+    border-radius: 20px;
 }
 
 .tooltip > .tooltip-arrow::before {
     border-right-color: white;      /* The arrow is simply a tilted shape */
 }                                     /* Change color with this */
+
+.tooltip-inner {
+    border-radius: inherit;
+    padding: 10px 10px 0px 0px;     /* Top right bottom left */
+    padding-left: 0;
+ 
+}             
