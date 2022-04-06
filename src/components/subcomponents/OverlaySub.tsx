@@ -19,20 +19,20 @@ interface OverlayProps {
     element: ReactElement<any, string | JSXElementConstructor<any>>;
     tipcontent: ReactElement<any, string | JSXElementConstructor<any>> | string;
     styleclass: string;
+    show?: boolean;
 }
 
 //cntrl k-u to undo
 function OverlaySub(props: OverlayProps) {
 
-    const [sc] = useState<string>(props.styleclass);
-    const [index] = useState<number>(props.index);
-    const [tip] = useState<ReactElement<any, string 
-    | JSXElementConstructor<any>> | string>(props.tipcontent);
-
+    const sc = props.styleclass;
+    
     //Declare Tooltip
-    const renderTooltip = (props: any) => (
-        <Tooltip  {...props}
-        className={c.addStyleClass(sc, 'tooltip')}>{tip}</Tooltip>
+    const renderTooltip = (innerProps: any) => (
+        <Tooltip  {...innerProps}
+        show={props.show}
+        open={props.show}
+        className={c.addStyleClass(sc, 'tooltip')}>{props.tipcontent}</Tooltip>
       );
 
     return(

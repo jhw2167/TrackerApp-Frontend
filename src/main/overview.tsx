@@ -16,6 +16,7 @@ import Header from '../components/Header';
 import DataGraph from '../components/DataGraph';
 import DataTable from '../components/DataTable';
 import SubTable from '../components/SubTable';
+import { includes } from 'underscore';
 
 interface OverviewProps {
     mn?: string | null;
@@ -39,6 +40,10 @@ function Overview(props: OverviewProps) {
         c.TRANS_DATA.AMT,
         c.TRANS_DATA.CAT
     ]
+
+    const DATA_TABLE_TT_COLS: Array<string> = Object.entries(c.TRANS_DATA).filter( ([key, v]) => {
+        return !includes(DATA_TABLE_COLS, v);}).map(([key, val]) => {return val});
+
 
     const DATA_GRAPH_EXCLUSIONS = new Set<string>(['Income', 'Returns']);
     const DATA_GRAPH_EXC_FUNC: Function = (tuple: DataTuple) => {
@@ -274,6 +279,8 @@ function Overview(props: OverviewProps) {
                         <DataTable headers={DATA_TABLE_HEADERS}
                         title=      {'Recent Transactions'} 
                         colNames=   {DATA_TABLE_COLS}
+                        toolTipColNames= {DATA_TABLE_TT_COLS}
+                        toolTipHeaders={DATA_TABLE_TT_COLS.map((v)=> {return c.titleCase(v)})}
                         data=       {recentTransactions}
                         limit=      {MAX_TRANS_PAGE}
                         hovCellFunc=   {setHovCellFunc}

@@ -48,6 +48,7 @@
     vertical-align:middle;
 
     border: solid 2px;
+    border-bottom-width: 1px;
     border-color: var(--trans-grey);
 
     font-weight: 400;
@@ -63,3 +64,20 @@
     overflow: unset;
     word-wrap: unset;
   }
+
+
+  /* Data Overlay styling */
+.dt-overlay-btn-tooltip {
+}
+
+.dt-overlay-row {
+    position: absolute;
+    display: block;
+    
+    color: white;
+    background-color: transparent;
+    border-color: yellow;
+    height: 10px;
+    width: 50px;
+    background-color: rgba(50,150,50, 50);
+}

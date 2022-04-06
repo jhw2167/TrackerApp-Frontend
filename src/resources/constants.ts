@@ -6,7 +6,7 @@ export const axios = require('axios').default;
 
 //Data Structure Constants
 export const TRANS_DATA = {
-	ID: 'tId', 
+	ID: 'tid', 
 	PURCHDATE: 'purchaseDate', 
 	AMT: 'amount', 
 	VEND: 'vendor', 
@@ -162,8 +162,20 @@ export const MNTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul","aug", "se
         return a.charAt(0).toUpperCase() + a.slice(1).toLowerCase();
     }
 
+    export const titleCase = function(a: string): string {
+        if(a==TRANS_DATA.ID) return 'ID';
+        const result = a.replace(/([A-Z])/g, " $1");
+        return result.charAt(0).toUpperCase() + result.slice(1);
+    }
+
     export const addStyleClass = function(baseName: string, type: string): string {
         return type + ' ' + baseName + '-' + type;
+    }
+
+    export const formatDBDate = function(date: string): string {
+        let split = date.split('-'); //[2022, MM, YY]
+        return Number(split[1]) + '/' + Number(split[2]) +
+        '/' + ( Number(split[0]) - 2000);
     }
 
 /* Interfaces */

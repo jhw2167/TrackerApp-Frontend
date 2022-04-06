@@ -1,7 +1,7 @@
 /* Data Table Component */
 
 //React Imports
-import { useEffect, useState } from "react";
+import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 
 //Project imports
 import * as c from '../resources/constants';
@@ -13,12 +13,16 @@ import _ from 'underscore';
 
 import * as CSS from 'csstype';
 import Arrow from "../resources/subcomponents/arrow";
+import OverlaySub from "./subcomponents/OverlaySub";
+import { Overlay, Tooltip } from "react-bootstrap";
 
 //Define interface for props type
 interface DataTableProps {
     title: string;
-    headers: String[];
-    colNames: String[];
+    headers: string[];
+    colNames: string[];
+    toolTipColNames?: string[];
+    toolTipHeaders?: string[];
     data: Array<any>;
     limit: number;
     hovCellFunc?: Function;
@@ -43,6 +47,8 @@ function DataTable(props: DataTableProps) {
     const [extHovCells, setExtHovCells] = useState<Set<any>>(new Set());
     const [hovCells, setHovCells] = useState<Set<any>>(new Set());
     const [deepHovCell, setDeepHovCell] = useState<any>();
+    let rowRefs = useRef<Array<HTMLTableRowElement | null>>([]);
+    let myRef = useRef(null);
 
     /* EFFECTS */
     useEffect( () => {
@@ -51,6 +57,10 @@ function DataTable(props: DataTableProps) {
         }
     }
     , [])
+
+    useEffect(() => {
+        rowRefs.current = rowRefs.current.slice(0, props.data.length);
+     }, [props.data]);
 
     useEffect( () => {
         if(extHovCells) {
@@ -88,20 +98,21 @@ function DataTable(props: DataTableProps) {
 
             <table className="transactions-table">
                 <tbody>
-
                 {/* Table Header */}
                 <tr className="data-table-header">{
                     Object.entries(props.headers).map(([key, value]) => {
                     return <th key={key}>{value}</th>})
                 }</tr>
-
                 {/* Now return data columns */}
-                {Object.entries(props.data).slice(0, props.limit).map(([key, value]) => {
+                {Object.entries(props.data).slice(0, props.limit).map(([key, value], index) => {
+                
                     let isHov: number = hovCells.has(value) ? 1 : 0;
                     isHov += _.isEqual(deepHovCell, value) ? 1 : 0; //0-no hov, 1-hov, 2-deep hov
-
                     let rowStyle = isHov > 0 ? HOV_ROW_STYLE : undefined;
-                    return <tr className="data-table-row" style={rowStyle} key={key}
+                    return <React.Fragment key={key}>
+                    <tr ref={ ref => rowRefs.current[index] = ref} 
+                    className="data-table-row" style={rowStyle}
+                    key={key}
                     onMouseEnter={() => {
                         hovCells.add(value);
                         setHovCells(hovCells); 
@@ -113,17 +124,13 @@ function DataTable(props: DataTableProps) {
                         setDeepHovCell(null);}}
                      >
                         {Object.entries(props.colNames).map(([dkey, col]) => {
-
                             let innerStyle: CSS.Properties = {};
                             let val:string = value[col.toString()];
                             switch(col.toString()) {
 
                                 case c.TRANS_DATA.PURCHDATE:
                                     innerStyle = {['fontSize' as any]: 14};
-
-                                    let split = val.split('-'); //[2022, MM, YY]
-                                    val = Number(split[1]) + '/' + Number(split[2]) +
-                                    '/' + ( Number(split[0]) - 2000);
+                                    val = c.formatDBDate(val);
                                     break;
 
                                 case c.TRANS_DATA.VEND:
@@ -144,16 +151,25 @@ function DataTable(props: DataTableProps) {
                                     break;
     
                             }
-
                             return <td className="data-table-entry"
                             style={innerStyle}
                             key={dkey}>{val}</td>
                         })}
-                    </tr>
-                    })
-                }
+                    </tr>{(rowRefs.current[index] && props.toolTipColNames && props.toolTipHeaders) ?
+                    <Overlay key={key + 'o'} target={rowRefs.current[index]}
+                     show={isHov>0}  placement="right">
+                        <Tooltip className={c.addStyleClass('dt', 'tooltip')}>
+                            <ul>
+                                {props.toolTipColNames.map((v, i) => {
+                                    return (<li>{(props.toolTipHeaders as string[])[i]
+                                         + ': ' + value[v.toString()] as string}</li>)
+                                })}
+                            </ul>
+                        </Tooltip>
+                    </Overlay> : null}
+                    </React.Fragment>
+                    })}
                 {/* END PRINT DATA */}
-
                 </tbody>
             </table>
 

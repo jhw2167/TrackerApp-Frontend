@@ -163,6 +163,7 @@ function DataGraph(props: DataGraphProps) {
                         tipcontent="This is a toolTip"
                         element={ <Arrow direction={'right'} styleClass={'overview-arrow'} onClick={() => arrowFunc(-1)}/>}
                         styleclass='o'
+                        show={true}
                         />
 
                
