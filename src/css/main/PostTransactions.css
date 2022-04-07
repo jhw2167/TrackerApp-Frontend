@@ -256,3 +256,22 @@
 
 
 /* ------------------ */
+
+/* Tooltip Styling */
+.pt-tooltip {
+    font-weight: 600;
+}
+
+#add-new-trans-tooltip > *  {
+   
+}
+
+/* #add-new-trans-tooltip */
+#add-new-trans-tooltip > .tooltip-arrow::before,
+#load-next-trans-tooltip > .tooltip-arrow::before  {
+   transform: rotate(45deg);
+   left: -3px;
+   top: -5px;
+}
+
+/* ------------------ */

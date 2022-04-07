@@ -69,7 +69,11 @@
   /* Data Overlay styling */
 .dt-tooltip > .tooltip-inner {
   border: 1px solid var(--primary-col);
-  margin-left: 5px
+  margin-left: 5px;
+  border-radius: inherit;
+  padding: 10px 10px 0px 0px;     /* Top right bottom left */
+  padding-left: 0;
+
 }
 
 .dt-tooltip > *{

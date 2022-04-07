@@ -19,6 +19,7 @@ import * as CSS from 'csstype';
 import Arrow from '../resources/subcomponents/arrow';
 import DoublePlus from '../resources/subcomponents/double_plus';
 import AddNewTrans from '../components/AddNewTrans';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 //CSS
 
@@ -126,6 +127,16 @@ function PostTransactions() {
                 const forceUpdate = React.useCallback(() => updateState({}), []);
 
         //Stylistic states
+
+        //For tooltips
+        const rndrBtnTooltip = (expression: string, placement: string, id: string) => (props: any) => (
+                <Tooltip {...props} id={id + '-tooltip'}
+                 className={c.addStyleClass('pt', 'tooltip')}
+                 placement={placement} 
+                 >
+                        {expression}
+                </Tooltip>
+        )
                 
 
         /* Effects */
@@ -295,13 +306,24 @@ function PostTransactions() {
                         id="add-new-trans-title">
                         Add New
                      </div>
-                        <div className='col post-trans-plus post-trans-subsec-title-item
+                     <div 
+                         className='col post-trans-plus post-trans-subsec-title-item
                         post-trans-hoverable' id='add-new-trans-button'>
-                                 <div>+</div> 
+                        <OverlayTrigger offset={[0, -45]} 
+                        overlay={rndrBtnTooltip('Start New Transaction', 
+                        'top', 'add-new-trans')}>
+                                 <div>+</div>
+                        </OverlayTrigger>
                         </div>
+                     
                         <div className='col post-trans-subsec-title-item post-trans-arrow-outer-div'> 
-                        <div><Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} 
+                        
+                        <OverlayTrigger offset={[0, 0]} 
+                        overlay={rndrBtnTooltip('Load Next Pending Transaction', 
+                        'top', 'load-next-trans')}>
+                                <div> <Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} 
                         styleClass='post-trans-hoverable post-trans-arrow'/> </div>
+                        </OverlayTrigger>
                         </div>
                   </div> 
                   {/* End row section header content */} 
@@ -333,9 +355,12 @@ function PostTransactions() {
                    <div className='row content-row section-footer-row no-internal-flex'>
                         <div className='col post-trans-double-plus post-trans-subsec-footer-item
                         post-trans-hoverable'>
+                        <OverlayTrigger offset={[0, -90]} show={true} overlay={rndrBtnTooltip('Post Now', 'bottom', 'post-form-trans-now')}>
                                  <div onClick={() => { console.log("calling " + JSON.stringify(formValues));
-                                 onAddNewTransSubmit('POST');}}> <DoublePlus
-                                 styleClass='post-trans-hoverable post-trans-double-plus' /> </div> 
+                                 onAddNewTransSubmit('POST');}}>
+                                 <DoublePlus styleClass='post-trans-hoverable post-trans-double-plus' />
+                                  </div>
+                        </OverlayTrigger>
                         </div>
                         <div className='col post-trans-subsec-footer-item post-trans-arrow-outer-div'> 
                         <div onClick={() => onAddNewTransSubmit('PREPARE')}>

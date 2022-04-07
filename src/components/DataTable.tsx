@@ -48,7 +48,6 @@ function DataTable(props: DataTableProps) {
     const [hovCells, setHovCells] = useState<Set<any>>(new Set());
     const [deepHovCell, setDeepHovCell] = useState<any>();
     let rowRefs = useRef<Array<HTMLTableRowElement | null>>([]);
-    let myRef = useRef(null);
 
     /* EFFECTS */
     useEffect( () => {
@@ -156,12 +155,12 @@ function DataTable(props: DataTableProps) {
                             key={dkey}>{val}</td>
                         })}
                     </tr>{(rowRefs.current[index] && props.toolTipColNames && props.toolTipHeaders) ?
-                    <Overlay key={key + 'o'} target={rowRefs.current[index]}
-                     show={isHov>0}  placement="right">
+                    <Overlay target={rowRefs.current[index]}
+                     show={isHov>1}  placement="right">
                         <Tooltip className={c.addStyleClass('dt', 'tooltip')}>
                             <ul>
                                 {props.toolTipColNames.map((v, i) => {
-                                    return (<li>{(props.toolTipHeaders as string[])[i]
+                                    return (<li key={i}>{(props.toolTipHeaders as string[])[i]
                                          + ': ' + value[v.toString()] as string}</li>)
                                 })}
                             </ul>

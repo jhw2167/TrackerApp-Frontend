@@ -157,16 +157,7 @@ function DataGraph(props: DataGraphProps) {
                  <h2 className="content-header-title" id="data-graph-title">{props.title}</h2>        
                     </div>
                     <div className="col">
-                        <OverlaySub
-                        index={1}
-                        placement="right"
-                        tipcontent="This is a toolTip"
-                        element={ <Arrow direction={'right'} styleClass={'overview-arrow'} onClick={() => arrowFunc(-1)}/>}
-                        styleclass='o'
-                        show={true}
-                        />
-
-               
+                    <Arrow direction={'right'} styleClass={'overview-arrow'} onClick={() => arrowFunc(-1)}/>
                     </div>
             </div>
             </div>
