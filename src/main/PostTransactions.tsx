@@ -28,6 +28,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 const ROLLOVER_DIV_STYLE: CSS.Properties = {
         ['position' as any]: 'fixed',
         ['width' as any]: '82.5%',
+        ['minWidth' as any]: '1390px',
         ['minHeight' as any]: 'unset'
 };
 
@@ -287,13 +288,18 @@ function PostTransactions() {
         <div className='row outer-row' id='pt-outer-row'>
         <div className='col rev-side-anim side-anim'></div>
 
-        <div className='col-10 no-padding' id='post-trans-center-col'>
+        <div className='col-10 no-padding h-100' id='post-trans-center-col'>
+
           {/* HEADER */}
-                <Header/>
+        <div className='row g-0'>
+          <div className='col'>
+           <Header/>
+         </div>
+        </div>
         {/*---------------*/}
 
-        <main className="center-div align-items-center" id='post-trans-main-content'>
-                <div className="row  content-row">
+                <div className="row content-row center-div align-items-center flex-grow-1"
+                id='post-trans-main-content'>
                 <div className='col-12'>
 
 
@@ -355,7 +361,7 @@ function PostTransactions() {
                    <div className='row content-row section-footer-row no-internal-flex'>
                         <div className='col post-trans-double-plus post-trans-subsec-footer-item
                         post-trans-hoverable'>
-                        <OverlayTrigger offset={[0, -90]} show={true} overlay={rndrBtnTooltip('Post Now', 'bottom', 'post-form-trans-now')}>
+                        <OverlayTrigger offset={[0, -90]} overlay={rndrBtnTooltip('Post Now', 'bottom', 'post-form-trans-now')}>
                                  <div onClick={() => { console.log("calling " + JSON.stringify(formValues));
                                  onAddNewTransSubmit('POST');}}>
                                  <DoublePlus styleClass='post-trans-hoverable post-trans-double-plus' />
@@ -363,9 +369,12 @@ function PostTransactions() {
                         </OverlayTrigger>
                         </div>
                         <div className='col post-trans-subsec-footer-item post-trans-arrow-outer-div'> 
-                        <div onClick={() => onAddNewTransSubmit('PREPARE')}>
+                        <OverlayTrigger offset={[0, -90]} overlay={rndrBtnTooltip('Move to Prepared\n Table', 'bottom', 'prepare-trans-now')}>
+                        <div onClick={() => onAddNewTransSubmit('PREPARE')}>      
                                 <Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} 
-                          styleClass='post-trans-hoverable post-trans-arrow'/> </div>
+                          styleClass='post-trans-hoverable post-trans-arrow'/> 
+                        </div>
+                        </OverlayTrigger>
                         </div>
                   </div>
                 {/* End row section footer content */} 
@@ -377,8 +386,10 @@ function PostTransactions() {
                 {/*--------------------------*/}
 
 
-                <div className='row main-scrollable-content-row scrollable-row'
-                        id='transactions-content-row' onWheel={(e) => setMouseWheelScrollDist(e.deltaY+10)}>
+                <div ref={scrollableRowRef} className='row main-scrollable-content-row scrollable-row'
+                        id='transactions-content-row' onWheel={(e: React.WheelEvent<HTMLDivElement>) => {
+                                scrollInnerDiv()}
+                        }>
                 <div className='col-12 main-scrollable-content-col'>
 
                 {/*Pending Transactions*/}
@@ -403,15 +414,19 @@ function PostTransactions() {
                         <div className='row content-row section-footer-row no-internal-flex'>
                                 <div className='col post-trans-double-plus post-trans-subsec-footer-item
                                 post-trans-hoverable'>
-                                  <div> <DoublePlus 
-                                        styleClass='post-trans-hoverable post-trans-double-plus' /> 
+                                 <OverlayTrigger offset={[0, -90]} overlay={rndrBtnTooltip('Post All', 'bottom', 'post-form-trans-now')}>
+                                  <div>
+                                   <DoublePlus styleClass='post-trans-hoverable post-trans-double-plus' /> 
                                   </div> 
+                                 </OverlayTrigger>
                                 </div>
 
-                                <div className='col post-trans-subsec-footer-item post-trans-arrow-outer-div'> 
-                                  <div><Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} 
-                                        styleClass='post-trans-hoverable post-trans-arrow'/> 
+                                <div className='col post-trans-subsec-footer-item post-trans-arrow-outer-div'>
+                                <OverlayTrigger offset={[0, -80]} overlay={rndrBtnTooltip('Post Next Record', 'bottom', 'post-form-trans-now')}>
+                                  <div>
+                                   <Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} styleClass='post-trans-hoverable post-trans-arrow'/> 
                                   </div>
+                                 </OverlayTrigger>
                                 </div>
                         </div>
                 {/* End row section footer content */} 
@@ -527,7 +542,6 @@ function PostTransactions() {
                 </div>
                 {/* END MAIN CONTENT ROW*/}
 
-        </main>
         </div> 
         {/*END MAIN CONTENT DIV*/}
 
