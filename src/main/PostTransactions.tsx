@@ -20,16 +20,18 @@ import Arrow from '../resources/subcomponents/arrow';
 import DoublePlus from '../resources/subcomponents/double_plus';
 import AddNewTrans from '../components/AddNewTrans';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { buffer } from 'stream/consumers';
 
 //CSS
 
 
 //Constants
-const ROLLOVER_DIV_STYLE: CSS.Properties = {
+const ROLLOVER_DIV_FIXED_STYLE: CSS.Properties = {
         ['position' as any]: 'fixed',
         ['width' as any]: '82.5%',
         ['minWidth' as any]: '1390px',
-        ['minHeight' as any]: 'unset'
+        ['minHeight' as any]: 'unset',
+        ['pointerEvents' as any]: 'all',
 };
 
 const ROLLOVER_BLANK_STYLE: CSS.Properties = {
@@ -83,7 +85,6 @@ function PostTransactions() {
                 ROLLOVER_BLANK_STYLE, ROLLOVER_BLANK_STYLE, ROLLOVER_BLANK_STYLE
         ]);
 
-        const [mouseWheelScrollDist, setMouseWheelScrollDist] = useState<number>(0);
         const [countFormRefresh, setCountFormRefresh] = useState<number>(0);
         //data states
         const BAD_CHARS = ['-', "'", '"', '.', '/', "\\", ','];      //we don't want our form to include these chars
@@ -128,6 +129,11 @@ function PostTransactions() {
                 const forceUpdate = React.useCallback(() => updateState({}), []);
 
         //Stylistic states
+        const scrollableRowRef = useRef<HTMLDivElement>(null);
+        const rolloverRows = useRef<Array<HTMLDivElement | null>>([]);
+        const [scrollPos, setScrollPos] = useState<number>(0);
+        const MAX_SCROLL = 50;
+        const MIN_SCROLL = 10;
 
         //For tooltips
         const rndrBtnTooltip = (expression: string, placement: string, id: string) => (props: any) => (
@@ -141,35 +147,59 @@ function PostTransactions() {
                 
 
         /* Effects */
-        const updateWheelPos = () => {
-           let wheelPos: number = document.querySelector("#transactions-content-row")?.scrollTop as unknown as number;
-            //console.log("------------------\nStarting pos: " + wheelPos);
-
-            let topLeft: any = (document.querySelector('.main-scrollable-content-row') as HTMLDivElement).getBoundingClientRect();
-            topLeft = {t: topLeft.top, l: topLeft.left};
-
-            let h: any =  window.getComputedStyle(document.querySelector('.rollover-row-spacer') as Element).height;
-            h = Number((h as string).split('p')[0]);
-            //console.log(wheelPos + "  " + h );
-            let newStyles = rolloverStyles.map( (v, i) => {
-                //console.log("wheelPos+100: %d, i*Number(h): %d,  i: %d", wheelPos+mouseWheelScrollDist, i*Number(h), i);
-                let toRet = ROLLOVER_BLANK_STYLE;
-                if(h) {
-                    toRet = (wheelPos+mouseWheelScrollDist >= i*Number(h)) ? {...ROLLOVER_DIV_STYLE,
-                            ['top' as any]: topLeft.t, ['left' as any]: topLeft.l }
-                                    : ROLLOVER_BLANK_STYLE;
+        useEffect(() => {
+                function handleScroll() {
+                  const scrollTop = window.scrollY;
+                  console.log(scrollTop);
                 }
-                //console.log("Returning: " + JSON.stringify(toRet));
-                 return toRet;
-        });
-            setRollOverStyles(newStyles);
-            //console.log("NewStyles: " + JSON.stringify(newStyles));
+            
+                window.addEventListener('onWheel', handleScroll, {passive: false});
+            
+                return () => {
+                  window.removeEventListener('onWheel', handleScroll);
+                };
+              }, []);
+
+        const scrollInnerDiv = (deltaY: number) => {
+                let dir = deltaY/Math.abs(deltaY)
+                let ref: HTMLDivElement;
+                if(scrollableRowRef.current)
+                  ref = scrollableRowRef.current;
+                else 
+                  return;
+
+                const BUFFER = 10;
+                let distFromTop = rolloverRows.current.map( (v) => {
+                        return (v) ? v.getBoundingClientRect().y - (ref.getBoundingClientRect().y + BUFFER) : 0;
+                })
+
+                let i = 0;
+                console.log('ARRR:' + JSON.stringify(distFromTop));
+                while(i<rolloverRows.current.length && distFromTop[i] < 0 ) {
+                        console.log(i);
+                        rolloverStyles[i++] = {...ROLLOVER_DIV_FIXED_STYLE, top: ref.getBoundingClientRect().top };
+                }
+
+                let scrollDist = 0;
+                if(i < rolloverRows.current.length) {
+                        scrollDist = (dir>0) ? Math.min(MAX_SCROLL, Math.max(distFromTop[i]/4, MIN_SCROLL))*dir : MAX_SCROLL*dir;
+                } else if(dir < 0) { //user attempting to scroll down when all divs are locked; loosen last
+                        console.log("here");
+                        scrollDist = -MIN_SCROLL;
+                        rolloverStyles[i-1] = ROLLOVER_BLANK_STYLE;     
+                }
+
+                if(i!=0 && i != rolloverRows.current.length && 
+                        distFromTop[i] < ref.getBoundingClientRect().height*2 && 
+                        distFromTop[i] - scrollDist > ref.getBoundingClientRect().height*2) {
+                                rolloverStyles[i-1] = ROLLOVER_BLANK_STYLE; //loosen previous fixed div
+                        }
+                             
+                setRollOverStyles(rolloverStyles);
+                setScrollPos(Math.min(Math.max(scrollPos+scrollDist, 0), ref.children[0].clientHeight));
+                scrollableRowRef.current?.scroll(0, scrollPos);
+                forceUpdate();
         };
-
-        useEffect( () => {
-                window.addEventListener("wheel", updateWheelPos);
-        }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
 
         /* Api Calls */
         let map: Map<string, Array<any>> = new Map();
@@ -388,19 +418,19 @@ function PostTransactions() {
 
                 <div ref={scrollableRowRef} className='row main-scrollable-content-row scrollable-row'
                         id='transactions-content-row' onWheel={(e: React.WheelEvent<HTMLDivElement>) => {
-                                scrollInnerDiv()}
-                        }>
+                                scrollInnerDiv(e.deltaY);
+                        }}>
                 <div className='col-12 main-scrollable-content-col'>
 
                 {/*Pending Transactions*/}
-                <div className='row content-row rollover-row' id='pt-pending-transactions'
+                <div ref={ref => rolloverRows.current[0] = ref}  id='pt-pending-transactions'
+                className='row content-row rollover-row'
                 style={rolloverStyles[0]}>
                 <div className='col-12 content-col'> 
-
                         <div className='row section-title-row no-internal-flex'>
-                                <div className='col post-trans-subsec-title-item section-title'>
-                                Pending
-                                </div>
+                         <div className='col post-trans-subsec-title-item section-title'>
+                            Pending
+                          </div>
                         </div>
                 {/* End row section title content */} 
 
@@ -411,27 +441,26 @@ function PostTransactions() {
                         </div>
                 {/* End row section component content */} 
 
-                        <div className='row content-row section-footer-row no-internal-flex'>
-                                <div className='col post-trans-double-plus post-trans-subsec-footer-item
-                                post-trans-hoverable'>
-                                 <OverlayTrigger offset={[0, -90]} overlay={rndrBtnTooltip('Post All', 'bottom', 'post-form-trans-now')}>
-                                  <div>
-                                   <DoublePlus styleClass='post-trans-hoverable post-trans-double-plus' /> 
-                                  </div> 
-                                 </OverlayTrigger>
-                                </div>
+                   <div className='row content-row section-footer-row no-internal-flex'>
+                         <div className='col post-trans-double-plus post-trans-subsec-footer-item
+                        post-trans-hoverable'>
+                                <OverlayTrigger offset={[0, -90]} overlay={rndrBtnTooltip('Post All', 'bottom', 'post-form-trans-now')}>
+                                <div>
+                                <DoublePlus styleClass='post-trans-hoverable post-trans-double-plus' /> 
+                                </div> 
+                                </OverlayTrigger>
+                         </div>
 
-                                <div className='col post-trans-subsec-footer-item post-trans-arrow-outer-div'>
-                                <OverlayTrigger offset={[0, -80]} overlay={rndrBtnTooltip('Post Next Record', 'bottom', 'post-form-trans-now')}>
-                                  <div>
-                                   <Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} styleClass='post-trans-hoverable post-trans-arrow'/> 
-                                  </div>
-                                 </OverlayTrigger>
-                                </div>
+                        <div className='col post-trans-subsec-footer-item post-trans-arrow-outer-div'>
+                         <OverlayTrigger offset={[0, -80]} overlay={rndrBtnTooltip('Post Next Record', 'bottom', 'post-form-trans-now')}>
+                           <div>
+                            <Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} styleClass='post-trans-hoverable post-trans-arrow'/> 
+                           </div>
+                         </OverlayTrigger>
                         </div>
-                {/* End row section footer content */} 
 
-                </div>
+                  </div>{/* End row section footer content */} 
+                 </div>
                 </div>
                 {/*--------------------------*/}
                 {/*-------END PENDING--------*/}
@@ -441,8 +470,9 @@ function PostTransactions() {
 
                 {/*Prepared Transactions*/}
 
-                <div className='row content-row rollover-row' id='pt-prepared-transactions'
-                        style={rolloverStyles[1]}>
+                <div ref={ref => rolloverRows.current[1] = ref} id='pt-prepared-transactions'
+                className='row content-row rollover-row'
+                style={rolloverStyles[1]}>
                 <div className='col-12 content-col'> 
 
                         <div className='row section-title-row no-internal-flex'>
@@ -485,8 +515,10 @@ function PostTransactions() {
                 
 
                         {/*Posted Transactions*/}
-                <div className='row content-row rollover-row' id='pt-posted-transactions'
-                        style={rolloverStyles[2]}>
+                <div ref={ref => rolloverRows.current[2] = ref} id='pt-posted-transactions'
+                className='row content-row rollover-row'
+                style={rolloverStyles[2]}
+                >
                 <div className='col-12 content-col'> 
 
                         <div className='row section-title-row no-internal-flex'>
@@ -497,9 +529,9 @@ function PostTransactions() {
                 {/* End row section title content */} 
 
                         <div className='row pt-bordered-section pt-table-section' id="transaction-form-div">
-                                <div className='col-12'>
+                         <div className='col-12'>
                                 {/* Component goes here */} <div className='scroll-sample'></div>               
-                                </div>
+                         </div>
                         </div>
                 {/* End row section component content */} 
 
