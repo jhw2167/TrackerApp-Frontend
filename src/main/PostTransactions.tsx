@@ -21,6 +21,7 @@ import DoublePlus from '../resources/subcomponents/double_plus';
 import AddNewTrans from '../components/AddNewTrans';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { buffer } from 'stream/consumers';
+import { Link, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 //CSS
 
@@ -132,8 +133,8 @@ function PostTransactions() {
         const scrollableRowRef = useRef<HTMLDivElement>(null);
         const rolloverRows = useRef<Array<HTMLDivElement | null>>([]);
         const [scrollPos, setScrollPos] = useState<number>(0);
-        const MAX_SCROLL = 50;
-        const MIN_SCROLL = 10;
+        const MAX_SCROLL = 70;
+        const MIN_SCROLL = 20;
 
         //For tooltips
         const rndrBtnTooltip = (expression: string, placement: string, id: string) => (props: any) => (
@@ -174,18 +175,17 @@ function PostTransactions() {
                 })
 
                 let i = 0;
-                console.log('ARRR:' + JSON.stringify(distFromTop));
                 while(i<rolloverRows.current.length && distFromTop[i] < 0 ) {
-                        console.log(i);
                         rolloverStyles[i++] = {...ROLLOVER_DIV_FIXED_STYLE, top: ref.getBoundingClientRect().top };
                 }
 
                 let scrollDist = 0;
+                let jump=0;
                 if(i < rolloverRows.current.length) {
                         scrollDist = (dir>0) ? Math.min(MAX_SCROLL, Math.max(distFromTop[i]/4, MIN_SCROLL))*dir : MAX_SCROLL*dir;
                 } else if(dir < 0) { //user attempting to scroll down when all divs are locked; loosen last
-                        console.log("here");
-                        scrollDist = -MIN_SCROLL;
+                        scrollDist = -MIN_SCROLL*3;
+                        jump = -MIN_SCROLL*2;
                         rolloverStyles[i-1] = ROLLOVER_BLANK_STYLE;     
                 }
 
@@ -194,10 +194,10 @@ function PostTransactions() {
                         distFromTop[i] - scrollDist > ref.getBoundingClientRect().height*2) {
                                 rolloverStyles[i-1] = ROLLOVER_BLANK_STYLE; //loosen previous fixed div
                         }
-                             
                 setRollOverStyles(rolloverStyles);
                 setScrollPos(Math.min(Math.max(scrollPos+scrollDist, 0), ref.children[0].clientHeight));
-                scrollableRowRef.current?.scroll(0, scrollPos);
+                scrollableRowRef.current?.scroll(0, scrollPos + jump);
+                //console.log('s')                        
                 forceUpdate();
         };
 
