@@ -20,8 +20,8 @@ import Arrow from '../resources/subcomponents/arrow';
 import DoublePlus from '../resources/subcomponents/double_plus';
 import AddNewTrans from '../components/AddNewTrans';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { buffer } from 'stream/consumers';
 import { Link, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+import PTSectionFooter from '../components/narrowcomponents/PTSectionFooter';
 
 //CSS
 
@@ -37,11 +37,6 @@ const ROLLOVER_DIV_FIXED_STYLE: CSS.Properties = {
 
 const ROLLOVER_BLANK_STYLE: CSS.Properties = {
 };
-
-// const ROLLOVER_PLCHLD_DIV: CSS.Properties = {
-//         ['height' as any]: '100%',
-//         ['opacity' as any]: 0
-// };
 
 /* Form Constants */
 const FORM_HEADERS = {
@@ -73,6 +68,17 @@ const FORM_INP_TYPES = {
 	POSTDATE: 'input-date', 
 	NOTES: 'input-text'
 }
+
+/* Function Constants */
+//For tooltips
+const rndrBtnTooltip = (expression: string, placement: string, id: string) => (props: any) => (
+        <Tooltip {...props} id={id + '-tooltip'}
+         className={c.addStyleClass('pt', 'tooltip')}
+         placement={placement}>
+                {expression}
+        </Tooltip>
+    )
+
 
 
 const ADD_NEW_TRANS_FORM_ID = 'pt-add-new-trans-form'
@@ -136,31 +142,7 @@ function PostTransactions() {
         const MAX_SCROLL = 70;
         const MIN_SCROLL = 20;
 
-        //For tooltips
-        const rndrBtnTooltip = (expression: string, placement: string, id: string) => (props: any) => (
-                <Tooltip {...props} id={id + '-tooltip'}
-                 className={c.addStyleClass('pt', 'tooltip')}
-                 placement={placement} 
-                 >
-                        {expression}
-                </Tooltip>
-        )
-                
-
         /* Effects */
-        useEffect(() => {
-                function handleScroll() {
-                  const scrollTop = window.scrollY;
-                  console.log(scrollTop);
-                }
-            
-                window.addEventListener('onWheel', handleScroll, {passive: false});
-            
-                return () => {
-                  window.removeEventListener('onWheel', handleScroll);
-                };
-              }, []);
-
         const scrollInnerDiv = (deltaY: number) => {
                 let dir = deltaY/Math.abs(deltaY)
                 let ref: HTMLDivElement;
@@ -442,24 +424,17 @@ function PostTransactions() {
                 {/* End row section component content */} 
 
                    <div className='row content-row section-footer-row no-internal-flex'>
-                         <div className='col post-trans-double-plus post-trans-subsec-footer-item
-                        post-trans-hoverable'>
-                                <OverlayTrigger offset={[0, -90]} overlay={rndrBtnTooltip('Post All', 'bottom', 'post-form-trans-now')}>
-                                <div>
-                                <DoublePlus styleClass='post-trans-hoverable post-trans-double-plus' /> 
-                                </div> 
-                                </OverlayTrigger>
-                         </div>
-
-                        <div className='col post-trans-subsec-footer-item post-trans-arrow-outer-div'>
-                         <OverlayTrigger offset={[0, -80]} overlay={rndrBtnTooltip('Post Next Record', 'bottom', 'post-form-trans-now')}>
-                           <div>
-                            <Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} styleClass='post-trans-hoverable post-trans-arrow'/> 
-                           </div>
-                         </OverlayTrigger>
-                        </div>
-
-                  </div>{/* End row section footer content */} 
+                           <PTSectionFooter ids={['post-all-pending-trans', 'post-next-pending-trans']}
+                           messages={['Post All', 'Post Next Record']}
+                           positions={['bottom', 'bottom']}
+                           offsets={[[0, -90], [0, -80]]}
+                           classNames={['col post-trans-double-plus post-trans-subsec-footer-item post-trans-hoverable',
+                           'col post-trans-subsec-footer-item post-trans-arrow-outer-div']}
+                           children={[ <DoublePlus key={'dp'} styleClass='post-trans-hoverable post-trans-double-plus' />,
+                           <Arrow key={'a'} height={ARROW_DIMS.h} width={ARROW_DIMS.w} styleClass='post-trans-hoverable post-trans-arrow'/>
+                           ]}/>
+                   </div>
+                  {/* End row section footer content */} 
                  </div>
                 </div>
                 {/*--------------------------*/}
@@ -489,21 +464,26 @@ function PostTransactions() {
                         </div>
                 {/* End row section component content */} 
 
-                        <div className='row content-row section-footer-row no-internal-flex'>
-                                <div className='col post-trans-double-plus post-trans-subsec-footer-item
-                                post-trans-hoverable'>
-                                  <div> <DoublePlus 
-                                        styleClass='post-trans-hoverable post-trans-double-plus' /> 
-                                  </div> 
-                                </div>
+                <div className='row content-row section-footer-row no-internal-flex'>
+                         <div className='col post-trans-double-plus post-trans-subsec-footer-item
+                        post-trans-hoverable'>
+                                <OverlayTrigger offset={[0, -90]} overlay={rndrBtnTooltip('Post All', 'bottom', 'post-form-trans-now')}>
+                                <div>
+                                <DoublePlus styleClass='post-trans-hoverable post-trans-double-plus' /> 
+                                </div> 
+                                </OverlayTrigger>
+                         </div>
 
-                                <div className='col post-trans-subsec-footer-item post-trans-arrow-outer-div'> 
-                                  <div><Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} 
-                                        styleClass='post-trans-hoverable post-trans-arrow'/> 
-                                  </div>
-                                </div>
+                        <div className='col post-trans-subsec-footer-item post-trans-arrow-outer-div'>
+                         <OverlayTrigger offset={[0, -80]} overlay={rndrBtnTooltip('Post Next Record', 'bottom', 'post-form-trans-now')}>
+                           <div>
+                            <Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} styleClass='post-trans-hoverable post-trans-arrow'/> 
+                           </div>
+                         </OverlayTrigger>
                         </div>
-                {/* End row section footer content */} 
+
+                  </div>
+                  {/* End row section footer content */} 
 
                 </div>
                 </div>
