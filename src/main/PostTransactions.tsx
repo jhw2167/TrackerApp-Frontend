@@ -168,14 +168,19 @@ function PostTransactions() {
                 } else if(dir < 0) { //user attempting to scroll down when all divs are locked; loosen last
                         scrollDist = -MIN_SCROLL*3;
                         jump = -MIN_SCROLL*2;
-                        rolloverStyles[i-1] = ROLLOVER_BLANK_STYLE;     
+                        rolloverStyles[i-1] = ROLLOVER_BLANK_STYLE;
                 }
 
+                console.log('Dist From: ' + JSON.stringify(distFromTop));
+                console.log('SP: %d', scrollPos);
                 if(i!=0 && i != rolloverRows.current.length && 
                         distFromTop[i] < ref.getBoundingClientRect().height*2 && 
                         distFromTop[i] - scrollDist > ref.getBoundingClientRect().height*2) {
                                 rolloverStyles[i-1] = ROLLOVER_BLANK_STYLE; //loosen previous fixed div
-                        }
+                }
+                while(i < rolloverRows.current.length) {
+                        rolloverStyles[i++] = ROLLOVER_BLANK_STYLE;
+                }
                 setRollOverStyles(rolloverStyles);
                 setScrollPos(Math.min(Math.max(scrollPos+scrollDist, 0), ref.children[0].clientHeight));
                 scrollableRowRef.current?.scroll(0, scrollPos + jump);
@@ -297,10 +302,10 @@ function PostTransactions() {
 
         return (
 
-        <div className='row outer-row' id='pt-outer-row'>
+        <div className='row outer-row g-0 no-scroll' id='pt-outer-row'>
         <div className='col rev-side-anim side-anim'></div>
 
-        <div className='col-10 no-padding h-100' id='post-trans-center-col'>
+        <div className='col-10 no-padding' id='post-trans-center-col'>
 
           {/* HEADER */}
         <div className='row g-0'>
