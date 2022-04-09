@@ -171,8 +171,8 @@ function PostTransactions() {
                         rolloverStyles[i-1] = ROLLOVER_BLANK_STYLE;
                 }
 
-                console.log('Dist From: ' + JSON.stringify(distFromTop));
-                console.log('SP: %d', scrollPos);
+                //console.log('Dist From: ' + JSON.stringify(distFromTop));
+                //console.log('SP: %d', scrollPos);
                 if(i!=0 && i != rolloverRows.current.length && 
                         distFromTop[i] < ref.getBoundingClientRect().height*2 && 
                         distFromTop[i] - scrollDist > ref.getBoundingClientRect().height*2) {

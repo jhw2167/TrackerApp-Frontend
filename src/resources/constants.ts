@@ -168,8 +168,8 @@ export const MNTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul","aug", "se
         return result.charAt(0).toUpperCase() + result.slice(1);
     }
 
-    export const addStyleClass = function(baseName: string, type: string): string {
-        return type + ' ' + baseName + '-' + type;
+    export const addStyleClass = function(styleClass: string, type: string): string {
+        return type + ' ' + styleClass + '-' + type;
     }
 
     export const formatDBDate = function(date: string): string {
