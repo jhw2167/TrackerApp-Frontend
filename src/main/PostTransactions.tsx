@@ -381,7 +381,7 @@ function PostTransactions() {
                         </OverlayTrigger>
                         </div>
                         <div className='col post-trans-subsec-footer-item post-trans-arrow-outer-div'> 
-                        <OverlayTrigger offset={[0, -90]} overlay={rndrBtnTooltip('Move to Prepared\n Table', 'bottom', 'prepare-trans-now')}>
+                        <OverlayTrigger offset={[0, -100]} overlay={rndrBtnTooltip('Move to Prepared\n Table', 'bottom', 'prepare-trans-now')}>
                         <div onClick={() => onAddNewTransSubmit('PREPARE')}>      
                                 <Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} 
                           styleClass='post-trans-hoverable post-trans-arrow'/> 
@@ -465,23 +465,15 @@ function PostTransactions() {
                 {/* End row section component content */} 
 
                 <div className='row content-row section-footer-row no-internal-flex'>
-                         <div className='col post-trans-double-plus post-trans-subsec-footer-item
-                        post-trans-hoverable'>
-                                <OverlayTrigger offset={[0, -90]} overlay={rndrBtnTooltip('Post All', 'bottom', 'post-form-trans-now')}>
-                                <div>
-                                <DoublePlus styleClass='post-trans-hoverable post-trans-double-plus' /> 
-                                </div> 
-                                </OverlayTrigger>
-                         </div>
-
-                        <div className='col post-trans-subsec-footer-item post-trans-arrow-outer-div'>
-                         <OverlayTrigger offset={[0, -80]} overlay={rndrBtnTooltip('Post Next Record', 'bottom', 'post-form-trans-now')}>
-                           <div>
-                            <Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} styleClass='post-trans-hoverable post-trans-arrow'/> 
-                           </div>
-                         </OverlayTrigger>
-                        </div>
-
+                <PTSectionFooter ids={['post-all-prepared-trans', 'post-next-prepared-trans']}
+                           messages={['Post All', 'Post Next Record']}
+                           positions={['bottom', 'bottom']}
+                           offsets={[[0, -90], [0, -80]]}
+                           classNames={['col post-trans-double-plus post-trans-subsec-footer-item post-trans-hoverable',
+                           'col post-trans-subsec-footer-item post-trans-arrow-outer-div']}
+                           children={[ <DoublePlus key={'dp'} styleClass='post-trans-hoverable post-trans-double-plus' />,
+                           <Arrow key={'a'} height={ARROW_DIMS.h} width={ARROW_DIMS.w} styleClass='post-trans-hoverable post-trans-arrow'/>
+                           ]}/>
                   </div>
                   {/* End row section footer content */} 
 
@@ -515,21 +507,8 @@ function PostTransactions() {
                         </div>
                 {/* End row section component content */} 
 
-                        <div className='row content-row section-footer-row no-internal-flex'>
-                                <div className='col post-trans-double-plus post-trans-subsec-footer-item
-                                post-trans-hoverable'>
-                                  <div> <DoublePlus 
-                                        styleClass='post-trans-hoverable post-trans-double-plus' /> 
-                                  </div> 
-                                </div>
-
-                                <div className='col post-trans-subsec-footer-item post-trans-arrow-outer-div'> 
-                                  <div><Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} 
-                                        styleClass='post-trans-hoverable post-trans-arrow'/> 
-                                  </div>
-                                </div>
-                        </div>
-                {/* End row section footer content */} 
+                      
+                {/* End row section footer content //Nothing to post here */} 
 
                 </div>
                 </div>
