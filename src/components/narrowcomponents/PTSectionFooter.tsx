@@ -52,7 +52,7 @@ function PTSectionFooter(props: PTFooterProps) {
             <div onClick={(e) => onClicks[i](e)}>{props.children[i]}</div>
         </OverlayTrigger>
     </div>
-    })
+    });
 
     return (<>{triggers}</>);
 }
