@@ -4,7 +4,7 @@ import { CpuInfo } from "os";
 import * as c from '../resources/constants';
 
 //other imports
-import _, { values } from 'underscore';
+import _ from 'underscore';
 import * as CSS from 'csstype';
 import React, { useEffect, useState } from "react";
 
@@ -47,14 +47,6 @@ interface BufferRowStyling {
     bufferColStyle?: Map<string, React.CSSProperties>;
     bufferRowStyle?: React.CSSProperties;
 }
-
-/* Styles */ 
-const HOV_ROW_STYLE: CSS.Properties = {
-    ["fontWeight" as any]: 700,
-    ["fontSize" as any]: 15,
-    ["border" as any]: 'solid 3px black',
-    ["lineHeight" as any]: '1.6em'
-};
 
 /* CONSTS */
 const MAX_VENDOR_DISP_LEN = 12;
@@ -126,7 +118,7 @@ function GeneralTable<T>(props: GeneralTableProps<T>) {
                         let rowStyle = (!!props.aggFunction && index==data.length-1) ? rowStyles?.aggRowCSS : rowStyles?.normCSS;
                         rowStyle = (isHov > 0) ? {...rowStyle, ...rowStyles?.hoverCSS} : rowStyle;
                         let aggRowClassName = (!!props.aggFunction && index==data.length-1) ?
-                        c.addStyleClass(props.id, 'data-subtable-aggregate-row-') : undefined;
+                        c.addStyleClass(props.id, 'general-table-aggregate-row-') : undefined;
                         
                         return <tr className= {c.addStyleClass(sc, 'general-table-row') + ' data-table-row ' +
                          aggRowClassName} style={rowStyle}

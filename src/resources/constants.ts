@@ -4,6 +4,56 @@
 
 export const axios = require('axios').default;
 
+
+/* Interfaces */
+export interface Transaction {
+    tId: string;
+    purchaseDate: Date;
+    amount: number;
+    vendor: string;
+    category: string;
+    boughtFor: string;
+    payMethod: string;
+    payStatus: string;
+    isIncome: boolean;
+    reimburses: string;
+    postedDate: Date;
+    notes: string;
+}
+
+export interface PlaidTransaction {
+    id: string;
+    postedDate: Date;   //date from plaid will be what we consider postedDate
+    vendor: string;
+    vendorID: string;
+    amount: number;
+    category: string;
+    creditID: string;
+    isIncome: string;
+}
+
+export interface Vendor {
+    cc_id: string,
+    cc: string,
+    vendor: string,
+    amount: number,
+    category: string,
+    typicallyIncome: boolean
+}
+
+
+export interface DataTuple {
+    label: string;
+    data: Object;
+}
+
+export interface Summary {
+    aggregateCol: string,
+    value: number,
+    categories: string
+}
+
+
 //Data Structure Constants
 export const TRANS_DATA = {
 	ID: 'tid', 
@@ -20,6 +70,22 @@ export const TRANS_DATA = {
 	NOTES: 'notes'
 }
 
+export const PLAID_TRANS = {
+	ID: 'tid', 
+	PURCHDATE: 'purchaseDate', 
+	AMT: 'amount',
+    VENDID: 'vendorID',
+	VEND: 'vendor', 
+	CAT: 'category', 
+	BOTFOR: 'boughtFor', 
+	PMETHOD: 'payMethod', 
+    CCID: 'creditID', 
+	PSTATUS: 'payStatus', 
+	INCOME: 'income', 
+	POSTDATE: 'postedDate', 
+}
+
+
 export const VENDOR_DATA = {
     cc_id: "cc_id",
     cc: "cc",
@@ -34,6 +100,8 @@ export const SUMMARY_DATA = {
     value: 'value',
     categories: 'categories'
 }
+
+
 
 /* COLORS */
     export const PRIM_COLOR = 'rgb(255, 80, 10)';
@@ -128,6 +196,7 @@ export const SUMMARY_DATA = {
         return res;
     }
 
+
 /* UTILITY */
 export const MONTHS= ["january","february","march","april","may","june","july",
             "august","september","october","november","december"];
@@ -177,43 +246,6 @@ export const MNTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul","aug", "se
         return Number(split[1]) + '/' + Number(split[2]) +
         '/' + ( Number(split[0]) - 2000);
     }
-
-/* Interfaces */
-export interface Transaction {
-    tId: string;
-    purchaseDate: Date;
-    amount: number;
-    vendor: string;
-    category: string;
-    boughtFor: string;
-    payMethod: string;
-    payStatus: string;
-    isIncome: boolean;
-    reimburses: string;
-    postedDate: Date;
-    notes: string;
-}
-
-export interface Vendor {
-    cc_id: string,
-    cc: string,
-    vendor: string,
-    amount: number,
-    category: string,
-    typicallyIncome: boolean
-}
-
-
-export interface DataTuple {
-    label: string;
-    data: Object;
-}
-
-export interface Summary {
-    aggregateCol: string,
-    value: number,
-    categories: string
-}
 
 /* FUNCTION CONSTANTS */
 export const avg = (arr: Array<number>) => { return arr.reduce((a, b) => a + b) / arr.length };

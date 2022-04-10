@@ -9,7 +9,7 @@ import {contains, now } from 'underscore';
 
 //project imports
 import * as c from '../resources/constants';
-import {Transaction} from '../resources/constants';
+import {Transaction, Vendor, PlaidTransaction} from '../resources/constants';
 import * as api from '../resources/api';
 //import DataTable from '../components/DataTable';
 //import SubTable from '../components/SubTable';
@@ -22,6 +22,8 @@ import AddNewTrans from '../components/AddNewTrans';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 import PTSectionFooter from '../components/narrowcomponents/PTSectionFooter';
+import GeneralTable from '../components/GeneralTable';
+import { stringify } from 'querystring';
 
 //CSS
 
@@ -37,6 +39,16 @@ const ROLLOVER_DIV_FIXED_STYLE: CSS.Properties = {
 
 const ROLLOVER_BLANK_STYLE: CSS.Properties = {
 };
+
+        //For Tables
+        const HOV_ROW_STYLE: CSS.Properties = {
+        ["fontWeight" as any]: 700,
+        ["fontSize" as any]: 15,
+        ["border" as any]: 'solid 3px black',
+        ["lineHeight" as any]: '1.6em'
+        };
+    
+
 
 /* Form Constants */
 const FORM_HEADERS = {
@@ -69,6 +81,18 @@ const FORM_INP_TYPES = {
 	NOTES: 'input-text'
 }
 
+/* Table Constants */
+const MIN_ROWS = 5;
+
+const PENDING_COLS = Object.entries(c.PLAID_TRANS).map (([k, v]) => {return v;});
+const PENDING_HEADERS = ():Map<string,string> => {
+        let a = new Map<string, string>();
+        Object.entries(c.PLAID_TRANS).forEach(([k, v]) => {
+                a.set(v, c.titleCase(v));})
+        return a;
+}
+
+
 /* Function Constants */
 //For tooltips
 const rndrBtnTooltip = (expression: string, placement: string, id: string) => (props: any) => (
@@ -93,6 +117,8 @@ function PostTransactions() {
         ]);
 
         const [countFormRefresh, setCountFormRefresh] = useState<number>(0);
+
+
         //data states
         const BAD_CHARS = ['-', "'", '"', '.', '/', "\\", ','];      //we don't want our form to include these chars
         //let BOT_FOR_VALS: string[]; // = ['PERSONAL', 'GROUP', 'FAMILY', 'DATE', ''];
@@ -135,12 +161,18 @@ function PostTransactions() {
                 const [, updateState] = React.useState<Object>();
                 const forceUpdate = React.useCallback(() => updateState({}), []);
 
-        //Stylistic states
-        const scrollableRowRef = useRef<HTMLDivElement>(null);
-        const rolloverRows = useRef<Array<HTMLDivElement | null>>([]);
-        const [scrollPos, setScrollPos] = useState<number>(0);
-        const MAX_SCROLL = 70;
-        const MIN_SCROLL = 20;
+                //Stylistic states
+                const scrollableRowRef = useRef<HTMLDivElement>(null);
+                const rolloverRows = useRef<Array<HTMLDivElement | null>>([]);
+                const [scrollPos, setScrollPos] = useState<number>(0);
+                const MAX_SCROLL = 70;
+                const MIN_SCROLL = 20;
+
+
+        //table states
+        const [pendingTrans, setPendingTrans] = useState<PlaidTransaction[]>([]);
+        const [prepdTrans, setPrepdTrans] = useState<Transaction[]>([]);
+        const [postedTrans, setPostedTrans] = useState<Transaction[]>([]);
 
         /* Effects */
         const scrollInnerDiv = (deltaY: number) => {
@@ -423,7 +455,16 @@ function PostTransactions() {
 
                         <div className='row pt-bordered-section pt-table-section' id="transaction-form-div">
                                 <div className='col-12'>
-                                {/* Component goes here */} <div className='scroll-sample'></div>               
+                                {/* Component goes here */} 
+                                <GeneralTable<PlaidTransaction> 
+                                id='pending-table'
+                                styleClass='pt'
+                                colNames={PENDING_COLS}
+                                data={pendingTrans}
+                                headers={PENDING_HEADERS()}
+                                limit={Infinity}
+                                minRows={MIN_ROWS}
+                                />
                                 </div>
                         </div>
                 {/* End row section component content */} 
