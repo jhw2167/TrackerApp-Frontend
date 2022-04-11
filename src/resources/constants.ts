@@ -76,8 +76,7 @@ export const PLAID_TRANS = {
 	AMT: 'amount',
     VENDID: 'vendorID',
 	VEND: 'vendor', 
-	CAT: 'category', 
-	BOTFOR: 'boughtFor', 
+	CAT: 'category',  
 	PMETHOD: 'payMethod', 
     CCID: 'creditID', 
 	PSTATUS: 'payStatus', 
@@ -227,12 +226,25 @@ export const MNTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul","aug", "se
         return [start, end];
     }
 
+    export const truncString = function(a: string, l: number): string {
+        return a.slice(0, Math.min(l, a.length)) + '...';
+    }
+
     export const properCase = function(a: string): string {
         return a.charAt(0).toUpperCase() + a.slice(1).toLowerCase();
     }
 
     export const titleCase = function(a: string): string {
-        if(a==TRANS_DATA.ID) return 'ID';
+        switch(a) {
+            case TRANS_DATA.ID:
+                return 'ID';
+
+            case PLAID_TRANS.VENDID:
+                return 'Vendor ID';
+            
+            case PLAID_TRANS.CCID:
+                return 'Account ID';
+        }
         const result = a.replace(/([A-Z])/g, " $1");
         return result.charAt(0).toUpperCase() + result.slice(1);
     }
@@ -245,6 +257,11 @@ export const MNTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul","aug", "se
         let split = date.split('-'); //[2022, MM, YY]
         return Number(split[1]) + '/' + Number(split[2]) +
         '/' + ( Number(split[0]) - 2000);
+    }
+
+    export const formatISODate = function(date: Date | number): string {
+        return new Date((new Date(date)).toLocaleString('en-US', { timeZone: 'America/Chicago' }).
+        split(",")[0]).toISOString().split('T')[0];
     }
 
 /* FUNCTION CONSTANTS */

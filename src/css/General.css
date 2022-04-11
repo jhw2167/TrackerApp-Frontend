@@ -2,6 +2,7 @@
 
 :root {
     --primary-col: rgb(255, 80, 10);
+        --primary-col-trans: rgba(255, 80, 10, 0.3);
     --secondary-col: black;
     --tert-col: white;
 

@@ -22,8 +22,9 @@ import AddNewTrans from '../components/AddNewTrans';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 import PTSectionFooter from '../components/narrowcomponents/PTSectionFooter';
-import GeneralTable from '../components/GeneralTable';
+import GeneralTable, { ColStyle } from '../components/GeneralTable';
 import { stringify } from 'querystring';
+import { format } from 'node:path/win32';
 
 //CSS
 
@@ -42,13 +43,17 @@ const ROLLOVER_BLANK_STYLE: CSS.Properties = {
 
         //For Tables
         const HOV_ROW_STYLE: CSS.Properties = {
-        ["fontWeight" as any]: 700,
-        ["fontSize" as any]: 15,
-        ["border" as any]: 'solid 3px black',
-        ["lineHeight" as any]: '1.6em'
+        ["border" as any]: 'solid 3px var(--primary-col)',
+        ["lineHeight" as any]: '2em'
         };
     
-
+        const HOV_COL_STYLE: CSS.Properties = {
+                ["fontWeight" as any]: 700,
+                ["fontSize" as any]: 15,
+                ["border" as any]: 'solid 4px var(--tert-col)',
+                ["lineHeight" as any]: '2.5em'
+        };
+            
 
 /* Form Constants */
 const FORM_HEADERS = {
@@ -82,16 +87,89 @@ const FORM_INP_TYPES = {
 }
 
 /* Table Constants */
-const MIN_ROWS = 5;
+const MIN_ROWS = 10;
+const MAX_STR_LEN = 12;
 
-const PENDING_COLS = Object.entries(c.PLAID_TRANS).map (([k, v]) => {return v;});
-const PENDING_HEADERS = ():Map<string,string> => {
-        let a = new Map<string, string>();
-        Object.entries(c.PLAID_TRANS).forEach(([k, v]) => {
-                a.set(v, c.titleCase(v));})
-        return a;
-}
+const PLTRS = Object.entries(c.PLAID_TRANS);
+const PENDING_COLS = PLTRS.map(([k, v]) => {return v;});
+const PENDING_HEADERS = new Map<string, string>(PLTRS.map(([k, v]) => {
+ return [v, c.titleCase(v)];}));
+const PENDING_COL_STYLE = new Map<string, ColStyle>(PLTRS.map(([k, col]) => { 
+        let cs: ColStyle = {
+                content: (v: string) => {return v;},
+                hoverCSS: HOV_COL_STYLE
+         }
 
+         switch(col) {
+                case c.PLAID_TRANS.AMT:
+                cs.css = {['textAlign' as any]: 'right',
+                ['paddingRight' as any]: '1%'};
+                cs.hoverCSS = {['paddingRight' as any]: '3%', ...cs.hoverCSS};
+                cs.content = (v: string) => {return '$' + Number(v).toFixed(2);};
+                break;
+
+                case c.PLAID_TRANS.POSTDATE:
+                case c.PLAID_TRANS.PURCHDATE:
+                cs.content = (v: string) => {return c.formatISODate(Date.parse(v))};
+                break;
+
+         } //END SWITCH
+         cs.content = (v:string) => {
+                 v = (cs.content) ? cs.content(v) : v;
+                 return c.truncString(v, MAX_STR_LEN);
+        };
+
+        cs.hoverContent = (v:string) => {
+                v = (cs.content) ? cs.content(v) : v;
+                return c.truncString(v, MAX_STR_LEN-3);
+       };
+
+         return [col, cs];
+}));
+
+const TRS = Object.entries(c.TRANS_DATA);
+const PREPARED_COLS = TRS.map(([k, v]) => {return v;});
+const PREPARED_HEADERS = new Map<string, string>(TRS.map(([k, v]) => {
+ return [v, c.titleCase(v)];}));
+const PREPARED_COL_STYLE = new Map<string, ColStyle>(TRS.map(([k, col]) => { 
+        let cs: ColStyle = {
+                content: (v: string) => {return v;},
+                hoverCSS: HOV_COL_STYLE
+         }
+
+         switch(col) {
+                case c.TRANS_DATA.AMT:
+                cs.css = {['textAlign' as any]: 'right',
+                ['paddingRight' as any]: '1%'};
+                cs.hoverCSS = {['paddingRight' as any]: '3%', ...cs.hoverCSS};
+                cs.content = (v: string) => {return '$' + Number(v).toFixed(2);};
+                break;
+
+                case c.TRANS_DATA.POSTDATE:
+                case c.TRANS_DATA.PURCHDATE:
+                cs.content = (v: string) => {return c.formatISODate(Date.parse(v))};
+                break;
+
+         } //END SWITCH
+         cs.content = (v:string) => {
+                 v = (cs.content) ? cs.content(v) : v;
+                 return c.truncString(v, MAX_STR_LEN);
+        };
+
+        cs.hoverContent = (v:string) => {
+                v = (cs.content) ? cs.content(v) : v;
+                return c.truncString(v, MAX_STR_LEN-3);
+       };
+
+         return [col, cs];
+}));
+
+
+
+//console.log(PENDING_COL_STYLE);
+
+/* MISC Constants */
+const ARROW_DIMS = { h: '30px', w: '40px'};
 
 /* Function Constants */
 //For tooltips
@@ -109,7 +187,7 @@ const ADD_NEW_TRANS_FORM_ID = 'pt-add-new-trans-form'
 
 function PostTransactions() {
 
-        const ARROW_DIMS = { h: '30px', w: '40px'}
+        /* Const */
 
         /* States */
         const [rolloverStyles, setRollOverStyles] = useState<Array<any>>([
@@ -117,7 +195,6 @@ function PostTransactions() {
         ]);
 
         const [countFormRefresh, setCountFormRefresh] = useState<number>(0);
-
 
         //data states
         const BAD_CHARS = ['-', "'", '"', '.', '/', "\\", ','];      //we don't want our form to include these chars
@@ -138,8 +215,7 @@ function PostTransactions() {
                 (val: string) => {return true;}     //Notes
         ];
 
-        const todayISO: string = new Date((new Date(now())).toLocaleString('en-US', { timeZone: 'America/Chicago' }).
-        split(",")[0]).toISOString().split('T')[0];
+        const todayISO: string = c.formatISODate(now());
                 const DEF_FORM_VALS = [
                         "",     //trans id
                         todayISO,     //Purchased Date
@@ -453,7 +529,7 @@ function PostTransactions() {
                         </div>
                 {/* End row section title content */} 
 
-                        <div className='row pt-bordered-section pt-table-section' id="transaction-form-div">
+                        <div className='row pt-bordered-section pt-table-section' id="pending-table-row">
                                 <div className='col-12'>
                                 {/* Component goes here */} 
                                 <GeneralTable<PlaidTransaction> 
@@ -461,9 +537,12 @@ function PostTransactions() {
                                 styleClass='pt'
                                 colNames={PENDING_COLS}
                                 data={pendingTrans}
-                                headers={PENDING_HEADERS()}
+                                headers={PENDING_HEADERS}
                                 limit={Infinity}
                                 minRows={MIN_ROWS}
+
+                                rowStyling={{hoverCSS: HOV_ROW_STYLE}}
+                                colStyling={PENDING_COL_STYLE}
                                 />
                                 </div>
                         </div>
@@ -503,9 +582,20 @@ function PostTransactions() {
                         </div>
                 {/* End row section title content */} 
 
-                        <div className='row pt-bordered-section pt-table-section' id="transaction-form-div">
+                        <div className='row pt-bordered-section pt-table-section' id="prepared-table-row">
                                 <div className='col-12'>
-                                {/* Component goes here */} <div className='scroll-sample'></div>               
+                                <GeneralTable<Transaction> 
+                                id='prepared-table'
+                                styleClass='pt'
+                                colNames={PREPARED_COLS}
+                                data={prepdTrans}
+                                headers={PREPARED_HEADERS}
+                                limit={Infinity}
+                                minRows={MIN_ROWS}
+
+                                rowStyling={{hoverCSS: HOV_ROW_STYLE}}
+                                colStyling={PREPARED_COL_STYLE}
+                                />              
                                 </div>
                         </div>
                 {/* End row section component content */} 
@@ -546,7 +636,7 @@ function PostTransactions() {
                         </div>
                 {/* End row section title content */} 
 
-                        <div className='row pt-bordered-section pt-table-section' id="transaction-form-div">
+                        <div className='row pt-bordered-section pt-table-section' id="posted-table-row">
                          <div className='col-12'>
                                 {/* Component goes here */} <div className='scroll-sample'></div>               
                          </div>

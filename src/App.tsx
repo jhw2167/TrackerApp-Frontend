@@ -12,10 +12,7 @@ import './css/misc/Background.css'
 //lib components
   import '../node_modules/react-vis/dist/style.css';
 
-
-  //high level
-  import './css/main/PostTransactions.css'
-  import './css/main/Overview.css'
+  //Project libs
   import './css/components/subcomponents/DropDown.css'
   import './css/components/subcomponents/Overlay.css'
 
@@ -25,8 +22,9 @@ import './css/misc/Background.css'
   import './css/components/SubTable.css'
   import './css/components/DataGraph.css';
   
-
-  //Sub components
+  //webpages
+  import './css/main/PostTransactions.css'
+  import './css/main/Overview.css'
 
 
 function App() {

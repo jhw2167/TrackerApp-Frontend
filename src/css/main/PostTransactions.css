@@ -2,6 +2,7 @@
 :root {
     --bordered-sec-width: 94%;
     --bordered-sec-margin: 3%;
+    --interal-sec-height: 28vh;
 }
 
 .sample {
@@ -64,12 +65,16 @@
 }
 
 .pt-table-section {
-    min-height: 20vh;
+    height: var(--interal-sec-height);
 }
 
 .post-trans-tab-down-arrow {
     position: relative;
     z-index: 100;
+}
+
+#posted-table-row {
+    min-height: calc(var(--interal-sec-height) + 5vh);
 }
 
 /* ------------------ */
@@ -257,8 +262,64 @@
 
 
 
-/* Main content Styling */
+/* Table Styling */
+.pt-general-table-wrapper-div {
+    margin-top: 1%;
+    margin-bottom: 1%;
+    height: calc(var(--interal-sec-height) - 4vh);
 
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+    /* Scrollbar */
+    .pt-general-table-wrapper-div::-webkit-scrollbar {
+        width: 8px;
+        border-radius: 10px;
+        background-color: transparent;
+    }
+
+
+    .pt-general-table-wrapper-div::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    .pt-general-table-wrapper-div:hover::-webkit-scrollbar-track {
+        background-color: var(--med-grey) ;
+        border-radius: 10px;
+    }
+    
+    /* Handle */
+    .pt-general-table-wrapper-div::-webkit-scrollbar-thumb {
+        background-color: var(--primary-col-trans);
+        opacity: 0;
+        border-radius: 20px;
+    }
+
+    .pt-general-table-wrapper-div:hover::-webkit-scrollbar-thumb {
+        background-color: var(--primary-col);
+    }
+
+.pt-general-table {
+    table-layout: fixed;
+    width: 96%;
+    margin-left: 2%;
+    margin-bottom: 2%;
+
+    text-align: center;
+    line-height: 2.2em;
+}
+
+.pt-general-table-header {
+    line-height: 1.4;
+    border-bottom: 3px solid var(--primary-col);
+    padding-bottom: 20%;
+}
+
+.pt-general-table-row {
+    border-color: var(--heavy-grey);
+    border: 0;
+}
 
 /* ------------------ */
 

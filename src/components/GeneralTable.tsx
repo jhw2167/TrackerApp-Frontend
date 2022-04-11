@@ -24,24 +24,24 @@ interface GeneralTableProps<T> {
     aggOtherRow?: boolean;
     summaryRow?: boolean;
     aggFunction?: Function;
-    hovCellFunc?: Function;
+    hovRowFunc?: Function;
     styleClass: string;
 }
 
-interface ColStyle {
+export interface ColStyle {
     css?: React.CSSProperties;
     hoverCSS?: React.CSSProperties;
     content?: (val: string) => string;
     hoverContent?: (val: string) => string;
 }
 
-interface RowStyle {
+export interface RowStyle {
     normCSS?: React.CSSProperties;
     hoverCSS?: React.CSSProperties;
     aggRowCSS?: React.CSSProperties;
 }
 
-interface BufferRowStyling {
+export interface BufferRowStyling {
     bufferSymbol?: string;          //same buffered symbol for each col in a row
     bufferContent?: Map<string, string>;   //if you want different symbols per column, e.g. buffered numbers are '0', buffered strings are '-'
     bufferColStyle?: Map<string, React.CSSProperties>;
@@ -49,15 +49,15 @@ interface BufferRowStyling {
 }
 
 /* CONSTS */
-const MAX_VENDOR_DISP_LEN = 12;
 
 
 function GeneralTable<T>(props: GeneralTableProps<T>) {
 
     /* STATES */
-    const [extHovCells, setExtHovCells] = useState<Set<any>>(new Set());
-    const [hovCells, setHovCells] = useState<Set<any>>(new Set());
-    const [deepHovCell, setDeepHovCell] = useState<any>();
+    const [exthovRows, setExthovRows] = useState<Set<any>>(new Set());
+    const [hovRows, sethovRows] = useState<Set<any>>(new Set());
+    const [hovCells, sethovCells] = useState<Set<number>>(new Set());
+    const [deephovRow, setDeephovRow] = useState<any>();
 
     const [data, setData] = useState<T[]>(Array.from( props.data ));
 
@@ -69,10 +69,13 @@ function GeneralTable<T>(props: GeneralTableProps<T>) {
     const bufStyles: BufferRowStyling = (props.bufferStyling) ? props.bufferStyling : { bufferContent: new Map<string, string>() };
         cols.forEach( (v) => { if(!bufStyles.bufferContent?.get(v)) bufStyles.bufferContent?.set(v, '-');});
     
+    const [, updateState] = React.useState<Object>();
+    const forceUpdate = React.useCallback(() => updateState({}), []);
+
     /* EFFECTS */
     useEffect( () => {
-        if(props.hovCellFunc) {
-            props.hovCellFunc((s: Set<any>) => (s: Set<any>) => setExtHovCells(s));
+        if(props.hovRowFunc) {
+            props.hovRowFunc((s: Set<any>) => (s: Set<any>) => setExthovRows(s));
         }
     }
     , [])
@@ -84,11 +87,11 @@ function GeneralTable<T>(props: GeneralTableProps<T>) {
     }, [props])
 
     useEffect( () => {
-        if(extHovCells) {
-            setHovCells(extHovCells);
+        if(exthovRows) {
+            sethovRows(exthovRows);
         }
     }
-    , [extHovCells])
+    , [exthovRows])
 
     if(!data[0]) {
         //console.log("ret nothing!!! %s: " + props.data.length, props.headers);
@@ -100,66 +103,68 @@ function GeneralTable<T>(props: GeneralTableProps<T>) {
     
                 <table className={c.addStyleClass(sc, 'general-table')}>
                     <tbody>
-                    {/*             Table Header            */} 
-                    { (props.headers) ?
+                    {/*             Table Header            */}
+                    {(props.headers) ?
                     <tr className={c.addStyleClass(sc, 'general-table-header')}>{
-                        Object.entries(props.headers).map(([key, value]) => {       //[0]
-                        return <th colSpan={ (data && data.length > 0) ? Object.entries(data[0]).length : 1}
-                         key={key}>{value}</th>})
-                    }</tr> : null} {/* END HEADER ROW */}
-    
-
+                        cols.map((key: string, i)  => {       
+                        return <th key={i}>{props.headers.get(key)}</th>})
+                    }</tr>:null}
+                    {/* END HEADER ROW */}
                     {/*         Now return data rows      */}
                     {data.slice(0, props.limit+2).map( (value: any, index: number) => {
-                        let isHov: number = hovCells.has(value) ? 1 : 0;
-                        isHov += _.isEqual(deepHovCell, value) ? 1 : 0; //0-no hov, 1-hov, 2-deep hov
-                        //console.log("Vals: " + !!props.aggFunction + " : " + index + " : " + (props.limit+1));
+                        let isHov: number = (hovRows.has(index) || hovRows.has(value))  ? 1 : 0;
+                        isHov += _.isEqual(deephovRow, index) ? 1 : 0; //0-no hov, 1-hov, 2-deep hov
+                        //console.log("Vals: " + " : " + index + " : " + (props.limit+1));
     
                         let rowStyle = (!!props.aggFunction && index==data.length-1) ? rowStyles?.aggRowCSS : rowStyles?.normCSS;
                         rowStyle = (isHov > 0) ? {...rowStyle, ...rowStyles?.hoverCSS} : rowStyle;
                         let aggRowClassName = (!!props.aggFunction && index==data.length-1) ?
-                        c.addStyleClass(props.id, 'general-table-aggregate-row-') : undefined;
+                        c.addStyleClass(props.id, 'general-table-aggregate-row-') : '';
                         
-                        return <tr className= {c.addStyleClass(sc, 'general-table-row') + ' data-table-row ' +
-                         aggRowClassName} style={rowStyle}
-                        key={index}
-                        onMouseEnter={() => {
-                            hovCells.add(value);
-                            setHovCells(hovCells); 
-                            setDeepHovCell(value); }}
-    
-                        onMouseLeave={() => {
-                            hovCells.delete(value);
-                            setHovCells(hovCells); 
-                            setDeepHovCell(null);}}
-                         >
-    
-                            {/*         Now return data COLS      */}
-                            {Object.entries(props.colNames).map(([dkey, col]) => {
-                                col = col.toString();
-                                let isBufRow = _.isEqual(value, {});
-                                let colStyle: ColStyle | undefined = colStyles.get(col);
+                        return<tr className= {c.addStyleClass(sc, 'general-table-row') + ' data-table-row ' +
+                        aggRowClassName} style={rowStyle}
+                       key={index}
+                       onMouseEnter={() => {
+                           hovRows.add(index);                           
+                           setDeephovRow(index)
+                           forceUpdate();
+                           }}
+   
+                       onMouseLeave={() => {
+                           //console.log('leaving ' + index)
+                           hovRows.delete(index);
+                           sethovRows(hovRows); 
+                           setDeephovRow(null);}}
+                        >
+   
+                           {/*         Now return data COLS      */}
+                           {Object.entries(props.colNames).map(([dkey, col], i) => {
+                               col = col.toString();
+                               let isBufRow = _.isEqual(value, {});
+                               let colStyle: ColStyle | undefined = colStyles.get(col);
+                               isHov = (hovCells.has(i) && hovRows.has(index)) ? 2 : 0;
+                        
+                               //set Value of "adjust Value function" depending on what functions were provided
+                               let adjValFunc = (colStyle) ? 
+                                   ( (isHov) ? colStyles.get(col)?.content : colStyles.get(col)?.hoverContent ) :
+                                       undefined;
+                               adjValFunc = (!adjValFunc || isBufRow) ? (v: string) => {return v;} : adjValFunc;
 
-                                //set Value of "adjust Value function" depending on what functions were provided
-                                let adjValFunc = (colStyle) ? 
-                                    ( (isHov) ? colStyles.get(col)?.content : colStyles.get(col)?.hoverContent ) :
-                                        undefined;
-                                adjValFunc = (!adjValFunc || isBufRow) ? (v: string) => {return v;} : adjValFunc;
+                               //set Value of "adjust Value function" depending on what functions were provided
+                               let innerStyle =(isBufRow && bufStyles.bufferColStyle?.get(col)) ?
+                                                        bufStyles.bufferColStyle.get(col) : colStyle?.css;
+                                    innerStyle = (isHov) ? {...colStyle?.hoverCSS} : innerStyle;
 
-                                //set Value of "adjust Value function" depending on what functions were provided
-                                let innerStyle = (isHov) ? colStyle?.hoverCSS : 
-                                                        ( (isBufRow && bufStyles.bufferColStyle?.get(col)) ?
-                                                         bufStyles.bufferColStyle.get(col) : colStyle?.css);
-
-                                let val:string = _.isEqual(value, {}) ?  bufStyles.bufferContent?.get(col) as string : adjValFunc(value[col]); 
-                                return <td className={c.addStyleClass(sc, 'general-table-entry')}
-                                style={innerStyle}
-                                key={dkey}>{val}</td>
-                                })}
-                        </tr>
+                               let val:string = _.isEqual(value, {}) ?  bufStyles.bufferContent?.get(col) as string : adjValFunc(value[col]); 
+                               return <td className={c.addStyleClass(sc, 'general-table-entry')}
+                               style={innerStyle}
+                               key={i}
+                               onMouseOver= {() => { hovCells.clear(); hovCells.add(i); forceUpdate();}}
+                             >{val}</td>
+                               })}
+                       </tr>;
                         })}
                     {/* END PRINT DATA */}
-    
                     </tbody>
                 </table>
     
