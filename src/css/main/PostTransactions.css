@@ -316,6 +316,10 @@
     padding-bottom: 20%;
 }
 
+.pt-general-table-header > th {
+    padding-bottom: 10px;
+}
+
 .pt-general-table-row {
     border-color: var(--heavy-grey);
     border: 0;

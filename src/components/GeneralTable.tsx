@@ -14,7 +14,7 @@ interface GeneralTableProps<T> {
     id: string;
     colNames: string[];
     headers: Map<string, string>;           //maps colName to header
-    data: Array<T>;                         //indexes object T by colName
+    data: Array<T>;                         //indexes object T by colName, that is displayedValue = T[colName];
     colStyling?: Map<string, ColStyle>;      //maps colName to ColStyle
     rowStyling?: RowStyle;
     bufferStyling?: BufferRowStyling;
@@ -39,6 +39,7 @@ export interface RowStyle {
     normCSS?: React.CSSProperties;
     hoverCSS?: React.CSSProperties;
     aggRowCSS?: React.CSSProperties;
+    state?: string[];                 //add a state as a classname to each row e.g. 'success'
 }
 
 export interface BufferRowStyling {
@@ -120,9 +121,10 @@ function GeneralTable<T>(props: GeneralTableProps<T>) {
                         rowStyle = (isHov > 0) ? {...rowStyle, ...rowStyles?.hoverCSS} : rowStyle;
                         let aggRowClassName = (!!props.aggFunction && index==data.length-1) ?
                         c.addStyleClass(props.id, 'general-table-aggregate-row-') : '';
+                        let rowState = (rowStyles?.state) ? ' ' + rowStyles.state[index] : '';
                         
                         return<tr className= {c.addStyleClass(sc, 'general-table-row') + ' data-table-row ' +
-                        aggRowClassName} style={rowStyle}
+                        aggRowClassName + rowState} style={rowStyle}
                        key={index}
                        onMouseEnter={() => {
                            hovRows.add(index);                           

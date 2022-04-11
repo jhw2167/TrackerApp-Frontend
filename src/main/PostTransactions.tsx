@@ -394,6 +394,8 @@ function PostTransactions() {
                         
                         case 'PREPARE':
                                 //push results to prepared table
+                                prepdTrans.push(t);
+                                setPrepdTrans(prepdTrans);
                                 console.log('Prep results')
                                 break;
                         default:
