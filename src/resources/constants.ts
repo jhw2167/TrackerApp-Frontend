@@ -56,7 +56,7 @@ export interface Summary {
 
 //Data Structure Constants
 export const TRANS_DATA = {
-	ID: 'tid', 
+	ID: 'tId', 
 	PURCHDATE: 'purchaseDate', 
 	AMT: 'amount', 
 	VEND: 'vendor', 
@@ -71,7 +71,7 @@ export const TRANS_DATA = {
 }
 
 export const PLAID_TRANS = {
-	ID: 'tid', 
+	ID: 'tId', 
 	PURCHDATE: 'purchaseDate', 
 	AMT: 'amount',
     VENDID: 'vendorID',
@@ -227,7 +227,7 @@ export const MNTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul","aug", "se
     }
 
     export const truncString = function(a: string, l: number): string {
-        return a.slice(0, Math.min(l, a.length)) + '...';
+        return (a.length > l) ? a.slice(0, Math.min(l, a.length)) + '...' : a;
     }
 
     export const properCase = function(a: string): string {
@@ -260,6 +260,7 @@ export const MNTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul","aug", "se
     }
 
     export const formatISODate = function(date: Date | number): string {
+        if(date==NaN) return 'NaN Passed';
         return new Date((new Date(date)).toLocaleString('en-US', { timeZone: 'America/Chicago' }).
         split(",")[0]).toISOString().split('T')[0];
     }

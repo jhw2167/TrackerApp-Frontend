@@ -122,7 +122,7 @@ function GeneralTable<T>(props: GeneralTableProps<T>) {
                         let aggRowClassName = (!!props.aggFunction && index==data.length-1) ?
                         c.addStyleClass(props.id, 'general-table-aggregate-row-') : '';
                         let rowState = (rowStyles?.state) ? ' ' + rowStyles.state[index] : '';
-                        
+
                         return<tr className= {c.addStyleClass(sc, 'general-table-row') + ' data-table-row ' +
                         aggRowClassName + rowState} style={rowStyle}
                        key={index}
@@ -156,8 +156,9 @@ function GeneralTable<T>(props: GeneralTableProps<T>) {
                                let innerStyle =(isBufRow && bufStyles.bufferColStyle?.get(col)) ?
                                                         bufStyles.bufferColStyle.get(col) : colStyle?.css;
                                     innerStyle = (isHov) ? {...colStyle?.hoverCSS} : innerStyle;
-
-                               let val:string = _.isEqual(value, {}) ?  bufStyles.bufferContent?.get(col) as string : adjValFunc(value[col]); 
+                                
+                               let val:string = (!value[col]) ?  bufStyles.bufferContent?.get(col) as string : adjValFunc(value[col]); 
+                               console.log('[col]: %s, val[col] %s', col, value[col]);
                                return <td className={c.addStyleClass(sc, 'general-table-entry')}
                                style={innerStyle}
                                key={i}

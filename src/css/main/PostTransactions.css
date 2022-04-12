@@ -307,13 +307,17 @@
     margin-bottom: 2%;
 
     text-align: center;
-    line-height: 2.2em;
+    font-size: 16;
+    font-weight: 400;
+    color: var(--prim-font-col);
+    line-height: 2em;
 }
 
 .pt-general-table-header {
     line-height: 1.4;
     border-bottom: 3px solid var(--primary-col);
     padding-bottom: 20%;
+    color: var(--primary-col);
 }
 
 .pt-general-table-header > th {
@@ -323,6 +327,8 @@
 .pt-general-table-row {
     border-color: var(--heavy-grey);
     border: 0;
+    font-size: inherit;
+    font-weight: inherit;
 }
 
 /* ------------------ */

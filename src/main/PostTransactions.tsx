@@ -48,10 +48,10 @@ const ROLLOVER_BLANK_STYLE: CSS.Properties = {
         };
     
         const HOV_COL_STYLE: CSS.Properties = {
-                ["fontWeight" as any]: 700,
-                ["fontSize" as any]: 15,
+                ["fontWeight" as any]: 500,
+                ["fontSize" as any]: 18,
                 ["border" as any]: 'solid 4px var(--tert-col)',
-                ["lineHeight" as any]: '2.5em'
+                ["lineHeight" as any]: '2.2em'
         };
             
 
@@ -87,8 +87,8 @@ const FORM_INP_TYPES = {
 }
 
 /* Table Constants */
-const MIN_ROWS = 10;
-const MAX_STR_LEN = 12;
+const MIN_ROWS = 1;
+const MAX_STR_LEN = 14;
 
 const PLTRS = Object.entries(c.PLAID_TRANS);
 const PENDING_COLS = PLTRS.map(([k, v]) => {return v;});
@@ -133,7 +133,6 @@ const PREPARED_HEADERS = new Map<string, string>(TRS.map(([k, v]) => {
  return [v, c.titleCase(v)];}));
 const PREPARED_COL_STYLE = new Map<string, ColStyle>(TRS.map(([k, col]) => { 
         let cs: ColStyle = {
-                content: (v: string) => {return v;},
                 hoverCSS: HOV_COL_STYLE
          }
 
@@ -147,17 +146,18 @@ const PREPARED_COL_STYLE = new Map<string, ColStyle>(TRS.map(([k, col]) => {
 
                 case c.TRANS_DATA.POSTDATE:
                 case c.TRANS_DATA.PURCHDATE:
-                cs.content = (v: string) => {return c.formatISODate(Date.parse(v))};
+                cs.content = (v: string) => {return c.formatDBDate(c.formatISODate(Date.parse(v)))};
                 break;
 
          } //END SWITCH
+         let temp = (cs.content) ? cs.content : (v: string) => {return v;};
          cs.content = (v:string) => {
-                 v = (cs.content) ? cs.content(v) : v;
+                 v = (cs.content) ? temp(v) : v;
                  return c.truncString(v, MAX_STR_LEN);
         };
 
         cs.hoverContent = (v:string) => {
-                v = (cs.content) ? cs.content(v) : v;
+                v = (cs.content) ? temp(v) : v;
                 return c.truncString(v, MAX_STR_LEN-3);
        };
 
@@ -219,10 +219,10 @@ function PostTransactions() {
                 const DEF_FORM_VALS = [
                         "",     //trans id
                         todayISO,     //Purchased Date
-                        "",     //amount
-                        "",     //vendor
-                        "",     //category
-                        "",     //PayMethod
+                        "85",     //amount
+                        "Var",     //vendor
+                        "Domestic",     //category
+                        "Georgetown",     //PayMethod
                         "",     //BoughtFor
                         "",     //PayStatus
                         "",     //Income
@@ -360,7 +360,7 @@ function PostTransactions() {
                 let fv = (formValues) ? formValues.current : [];
 
                 let t: Transaction = {
-                        tId: fv[i++],
+                        tId: (fv[i++]) ? fv[i] : '?',
                         purchaseDate: fv[i++],
                         amount: fv[i++],
                         vendor: fv[i++],
@@ -373,7 +373,6 @@ function PostTransactions() {
                         postedDate: fv[i++],
                         notes: fv[i++]
                 }
-
                 //Submitting the form tells form to validate entries and clear
                 addNewFormRef.current?.requestSubmit();
 
