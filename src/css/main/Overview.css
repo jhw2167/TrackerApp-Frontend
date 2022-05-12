@@ -1,6 +1,10 @@
 /*
     Styling for major Divs in Overview main component
 */
+body {
+    overflow: hidden;
+}
+
 #overview-center-col {
     min-width: 900px;
     max-width: 1000px;

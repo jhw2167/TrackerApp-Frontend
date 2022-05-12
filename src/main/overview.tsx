@@ -185,7 +185,7 @@ function Overview(props: OverviewProps) {
 
     return (
 
-        <div className='row outer-row'>
+        <div className='row outer-row g-0'>
         <div className='col rev-side-anim side-anim'></div>
         <div className='col-8 no-padding' id='overview-center-col'>
 
