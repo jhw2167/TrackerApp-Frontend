@@ -151,6 +151,9 @@ function Overview(props: OverviewProps) {
         }
     }, [hovCategory]);
 
+    useEffect( () => {
+        recentTransactions.forEach( (t) => properlyCaseTransaction(t));
+    }, [recentTransactions])
 
     /*  Other functions  */
     const updateCurrentMonth = (dir: number) => {
@@ -165,6 +168,12 @@ function Overview(props: OverviewProps) {
         }
     }
 
+    const properlyCaseTransaction = (t: Transaction) => {
+        t.boughtFor = c.properCase(t.boughtFor);
+        t.category = c.properCase(t.category);
+        t.payStatus = c.properCase(t.payStatus);
+        t.vendor = c.properCase(t.vendor);
+    }
 
     //positive offset is further back in the logs
     const updateRecentTransactions = (dir: number) => {
@@ -296,8 +305,8 @@ function Overview(props: OverviewProps) {
 
     {/* Container wrapper class */}
             <footer>
-                <div> {//JSON.stringify(recentTransactions[0], null, 2)
-                } </div>
+                <div> 
+                 </div>
             </footer>
 
 

@@ -23,8 +23,6 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 import PTSectionFooter from '../components/narrowcomponents/PTSectionFooter';
 import GeneralTable, { ColStyle } from '../components/GeneralTable';
-import { stringify } from 'querystring';
-import { format } from 'node:path/win32';
 
 //CSS
 
