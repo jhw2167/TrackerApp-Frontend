@@ -422,7 +422,7 @@ function PostTransactions() {
         </div>
         {/*---------------*/}
 
-                <div className="row content-row center-div align-items-center flex-grow-1"
+                <div className="row content-row center-div-spacer align-items-center flex-grow-1"
                 id='post-trans-main-content'>
                 <div className='col-12'>
 

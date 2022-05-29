@@ -112,12 +112,11 @@ header{
 
 .outer-row {
     width: 100%;
+    height: 100%;
 }
 
 
-.center-div {
-    padding-top: 2%;
-
+.center-div-spacer {
     border: 4px solid;
     border-image: linear-gradient(
       to bottom, 
@@ -128,8 +127,7 @@ header{
 
     border-top: 0px;
     border-bottom: 0px;
-
-    /*background-color: var(--secondary-col);*/
+    
 }
 
 .col-6 {

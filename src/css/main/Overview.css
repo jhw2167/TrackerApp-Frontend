@@ -8,7 +8,32 @@ body {
 #overview-center-col {
     min-width: 900px;
     max-width: 1000px;
+    min-height: 100px;
     padding: 0;
+    max-height: 100%;
+}
+
+.main-content-row {
+    padding-top: 1%;
+}
+
+.center-div {
+    height: 100%;
+    /*background-color: var(--secondary-col);*/
+}
+
+.center-div-spacer {
+    height: 85%;
+}
+
+
+#footer {
+    background-color: var(--secondary-col);
+    text-align: right;
+    padding-right: 5%;
+
+    color: var(--primary-col);
+    font-size: small;
 }
 
 /* LeftSide Div */

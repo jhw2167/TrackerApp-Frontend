@@ -194,6 +194,7 @@ function Overview(props: OverviewProps) {
             <Header />
 
             {/*Large div contains entire vertical length page*/}
+            <div className='center-div-spacer'>
             <main className="center-div align-items-center">
             <div className="row  main-content-row">
 
@@ -303,13 +304,13 @@ function Overview(props: OverviewProps) {
             </div> {/* Container row class */}
             </main>
 
-    {/* Container wrapper class */}
-            <footer>
-                <div> 
-                 </div>
-            </footer>
+        <footer>
+          <div id="footer">
+                <p> &copy; TrackerApp 2022  </p>
+          </div>
+        </footer>
 
-
+        </div>
         </div>
             <div className='col for-side-anim side-anim'></div>
 
