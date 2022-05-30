@@ -202,7 +202,7 @@ function Overview(props: OverviewProps) {
 
             {/*Large div contains entire vertical length page*/}
         
-        <div className="row flex-grow-1 g-0" id="overview-mid-row">
+        <div className="row g-0" id="overview-mid-row">
             <div className="col">
             <main className="center-div align-items-center">
             <div className="row  main-content-row">
@@ -317,7 +317,7 @@ function Overview(props: OverviewProps) {
 
 
 
-        <div className="row flex-grow-1 g-0" id="overview-bot-row">
+        <div className="row g-0" id="overview-bot-row">
             <div className="col">
             <Footer />
             </div>
