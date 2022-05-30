@@ -189,10 +189,10 @@ function Overview(props: OverviewProps) {
         <div className='row outer-row g-0'>
         <div className='col rev-side-anim side-anim'></div>
 
-        <div className='col-8 no-padding' id='overview-center-col'>
+        <div className='col-8 container no-padding' id='overview-center-col'>
 
         {/*page title and logo*/}
-        <div className="row g-0">
+        <div className="row flex-grow-1 g-0" id="overview-top-row">
             <div className="col">
             <Header />
             </div>
@@ -201,7 +201,7 @@ function Overview(props: OverviewProps) {
 
             {/*Large div contains entire vertical length page*/}
         
-        <div className="row flex-1 g-0">
+        <div className="row g-0" id="overview-mid-row">
             <div className="col">
             <main className="center-div align-items-center">
             <div className="row  main-content-row">
@@ -314,7 +314,9 @@ function Overview(props: OverviewProps) {
             </div> {/*End Wrapper col*/}
         </div> {/*End Wrapper row*/}
 
-        <div className="row g-0">
+
+
+        <div className="row g-0" id="overview-bot-row">
             <div className="col">
             <Footer />
             </div>

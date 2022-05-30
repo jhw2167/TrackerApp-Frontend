@@ -3,6 +3,7 @@
 import { Route, Routes, Navigate, useSearchParams, BrowserRouter} from "react-router-dom";
 import Overview from "./overview";
 import PostTransactions from "./PostTransactions";
+import Sample from "./Sample";
 
 function Layout() {
 
@@ -19,6 +20,7 @@ function Layout() {
             setSearchParams={setSearchParams} />} />
 
           <Route path="/post" element={<PostTransactions/>} />
+          <Route path="/sample" element={<Sample/>} />
           <Route path="*" element={<Navigate to="/post" />} />
 
            </Routes>          

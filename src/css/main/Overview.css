@@ -6,22 +6,37 @@ body {
    /* overflow: hidden;*/
 }
 
+.my {
+    display: flex;
+    flex-direction: row;
+    background-color: orange;
+    min-height: 30px;
+}
+
 #overview-center-col {
     min-width: 900px;
     max-width: 1000px;
-    min-height: 100px;
-    padding: 0;
-    max-height: 100%;
-}
-
-.main-content-row {
-    padding-top: 1%;
+    height: 100vh;
 }
 
 .center-div {
     height: 100%;
-    flex: 1;
-    /*background-color: var(--secondary-col);*/
+}
+
+#overview-top-row {
+    height: 9.4%;
+}
+
+#overview-mid-row {
+    height: 86.6%;
+}
+
+#overview-bot-row {
+    height: 4%;
+}
+
+.main-content-row {
+    padding-top: 1%;
 }
 
 /* LeftSide Div */
