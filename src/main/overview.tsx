@@ -194,7 +194,7 @@ function Overview(props: OverviewProps) {
             <Header />
 
             {/*Large div contains entire vertical length page*/}
-            <div className='center-div-spacer'>
+            <div className='center-div-spacer flex-1'>
             <main className="center-div align-items-center">
             <div className="row  main-content-row">
 

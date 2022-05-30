@@ -1,10 +1,6 @@
 /*
     Styling for major Divs in Overview main component
 */
-body {
-    overflow: hidden;
-}
-
 #overview-center-col {
     min-width: 900px;
     max-width: 1000px;
@@ -21,11 +17,6 @@ body {
     height: 100%;
     /*background-color: var(--secondary-col);*/
 }
-
-.center-div-spacer {
-    height: 85%;
-}
-
 
 #footer {
     background-color: var(--secondary-col);

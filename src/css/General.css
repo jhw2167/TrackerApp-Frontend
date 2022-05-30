@@ -174,6 +174,9 @@ header{
     flex: 0 !important;
 }
 
+.flex-1 {
+    flex: 1 !important;
+}
 
 /*
     LIST OF Z-indices
