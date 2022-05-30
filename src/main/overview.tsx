@@ -13,6 +13,7 @@ import * as api from '../resources/api';
 import useWindowDimensions from '../resources/WindowDims';
 
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import DataGraph from '../components/DataGraph';
 import DataTable from '../components/DataTable';
 import SubTable from '../components/SubTable';
@@ -62,7 +63,7 @@ function Overview(props: OverviewProps) {
     const [incomeSummary, setIncomeSummary] = useState<Summary[]>([]);
     const [expenseSummary, setExpenseSummary] = useState<Summary[]>([]);
 
-    const [categories, setCategories] = useState(["Loading Categories"]);
+    const [categories, setCategories] = useState<string[]>([]);
     const [categoriesData, setCategoriesData] = useState<DataTuple[]>([]);
     const [currentDateByMonth, setCurrentDateByMonth] = useState<Date>( () => {
         let date = new Date(Date.now());
@@ -187,14 +188,21 @@ function Overview(props: OverviewProps) {
 
         <div className='row outer-row g-0'>
         <div className='col rev-side-anim side-anim'></div>
+
         <div className='col-8 no-padding' id='overview-center-col'>
 
-
         {/*page title and logo*/}
+        <div className="row g-0">
+            <div className="col">
             <Header />
+            </div>
+        </div>
+            
 
             {/*Large div contains entire vertical length page*/}
-            <div className='center-div-spacer flex-1'>
+        
+        <div className="row flex-1 g-0">
+            <div className="col">
             <main className="center-div align-items-center">
             <div className="row  main-content-row">
 
@@ -303,14 +311,16 @@ function Overview(props: OverviewProps) {
                
             </div> {/* Container row class */}
             </main>
+            </div> {/*End Wrapper col*/}
+        </div> {/*End Wrapper row*/}
 
-        <footer>
-          <div id="footer">
-                <p> &copy; TrackerApp 2022  </p>
-          </div>
-        </footer>
-
+        <div className="row g-0">
+            <div className="col">
+            <Footer />
+            </div>
         </div>
+
+
         </div>
             <div className='col for-side-anim side-anim'></div>
 

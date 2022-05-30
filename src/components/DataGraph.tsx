@@ -234,7 +234,7 @@ function DataGraph(props: DataGraphProps) {
                     onItemMouseLeave={() => {if(!legItemClick) setHovValueByColor("") }}
                  />
     
-            </div>
+            </div> {/* END DATA GRAPH LEGEND */}
         
         </div>
         </div>

@@ -1,6 +1,11 @@
 /*
     Styling for major Divs in Overview main component
 */
+
+body {
+   /* overflow: hidden;*/
+}
+
 #overview-center-col {
     min-width: 900px;
     max-width: 1000px;
@@ -15,16 +20,8 @@
 
 .center-div {
     height: 100%;
+    flex: 1;
     /*background-color: var(--secondary-col);*/
-}
-
-#footer {
-    background-color: var(--secondary-col);
-    text-align: right;
-    padding-right: 5%;
-
-    color: var(--primary-col);
-    font-size: small;
 }
 
 /* LeftSide Div */
