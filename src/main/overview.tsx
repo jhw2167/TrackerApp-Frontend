@@ -25,6 +25,8 @@ interface OverviewProps {
     setSearchParams: Function;
 }
 
+const SENSITIVE_DATA = false;
+
 ///finances/overview?mn=August&yr=21
 //Guess we'll have to take some params here
 function Overview(props: OverviewProps) {
@@ -58,10 +60,16 @@ function Overview(props: OverviewProps) {
     //console.log(JSON.stringify(JSON.stringify({winHeight, winWidth})));
     const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([]);
     const [monthlyTransactions, setMonthlyTransactions] = useState<Transaction[]>([]);
+    const [recentTransactionsDisplayable, setRecentTransactionsDisplayable] = useState<Transaction[]>([]);
+    const [monthlyTransactionsDisplayable, setMonthlyTransactionsDisplayable] = useState<Transaction[]>([]);
+
     const [offsetTransactions, setOffsetTransactions] = useState<number>(0);
 
     const [incomeSummary, setIncomeSummary] = useState<Summary[]>([]);
     const [expenseSummary, setExpenseSummary] = useState<Summary[]>([]);
+    const [incomeSummaryDisplayable, setIncomeSummaryDisplayable] = useState<Summary[]>([]);
+    const [expenseSummaryDisplayable, setExpenseSummaryDisplayable] = useState<Summary[]>([]);
+
 
     const [categories, setCategories] = useState<string[]>([]);
     const [categoriesData, setCategoriesData] = useState<DataTuple[]>([]);
@@ -119,9 +127,9 @@ function Overview(props: OverviewProps) {
         //console.log(2);
         if(isMounted.current){
             //console.log("hello")
-            setCategoriesData(c.aggregateTransactions(monthlyTransactions, categories));
+            setCategoriesData(c.aggregateTransactions(monthlyTransactionsDisplayable, categories));
         }
-    }, [categories, monthlyTransactions]);
+    }, [categories, monthlyTransactionsDisplayable]);
 
     useEffect( () => {
         //console.log(3);
@@ -153,8 +161,36 @@ function Overview(props: OverviewProps) {
     }, [hovCategory]);
 
     useEffect( () => {
-        recentTransactions.forEach( (t) => properlyCaseTransaction(t));
+        let rts: c.Transaction[] = recentTransactions.map( (t) => {return properlyCaseTransaction(t);});
+        if(SENSITIVE_DATA)
+            rts = rts.map( (t) => {return setSensitiveTransactions(t)} );
+        setRecentTransactionsDisplayable(rts);
     }, [recentTransactions])
+
+    useEffect( () => {
+        let mts: c.Transaction[] = monthlyTransactions;
+        if(SENSITIVE_DATA)
+            mts = mts.map( (t) => {return setSensitiveTransactions(t)} );
+        setMonthlyTransactionsDisplayable(mts);
+    }, [monthlyTransactions])
+
+    useEffect( () => {
+        let s: c.Summary[] = incomeSummary;
+        if(SENSITIVE_DATA)
+            s = s.map( (a) => {return setSensitiveSummary(a)} );
+        setIncomeSummaryDisplayable(s);
+    }, [incomeSummary])
+
+
+    useEffect( () => {
+        let s: c.Summary[] = expenseSummary;
+        if(SENSITIVE_DATA)
+            s = s.map( (a) => {return setSensitiveSummary(a)} );
+        setExpenseSummaryDisplayable(s);
+    }, [expenseSummary])
+
+
+    /* # # # # #  */
 
     /*  Other functions  */
     const updateCurrentMonth = (dir: number) => {
@@ -174,12 +210,32 @@ function Overview(props: OverviewProps) {
         t.category = c.properCase(t.category);
         t.payStatus = c.properCase(t.payStatus);
         t.vendor = c.properCase(t.vendor);
+        return t;
     }
 
     //positive offset is further back in the logs
     const updateRecentTransactions = (dir: number) => {
         const offSet = MAX_TRANS_PAGE * dir;
         setOffsetTransactions(Math.max(0, offsetTransactions + offSet));
+    }
+
+    //hide sensitive values by giving them random vals
+    const setSensitiveTransactions = (t: c.Transaction) => {
+        t.amount = Math.random() * 100;
+        if(t.vendor=="Revature")
+            t.vendor="Income";
+        if(t.vendor.includes("M line"))
+            t.vendor="Rent";
+        return t;
+    }
+
+    const setSensitiveSummary = (s: c.Summary) => {
+        s.value = Math.random() * 100;
+        if(s.aggregateCol=="Revature")
+        s.aggregateCol="Income";
+        if(s.aggregateCol.includes("M line"))
+        s.aggregateCol ="Rent";
+        return s;
     }
 
     //Only Render if we have all our data:
@@ -247,7 +303,7 @@ function Overview(props: OverviewProps) {
                                     aggFunction={sumTableAgg}
                                     aggOtherRow={true}
                                     minRows={3}
-                                    data={expenseSummary}
+                                    data={expenseSummaryDisplayable}
                                     limit={SUMMARY_TABLE_LIMIT}
                                 />
                             </div>
@@ -268,7 +324,7 @@ function Overview(props: OverviewProps) {
                                     aggFunction={sumTableAgg}
                                     minRows={3}
                                     aggOtherRow={true}
-                                    data={incomeSummary}
+                                    data={incomeSummaryDisplayable}
                                     limit={SUMMARY_TABLE_LIMIT}
                                 />
                                 </div>
@@ -300,7 +356,7 @@ function Overview(props: OverviewProps) {
                         colNames=   {DATA_TABLE_COLS}
                         toolTipColNames= {DATA_TABLE_TT_COLS}
                         toolTipHeaders={DATA_TABLE_TT_COLS.map((v)=> {return c.titleCase(v)})}
-                        data=       {recentTransactions}
+                        data=       {recentTransactionsDisplayable}
                         limit=      {MAX_TRANS_PAGE}
                         hovCellFunc=   {setHovCellFunc}
                         updateDataHyperlink={updateRecentTransactions}
