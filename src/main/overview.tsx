@@ -243,84 +243,60 @@ function Overview(props: OverviewProps) {
     return (
 
         <div className="container d-flex flex-column g-0" id="overview-container">
+
             <Header />   
 
             {/*Large div contains entire vertical length page*/}
-            <div className="row  main-content-row center-div align-items-center"> 
-                <div className="col-6 half-portion-wrapper-col">
-                    <div className='left-div row-centered-contents'>
+            <div className="row  main-content-row center-div"> 
+                <div className="col-lg-6 left-col">
 
-                    <div className='row inner-portion-top-row justify-content-center'>
-                        <div className='col-12 inner-portion-full-col'>
-                        
-                        
-                        <div className="left-data-graph">
-                        <DataGraph
-                           data=          {categoriesData} 
-                           exclusions=    {DATA_GRAPH_EXC_FUNC}
-                           limit=         {DATA_GRAPH_LIMIT}
-                           title=         {c.properCase(c.MONTHS[currentDateByMonth.getMonth()])}
-                           setHovSegment= {setHovCategory}
-                           height={Math.min(winWidth * .60 * .90, 340)}
-                           width={Math.min(winWidth * .60 * .90, 380)}
-                           updateDataHyperlink={updateCurrentMonth}
-                           />
+                    <div className="left-data-graph">
+                    <DataGraph
+                        data=          {categoriesData} 
+                        exclusions=    {DATA_GRAPH_EXC_FUNC}
+                        limit=         {DATA_GRAPH_LIMIT}
+                        title=         {c.properCase(c.MONTHS[currentDateByMonth.getMonth()])}
+                        setHovSegment= {setHovCategory}
+                        height={Math.min(winWidth * .60 * .90, 340)}
+                        width={Math.min(winWidth * .60 * .90, 380)}
+                        updateDataHyperlink={updateCurrentMonth}
+                        />
+                    </div>
+
+
+                
+                        {/*div for summary table 1, expenses */}
+
+                        <div className='inline-summary-table'> 
+                            <SubTable 
+                                title={'Expense Summary'}
+                                headers={['Expense Summary']}
+                                colNames={Object.values(c.SUMMARY_DATA)}
+                                aggFunction={sumTableAgg}
+                                aggOtherRow={true}
+                                minRows={3}
+                                data={expenseSummaryDisplayable}
+                                limit={SUMMARY_TABLE_LIMIT}
+                            />
                         </div>
 
-
-                        </div>    
-                    </div>
-                    {/* END TOP ROW UPPER LEFT */}
-
-
-                    <div className='row second-row justify-content-center'>
-                        <div className='col-10 inner-portion-full-col'>
-
-                            {/*div for summary table 1, expenses */}
+                            
+                
+                            {/*div for summary table 2, income*/ }
 
                             <div className='inline-summary-table'> 
-                                <SubTable 
-                                    title={'Expense Summary'}
-                                    headers={['Expense Summary']}
-                                    colNames={Object.values(c.SUMMARY_DATA)}
-                                    aggFunction={sumTableAgg}
-                                    aggOtherRow={true}
-                                    minRows={3}
-                                    data={expenseSummaryDisplayable}
-                                    limit={SUMMARY_TABLE_LIMIT}
-                                />
+                            <SubTable 
+                                title={'Income Summary'}
+                                headers={['Income Summary']}
+                                colNames={Object.values(c.SUMMARY_DATA)}
+                                aggFunction={sumTableAgg}
+                                minRows={3}
+                                aggOtherRow={true}
+                                data={incomeSummaryDisplayable}
+                                limit={SUMMARY_TABLE_LIMIT}
+                            />
                             </div>
 
-                        </div>    
-                    </div>
-                            
-                    <div className='row third-row justify-content-center'>
-                        <div className='col-10 inner-portion-full-col'>
-
-                                {/*div for summary table 2, income*/ }
-
-                                <div className='inline-summary-table'> 
-                                <SubTable 
-                                    title={'Income Summary'}
-                                    headers={['Income Summary']}
-                                    colNames={Object.values(c.SUMMARY_DATA)}
-                                    aggFunction={sumTableAgg}
-                                    minRows={3}
-                                    aggOtherRow={true}
-                                    data={incomeSummaryDisplayable}
-                                    limit={SUMMARY_TABLE_LIMIT}
-                                />
-                                </div>
-
-
-                        </div>
-                        </div>    
-                    {/*#######################*/}
-                    {/* END SECOND ROW  LEFT */}
-                    {/*#######################*/}
-
-                   
-                    </div>
                 </div>
                {/*#######################*/}
                 {/* END Left side col segment */}
@@ -331,7 +307,7 @@ function Overview(props: OverviewProps) {
                 {/* Spacing cols */}
                 
                 {/*div for transactions table, right side entire length */}
-                <div className="col-6">
+                <div className="col-lg-6">
 
                     <div className='right-data-table'>
                         <DataTable headers={DATA_TABLE_HEADERS}

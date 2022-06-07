@@ -3,7 +3,7 @@
 */
 
 body {
-   /* overflow: hidden;*/
+   overflow: hidden;
 }
 
 .row {
@@ -19,45 +19,32 @@ body {
 
 .center-div {
     height: 100%;
+    justify-content: center;
+    text-align: center;
 }
-
-/* #overview-top-row {
-    height: 9.4%;
-}
-
-#overview-mid-row {
-    height: 86.6%;
-}
-
-#overview-bot-row {
-    height: 4%;
-} */
 
 .main-content-row {
     padding-top: 1%;
 }
 
 /* LeftSide Div */
-.left-div {
-    width: 85%;
+.left-col {
     margin: auto;
-    margin-top: 0%;
-
     text-align: center;
-    justify-content: center;
-    
+    position: relative;
+}
+
+.left-col > * {
+    max-width: 75%;
+    margin: auto;
 }
 
 .left-data-graph {
-    margin: auto;
     margin-bottom: 7%;
 }
 
-
 .inline-summary-table {
-    height: 100%;
     margin-bottom: 10%;
-    width: 100%;
     table-layout: fixed;
 }
 

@@ -45,7 +45,7 @@ html, body, .container-table, div#root{
 
 /* header div */
 .header-row{
-    min-height: 80px;
+    height: 9.3%;
 
     background-image: linear-gradient(
         -90deg, 
@@ -57,7 +57,7 @@ html, body, .container-table, div#root{
 }
 
 .nested-banner-img {
-    width: 60%;
+    width: 80%;
     position: relative;
     left: 4px;
     top: -4px;
@@ -89,8 +89,10 @@ html, body, .container-table, div#root{
     width: 40%;
 }
 
-
+/* footer div */
 .footer-row {
+    height: 6.4%;
+
     background-color: var(--secondary-col);
     border: solid var(--primary-col);
     border-width: 0px 4px 0px 4px;
