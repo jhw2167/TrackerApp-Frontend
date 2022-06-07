@@ -6,23 +6,12 @@ body {
    /* overflow: hidden;*/
 }
 
-.row{
-    /* border: 1px solid green; */
-}
-
-.col{
-    border: 1px solid yellow;
+.row {
+    flex-grow: 1;
 }
 
 
-.my {
-    display: flex;
-    flex-direction: row;
-    background-color: orange;
-    min-height: 30px;
-}
-
-#overview-center-col {
+#overview-container {
     min-width: 900px;
     max-width: 1000px;
     height: 100vh;

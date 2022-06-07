@@ -4,11 +4,11 @@
 function Footer()  {
 
     return (
-        <footer>
+        <div className="row footer-row">
             <div className="footer-div">
                 <p className="copyright-text"> &copy; Tracker App 2022</p>
             </div>
-        </footer>
+        </div>
     )
 
 }

@@ -242,28 +242,11 @@ function Overview(props: OverviewProps) {
 
     return (
 
-        <div className="container-fluid g-0">
-        <div className='row outer-row g-0'>
-        <div className='col rev-side-anim side-anim'></div>
-
-        <div className='col-8 container no-padding' id='overview-center-col'>
-
-        {/*page title and logo*/}
-        <div className="row flex-grow-1 g-0" id="overview-top-row">
-            <div className="col">
-            <Header />
-            </div>
-        </div>
-            
+        <div className="container d-flex flex-column g-0" id="overview-container">
+            <Header />   
 
             {/*Large div contains entire vertical length page*/}
-        
-        <div className="row g-0" id="overview-mid-row">
-            <div className="col">
-            <main className="center-div align-items-center">
-            <div className="row  main-content-row">
-
-               
+            <div className="row  main-content-row center-div align-items-center"> 
                 <div className="col-6 half-portion-wrapper-col">
                     <div className='left-div row-centered-contents'>
 
@@ -367,24 +350,9 @@ function Overview(props: OverviewProps) {
                 
                
             </div> {/* Container row class */}
-            </main>
-            </div> {/*End Wrapper col*/}
-        </div> {/*End Wrapper row*/}
-
-
-
-        <div className="row g-0" id="overview-bot-row">
-            <div className="col">
             <Footer />
-            </div>
-        </div>
 
-
-        </div>
-            <div className='col for-side-anim side-anim'></div>
-
-    </div> {/* OUTTER ROW WRAPPER class */}
-    </div>); {/* END CONTAINER FLUID WRAPPER */}
+    </div>); {/* END CONTAINER WRAPPER */}
     //END REACT OVERVIEW ELEMENT
 }
 

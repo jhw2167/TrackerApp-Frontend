@@ -7,7 +7,7 @@ import banner from '../resources/img/blank_banner.png';
 function Header()  {
 
     return (
-        <header>
+        <div className="row header-row">
                 <div className='nested-banner-img'>
                     <img id="banner-img" src={banner}/>
                 </div>
@@ -18,7 +18,7 @@ function Header()  {
                 <div className='logo-subcontainer' id='feet1'><img src={logo}/></div>
             </div>
             </div>
-        </header>
+        </div>
     )
 
 }
