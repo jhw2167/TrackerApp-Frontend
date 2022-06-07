@@ -6,6 +6,15 @@ body {
    /* overflow: hidden;*/
 }
 
+.row{
+    /* border: 1px solid green; */
+}
+
+.col{
+    border: 1px solid yellow;
+}
+
+
 .my {
     display: flex;
     flex-direction: row;
@@ -23,7 +32,7 @@ body {
     height: 100%;
 }
 
-#overview-top-row {
+/* #overview-top-row {
     height: 9.4%;
 }
 
@@ -33,7 +42,7 @@ body {
 
 #overview-bot-row {
     height: 4%;
-}
+} */
 
 .main-content-row {
     padding-top: 1%;
