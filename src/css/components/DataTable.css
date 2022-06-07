@@ -3,7 +3,6 @@
 
 .data-table-wrapper {
   min-width: 450px;
-  margin-top: 2%;
 }
 
 /* Table CSS */
@@ -23,7 +22,7 @@
     text-align: center;
     width: 100%;
     table-layout: fixed;
-    margin-top: 2%;
+    margin-top: 0.5%;
 }
 
 /* Header CSS */
@@ -34,12 +33,13 @@
     border: solid 4px;
     border-color: var(--trans-grey);
     border-bottom: 0;
-    line-height: 3em;
+    line-height: 2em;
 
     font-weight: 600;
     font-size: 14px;
     text-align: center;
     text-transform: uppercase;
+    white-space: nowrap;
    }
 
 /* Row CSS */

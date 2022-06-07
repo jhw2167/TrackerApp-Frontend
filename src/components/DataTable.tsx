@@ -24,7 +24,8 @@ interface DataTableProps {
     toolTipColNames?: string[];
     toolTipHeaders?: string[];
     data: Array<any>;
-    limit: number;
+    maxRows?: number;
+    minRows?: number;
     hovCellFunc?: Function;
     updateDataHyperlink?: Function;
 }
@@ -42,6 +43,14 @@ const MAX_VENDOR_DISP_LEN = 12;
 
 
 function DataTable(props: DataTableProps) {
+
+    /* VARS */
+    const maxRows = (props.maxRows) ? props.maxRows : Infinity;
+    const minRows = (props.minRows) ? props.minRows : 0;
+    const data = props.data;
+        let i: number = data.length;    //pad until min
+        while(i < minRows) {data.push({}); i++;}
+        
 
     /* STATES */
     const [extHovCells, setExtHovCells] = useState<Set<any>>(new Set());
@@ -103,10 +112,11 @@ function DataTable(props: DataTableProps) {
                     return <th key={key}>{value}</th>})
                 }</tr>
                 {/* Now return data columns */}
-                {Object.entries(props.data).slice(0, props.limit).map(([key, value], index) => {
+                {Object.entries(data).slice(0, maxRows).map(([key, value], index) => {
                 
                     let isHov: number = hovCells.has(value) ? 1 : 0;
                     isHov += _.isEqual(deepHovCell, value) ? 1 : 0; //0-no hov, 1-hov, 2-deep hov
+                        isHov = (_.isEqual(value, {})) ? 0 : isHov;
                     let rowStyle = isHov > 0 ? HOV_ROW_STYLE : undefined;
                     return <React.Fragment key={key}>
                     <tr ref={ ref => rowRefs.current[index] = ref} 
@@ -124,31 +134,34 @@ function DataTable(props: DataTableProps) {
                      >
                         {Object.entries(props.colNames).map(([dkey, col]) => {
                             let innerStyle: CSS.Properties = {};
-                            let val:string = value[col.toString()];
-                            switch(col.toString()) {
+                            let val:string = (!value[col]) ?  '-' :  value[col.toString()];
 
-                                case c.TRANS_DATA.PURCHDATE:
-                                    innerStyle = {['fontSize' as any]: 14};
-                                    val = c.formatDBDate(val);
-                                    break;
+                            if(val != '-') 
+                            {
+                                switch(col.toString()) 
+                                {
+                                    case c.TRANS_DATA.PURCHDATE:
+                                        innerStyle = {['fontSize' as any]: 14};
+                                        val = c.formatDBDate(val);
+                                        break;
 
-                                case c.TRANS_DATA.VEND:
-                                    if(val.length > MAX_VENDOR_DISP_LEN ) {
-                                        val = val.slice(0, 12);
-                                        val += '...'
-                                    }
-                                    innerStyle= {['width' as any]: '50%'};
-                                    break;
+                                    case c.TRANS_DATA.VEND:
+                                        if(val.length > MAX_VENDOR_DISP_LEN ) {
+                                            val = val.slice(0, 12);
+                                            val += '...'
+                                        }
+                                        innerStyle= {['width' as any]: '50%'};
+                                        break;
 
-                                case c.TRANS_DATA.AMT:
-                                    innerStyle= {['textAlign' as any]: 'left',
-                                    ['paddingLeft' as any]: isHov > 1 ? '6%' : '9%'};
-                                    val = '$' + Number(val).toFixed(2);
-                                    break;
+                                    case c.TRANS_DATA.AMT:
+                                        innerStyle= {['textAlign' as any]: 'left',
+                                        ['paddingLeft' as any]: isHov > 1 ? '6%' : '9%'};
+                                        val = '$' + Number(val).toFixed(2);
+                                        break;
 
-                                case c.TRANS_DATA.CAT:
-                                    break;
-    
+                                    case c.TRANS_DATA.CAT:
+                                        break;
+                                }
                             }
                             return <td className="data-table-entry"
                             style={innerStyle}

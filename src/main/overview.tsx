@@ -25,7 +25,7 @@ interface OverviewProps {
     setSearchParams: Function;
 }
 
-const SENSITIVE_DATA = false;
+const SENSITIVE_DATA = true;
 
 ///finances/overview?mn=August&yr=21
 //Guess we'll have to take some params here
@@ -274,6 +274,7 @@ function Overview(props: OverviewProps) {
                                 colNames={Object.values(c.SUMMARY_DATA)}
                                 aggFunction={sumTableAgg}
                                 aggOtherRow={true}
+                                headerColSpan={3}
                                 minRows={3}
                                 data={expenseSummaryDisplayable}
                                 limit={SUMMARY_TABLE_LIMIT}
@@ -282,20 +283,21 @@ function Overview(props: OverviewProps) {
 
                             
                 
-                            {/*div for summary table 2, income*/ }
+                        {/*div for summary table 2, income*/ }
 
-                            <div className='inline-summary-table'> 
-                            <SubTable 
-                                title={'Income Summary'}
-                                headers={['Income Summary']}
-                                colNames={Object.values(c.SUMMARY_DATA)}
-                                aggFunction={sumTableAgg}
-                                minRows={3}
-                                aggOtherRow={true}
-                                data={incomeSummaryDisplayable}
-                                limit={SUMMARY_TABLE_LIMIT}
-                            />
-                            </div>
+                        <div className='inline-summary-table'> 
+                        <SubTable 
+                            title={'Income Summary'}
+                            headers={['Income Summary']}
+                            colNames={Object.values(c.SUMMARY_DATA)}
+                            aggFunction={sumTableAgg}
+                            headerColSpan={3}
+                            minRows={3}
+                            aggOtherRow={true}
+                            data={incomeSummaryDisplayable}
+                            limit={SUMMARY_TABLE_LIMIT}
+                        />
+                        </div>
 
                 </div>
                {/*#######################*/}
@@ -316,7 +318,8 @@ function Overview(props: OverviewProps) {
                         toolTipColNames= {DATA_TABLE_TT_COLS}
                         toolTipHeaders={DATA_TABLE_TT_COLS.map((v)=> {return c.titleCase(v)})}
                         data=       {recentTransactionsDisplayable}
-                        limit=      {MAX_TRANS_PAGE}
+                        maxRows=      {MAX_TRANS_PAGE}
+                        minRows=      {MAX_TRANS_PAGE}
                         hovCellFunc=   {setHovCellFunc}
                         updateDataHyperlink={updateRecentTransactions}
                         />

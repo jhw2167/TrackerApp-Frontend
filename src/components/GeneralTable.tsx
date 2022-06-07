@@ -158,7 +158,7 @@ function GeneralTable<T>(props: GeneralTableProps<T>) {
                                     innerStyle = (isHov) ? {...colStyle?.hoverCSS} : innerStyle;
                                 
                                let val:string = (!value[col]) ?  bufStyles.bufferContent?.get(col) as string : adjValFunc(value[col]); 
-                               console.log('[col]: %s, val[col] %s', col, value[col]);
+                               //console.log('[col]: %s, val[col] %s', col, value[col]);
                                return <td className={c.addStyleClass(sc, 'general-table-entry')}
                                style={innerStyle}
                                key={i}
@@ -202,12 +202,9 @@ function buildData(data: any[], aggFunc: Function | undefined, min: number = dat
         }
 
         //pad until min
-
         let i: number = retData.length;    
         while(i < min) {retData.push({}); i++;}
         
-            
-
         if(!_.isEqual(otherTuple,{}))
             retData.push(otherTuple);
         

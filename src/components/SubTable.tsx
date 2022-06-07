@@ -16,6 +16,7 @@ interface SubTableProps {
     colNames: string[];
     limit: number;
     minRows?: number;
+    headerColSpan?: number;
     aggOtherRow?: boolean;
     summaryRow?: boolean;
     aggFunction?: Function;
@@ -35,6 +36,9 @@ const MAX_VENDOR_DISP_LEN = 12;
 
 
 function SubTable(props: SubTableProps) {
+
+    /* VARS */
+    const headColSpan = (props.headerColSpan) ? props.headerColSpan : 0;
 
     /* STATES */
     const [extHovCells, setExtHovCells] = useState<Set<any>>(new Set());
@@ -77,7 +81,7 @@ function SubTable(props: SubTableProps) {
                     {/*             Table Header            */}
                     <tr className={'data-table-header' + ' data-subtable-header'}>{
                         Object.entries(props.headers).map(([key, value]) => {       //[0]
-                        return <th colSpan={ (data && data.length > 0) ? Object.entries(data[0]).length : 1}
+                        return <th colSpan={headColSpan}
                          key={key}>{value}</th>})
                     }</tr>
     
