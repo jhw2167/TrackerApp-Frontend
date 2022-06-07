@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <style type="text/css">
+        body {
+            background: black;
+            color: white;
+        }
+        #main-body {
+            min-height: 100vh;
+        }
+    </style>
+</head>
+
+<!--
+    So in looking at your markup, you just have too much.
+    Instead, your code will greatly benefit from reducing
+    and simplifying the HTML, so you will have fewer things
+    to tweak in CSS.
+
+    First, were going to tell the main body to be at least
+    100% the height of the display, then we are going to
+    create a basic BS grid.
+
+    Here is the basic diagram:
+
+    |-------------------------------------------------------
+    | <#main-body.container>                               |
+    |-------------------------------------------------------
+    |  | <header />                                        |
+    |-------------------------------------------------------
+    |    | <div.row>                                       |
+    |    | | <.col-lg-6>       | | <div.col-lg-6>          |
+    |    | | | <graph>         | |  | <big-ass table>      |
+    |    | | | <expense sum>   | | </div>                  |
+    |    | | | <income sum>    | |                         |
+    |    | | </div>            | |                         |
+    |    | </div>                                          |
+    |-------------------------------------------------------
+    |  | <footer />                                        |
+    |-------------------------------------------------------
+    | </.container>                                        |
+    |-------------------------------------------------------
+    
+
+    That will establish the basic 2-column grid, and allow
+    your layout to be responsive. Once we have this in place
+    we're going to:
+    
+    1. Add ".d-flex" on the container to enable flex behaviors.
+    2. Set the flex direction to ".flex-column".
+        (flex defaults to "row" which places siblings side-by-side,
+        and we need to stack them in a column like legos.)
+    3. Tell the ".row" to grow to fill the space via "flex-grow-1".
+
+    <div class="container d-flex flex-column">
+        <header>
+            ...
+        </header>
+        <div class="row flex-grow-1">
+            ...
+        </div>
+        <footer></footer>
+    </div>
+
+    I also added some margin and padding classes.
+-->
+
+<body>
+    <div id="main-body" class='container d-flex flex-column'>
+        <header class="py-3">Header goes here</header>
+        <div class="row flex-grow-1">
+            <div class="col-lg-6">
+                <h3 class="text-center">Month</h3>
+                <span class="text-center d-block mb-3">(Graph goes here.)</p>
+                <h3 class="text-center">Recent Transactions</h3>
+                <table class="table text-white table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th>DATE</th>
+                            <th>VENDOR</th>
+                            <th>AMOUNT</th>
+                            <th>CATEGORY</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>5/31/22</td>
+                            <td>Sample Data</td>
+                            <td>$100.00</td>
+                            <td>Category Name</td>
+                        </tr>
+                        <tr>
+                            <td>5/31/22</td>
+                            <td>Sample Data</td>
+                            <td>$100.00</td>
+                            <td>Category Name</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3 class="text-center">Recent Transactions</h3>
+                <table class="table text-white table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th>DATE</th>
+                            <th>VENDOR</th>
+                            <th>AMOUNT</th>
+                            <th>CATEGORY</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>5/31/22</td>
+                            <td>Sample Data</td>
+                            <td>$100.00</td>
+                            <td>Category Name</td>
+                        </tr>
+                        <tr>
+                            <td>5/31/22</td>
+                            <td>Sample Data</td>
+                            <td>$100.00</td>
+                            <td>Category Name</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-6">
+                <h3 class="text-center">Recent Transactions</h3>
+                <table class="table text-white table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th>DATE</th>
+                            <th>VENDOR</th>
+                            <th>AMOUNT</th>
+                            <th>CATEGORY</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>5/31/22</td>
+                            <td>Sample Data</td>
+                            <td>$100.00</td>
+                            <td>Category Name</td>
+                        </tr>
+                        <tr>
+                            <td>5/31/22</td>
+                            <td>Sample Data</td>
+                            <td>$100.00</td>
+                            <td>Category Name</td>
+                        </tr>
+                        <tr>
+                            <td>5/31/22</td>
+                            <td>Sample Data</td>
+                            <td>$100.00</td>
+                            <td>Category Name</td>
+                        </tr>
+                        <tr>
+                            <td>5/31/22</td>
+                            <td>Sample Data</td>
+                            <td>$100.00</td>
+                            <td>Category Name</td>
+                        </tr>
+                        <tr>
+                            <td>5/31/22</td>
+                            <td>Sample Data</td>
+                            <td>$100.00</td>
+                            <td>Category Name</td>
+                        </tr>
+                        <tr>
+                            <td>5/31/22</td>
+                            <td>Sample Data</td>
+                            <td>$100.00</td>
+                            <td>Category Name</td>
+                        </tr>
+                        <tr>
+                            <td>5/31/22</td>
+                            <td>Sample Data</td>
+                            <td>$100.00</td>
+                            <td>Category Name</td>
+                        </tr>
+                        <tr>
+                            <td>5/31/22</td>
+                            <td>Sample Data</td>
+                            <td>$100.00</td>
+                            <td>Category Name</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <footer class="py-3">Footer goes here</footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
+        integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"
+        integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
