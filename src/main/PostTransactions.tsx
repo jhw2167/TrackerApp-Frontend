@@ -41,14 +41,14 @@ const ROLLOVER_BLANK_STYLE: CSS.Properties = {
 
         //For Tables
         const HOV_ROW_STYLE: CSS.Properties = {
-        ["border" as any]: 'solid 3px var(--primary-col)',
+        ["border" as any]: 'solid 2px var(--primary-col)',
         ["lineHeight" as any]: '2em'
         };
     
         const HOV_COL_STYLE: CSS.Properties = {
                 ["fontWeight" as any]: 500,
                 ["fontSize" as any]: 18,
-                ["border" as any]: 'solid 4px var(--tert-col)',
+                ["border" as any]: 'solid 3px var(--tert-col)',
                 ["lineHeight" as any]: '2.2em'
         };
             
@@ -413,14 +413,8 @@ function PostTransactions() {
         <div className='col rev-side-anim side-anim'></div>
 
         <div className='col-10 no-padding' id='post-trans-center-col'>
-
-          {/* HEADER */}
-        <div className='row g-0'>
-          <div className='col'>
+    
            <Header/>
-         </div>
-        </div>
-        {/*---------------*/}
 
                 <div className="row content-row center-div align-items-center flex-grow-1"
                 id='post-trans-main-content'>
