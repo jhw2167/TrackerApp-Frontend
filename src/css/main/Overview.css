@@ -3,7 +3,7 @@
 */
 
 body {
-   overflow: hidden;
+   /* overflow: hidden; */
 }
 
 .row {
@@ -14,8 +14,7 @@ body {
 #overview-container {
     min-width: 900px;
     max-width: 1000px;
-    height: 100vh;
-    max-height: 100vh;
+    height: fit-content;
 }
 
 .center-div {

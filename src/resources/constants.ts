@@ -7,7 +7,7 @@ export const axios = require('axios').default;
 
 /* Interfaces */
 export interface Transaction {
-    tId: string;
+    tid: string;
     purchaseDate: Date;
     amount: number;
     vendor: string;
@@ -56,7 +56,7 @@ export interface Summary {
 
 //Data Structure Constants
 export const TRANS_DATA = {
-	ID: 'tId', 
+	ID: 'tid', 
 	PURCHDATE: 'purchaseDate', 
 	AMT: 'amount', 
 	VEND: 'vendor', 
@@ -71,7 +71,7 @@ export const TRANS_DATA = {
 }
 
 export const PLAID_TRANS = {
-	ID: 'tId', 
+	ID: 'tid', 
 	PURCHDATE: 'purchaseDate', 
 	AMT: 'amount',
     VENDID: 'vendorID',

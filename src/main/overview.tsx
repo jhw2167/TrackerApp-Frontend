@@ -25,7 +25,7 @@ interface OverviewProps {
     setSearchParams: Function;
 }
 
-const SENSITIVE_DATA = true;
+const SENSITIVE_DATA = false;
 
 ///finances/overview?mn=August&yr=21
 //Guess we'll have to take some params here

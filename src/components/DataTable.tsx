@@ -170,7 +170,10 @@ function DataTable(props: DataTableProps) {
                     </tr>{(rowRefs.current[index] && props.toolTipColNames && props.toolTipHeaders) ?
                     <Overlay target={rowRefs.current[index]}
                      show={isHov>1}  placement="right">
-                        <Tooltip className={c.addStyleClass('dt', 'tooltip')}>
+                        <Tooltip className={c.addStyleClass('dt', 'tooltip')}
+                        onMouseEnter={() => setDeepHovCell(value)}
+                        onMouseLeave={() => setDeepHovCell(null)}
+                        >
                             <ul>
                                 {props.toolTipColNames.map((v, i) => {
                                     return (<li key={i}>{(props.toolTipHeaders as string[])[i]

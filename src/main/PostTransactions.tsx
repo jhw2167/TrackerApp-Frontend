@@ -358,7 +358,7 @@ function PostTransactions() {
                 let fv = (formValues) ? formValues.current : [];
 
                 let t: Transaction = {
-                        tId: (fv[i++]) ? fv[i] : '?',
+                        tid: (fv[i++]) ? fv[i] : '?',
                         purchaseDate: fv[i++],
                         amount: fv[i++],
                         vendor: fv[i++],
