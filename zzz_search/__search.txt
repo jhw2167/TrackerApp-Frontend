@@ -1,9 +1,0 @@
-src/components/AddNewTrans.tsx:65:let forceUpdate: Function;
-src/components/AddNewTrans.tsx:94:    forceUpdate = React.useCallback(() => updateState({}), []);
-src/components/AddNewTrans.tsx:103:        forceUpdate();  //forces component updated each time form is changed
-src/components/AddNewTrans.tsx:120:        forceUpdate();  //forces component updated each time form submit is attempted
-src/components/GeneralTable.tsx:74:    const forceUpdate = React.useCallback(() => updateState({}), []);
-src/components/GeneralTable.tsx:132:                           forceUpdate();
-src/components/GeneralTable.tsx:165:                               onMouseOver= {() => { hovCells.clear(); hovCells.add(i); forceUpdate();}}
-src/main/PostTransactions.tsx:236:                const forceUpdate = React.useCallback(() => updateState({}), []);
-src/main/PostTransactions.tsx:294:                forceUpdate();
