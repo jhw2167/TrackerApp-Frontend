@@ -252,7 +252,7 @@ function Overview(props: OverviewProps) {
             <Header />   
 
             {/*Large div contains entire vertical length page*/}
-            <div className="row  main-content-row center-div"> 
+            <div className="row  main-content-row center-div gradient"> 
                 <div className="col-lg-6 left-col">
 
                     <div className="left-data-graph">

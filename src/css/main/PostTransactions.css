@@ -17,19 +17,17 @@
     height: 100px;
 }
 
-#pt-outer-row {
-    height: 100%;
-}
-
 /* Main content Styling */
-#post-trans-center-col {
-    min-width: 1400px;
+#pt-container {
     background-color: var(--secondary-col);
+    background-color: black;
 }
 
-#post-trans-main-content {
-    background-image: none;
+#pt-container > * {
+    width: 90%;
+    min-width: 1400px;
 }
+
 
 .content-row {
     margin: auto;

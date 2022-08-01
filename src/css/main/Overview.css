@@ -6,10 +6,6 @@ body {
    /* overflow: hidden; */
 }
 
-.row {
-    flex-grow: 1;
-}
-
 
 #overview-container {
     min-width: 900px;

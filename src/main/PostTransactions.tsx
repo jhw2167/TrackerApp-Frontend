@@ -251,7 +251,7 @@ function PostTransactions() {
 
         /* Effects */
         const scrollInnerDiv = (deltaY: number) => {
-                console.log('----- -----');
+                //console.log('----- -----');
                 let dir = deltaY/Math.abs(deltaY)
                 //console.log('dir: ' + dir);
                 let ref: HTMLDivElement;
@@ -302,7 +302,7 @@ function PostTransactions() {
                 //console.log("scrolls:  " + (newScrollPos))
                 scrollableRowRef.current?.scroll(0, newScrollPos);
                 //console.log('s')                        
-                console.log('\n\n\n')
+                //console.log('\n\n\n')
                 setScrollPos(newScrollPos);
                 //state doesnt update until after function terminates
         };
@@ -422,21 +422,15 @@ function PostTransactions() {
 
         return (
 
-        <div className='row outer-row g-0 no-scroll' id='pt-outer-row'>
-        <div className='col rev-side-anim side-anim'></div>
-
-        <div className='col-10 no-padding' id='post-trans-center-col'>
-    
-           <Header/>
-
-                <div className="row content-row center-div align-items-center flex-grow-1"
-                id='post-trans-main-content'>
-                <div className='col-12'>
+        <div className='container-fluid vh-100 d-flex flex-column align-items-center' id='pt-container'>
+                <Header/>
+        <div className='row pt justify-content-center no-scroll center-div'>
+        <div className='col no-scroll'>
 
 
                 {/*ADD NEW TRANS*/}
                 <div className='row content-row' id='add-new-transaction'>
-                <div className='col-12 content-col'>
+                <div className='col content-col'>
 
                   <div className='row content-row section-title-row no-internal-flex'>
                      <div className='col post-trans-subsec-title-item section-title'
@@ -521,7 +515,7 @@ function PostTransactions() {
                         id='transactions-content-row' onWheel={(e: React.WheelEvent<HTMLDivElement>) => {
                                 scrollInnerDiv(e.deltaY);
                         }}>
-                <div className='col-12 main-scrollable-content-col'>
+                <div className='col main-scrollable-content-col'>
 
                 {/*Pending Transactions*/}
                 <div ref={ref => rolloverRows.current[0] = ref}  id='pt-pending-transactions'
@@ -672,13 +666,12 @@ function PostTransactions() {
 
 
                 </div>
-                </div>
                 {/* END MAIN CONTENT ROW*/}
+
 
         </div> 
         {/*END MAIN CONTENT DIV*/}
 
-        <div className='col for-side-anim side-anim'></div>
         </div>  
         /* END OUTER ROW*/
 )
