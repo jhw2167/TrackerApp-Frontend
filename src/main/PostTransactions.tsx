@@ -250,20 +250,23 @@ function PostTransactions() {
 
         /* Effects */
         const scrollInnerDiv = (deltaY: number) => {
+                console.log('----- -----');
                 let dir = deltaY/Math.abs(deltaY)
+                console.log('dir: ' + dir);
                 let ref: HTMLDivElement;
                 if(scrollableRowRef.current)
                   ref = scrollableRowRef.current;
                 else 
                   return;
 
-                const BUFFER = 10;
+                const BUFFER = 5;
                 let distFromTop = rolloverRows.current.map( (v) => {
                         return (v) ? v.getBoundingClientRect().y - (ref.getBoundingClientRect().y + BUFFER) : 0;
                 })
 
                 let i = 0;
                 while(i<rolloverRows.current.length && distFromTop[i] < 0 ) {
+                        //for fixed rollovers, keep them fixed unless user tries to scroll down
                         rolloverStyles[i++] = {...ROLLOVER_DIV_FIXED_STYLE, top: ref.getBoundingClientRect().top };
                 }
 
@@ -271,27 +274,33 @@ function PostTransactions() {
                 let jump=0;
                 if(i < rolloverRows.current.length) {
                         scrollDist = (dir>0) ? Math.min(MAX_SCROLL, Math.max(distFromTop[i]/4, MIN_SCROLL))*dir : MAX_SCROLL*dir;
+                        console.log("dist: " + scrollDist);
+
                 } else if(dir < 0) { //user attempting to scroll down when all divs are locked; loosen last
                         scrollDist = -MIN_SCROLL*3;
                         jump = -MIN_SCROLL*2;
                         rolloverStyles[i-1] = ROLLOVER_BLANK_STYLE;
                 }
 
-                //console.log('Dist From: ' + JSON.stringify(distFromTop));
-                //console.log('SP: %d', scrollPos);
+                console.log('Dist From: ' + JSON.stringify(distFromTop));
                 if(i!=0 && i != rolloverRows.current.length && 
                         distFromTop[i] < ref.getBoundingClientRect().height*2 && 
-                        distFromTop[i] - scrollDist > ref.getBoundingClientRect().height*2) {
-                                rolloverStyles[i-1] = ROLLOVER_BLANK_STYLE; //loosen previous fixed div
+                        distFromTop[i] - scrollDist > ref.getBoundingClientRect().height*2) 
+                {
+                        rolloverStyles[i-1] = ROLLOVER_BLANK_STYLE; //loosen previous fixed div
                 }
                 while(i < rolloverRows.current.length) {
                         rolloverStyles[i++] = ROLLOVER_BLANK_STYLE;
                 }
                 setRollOverStyles(rolloverStyles);
-                setScrollPos(Math.min(Math.max(scrollPos+scrollDist, 0), ref.children[0].clientHeight));
-                scrollableRowRef.current?.scroll(0, scrollPos + jump);
+                let newScrollPos = Math.min(Math.max(scrollPos+scrollDist, 0), ref.children[0].clientHeight);
+                console.log('SP: %d', scrollPos);
+                console.log("scrolls:  " + (newScrollPos))
+                scrollableRowRef.current?.scroll(0, newScrollPos + jump);
                 //console.log('s')                        
-                forceUpdate();
+                console.log('\n\n\n')
+                setScrollPos(newScrollPos);
+                //state doesnt update until after function terminates
         };
 
         /* Api Calls */
