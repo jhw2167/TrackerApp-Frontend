@@ -221,18 +221,23 @@ function Overview(props: OverviewProps) {
 
     //hide sensitive values by giving them random vals
     const setSensitiveTransactions = (t: c.Transaction) => {
-        t.amount = Math.random() * 100;
-        if(t.vendor=="Revature")
-            t.vendor="Income";
+        //t.amount = Math.random() * 100;
+        if(t.vendor=="Revature") {
+            t.vendor="Bank of Am.";
+            t.amount*=2;
+        }  
         if(t.vendor.includes("M line"))
             t.vendor="Rent";
         return t;
     }
 
     const setSensitiveSummary = (s: c.Summary) => {
-        s.value = Math.random() * 100;
-        if(s.aggregateCol=="Revature")
-        s.aggregateCol="Income";
+        //s.value = Math.random() * 100;
+        if(s.aggregateCol=="Revature") {
+            s.aggregateCol="Income";
+            s.value*=2;
+        }
+        
         if(s.aggregateCol.includes("M line"))
         s.aggregateCol ="Rent";
         return s;

@@ -386,7 +386,7 @@ function PostTransactions() {
                         case 'POST':
                                 //post results
                                 console.log('Post Results')
-                                //api.postRequest(api.SERVER_ALL_TRANSACTIONS, [t]);
+                                api.postRequest(api.SERVER_ALL_TRANSACTIONS, [t]);
                                 break;
                         
                         case 'PREPARE':
