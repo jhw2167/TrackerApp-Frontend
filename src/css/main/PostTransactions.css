@@ -87,7 +87,7 @@
 .main-scrollable-content-row {
     margin: auto;
     position: relative;
-    z-index: 100;
+    overflow-y: hidden;
     
     height: 50vh;
 }
