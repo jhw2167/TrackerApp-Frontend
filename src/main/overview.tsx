@@ -235,7 +235,6 @@ function Overview(props: OverviewProps) {
         //s.value = Math.random() * 100;
         if(s.aggregateCol=="Revature") {
             s.aggregateCol="Income";
-            s.value*=2;
         }
         
         if(s.aggregateCol.includes("M line"))
