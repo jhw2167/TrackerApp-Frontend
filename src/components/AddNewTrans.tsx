@@ -10,9 +10,10 @@ import React, { KeyboardEvent, MutableRefObject,
      ReactElement, RefObject, useEffect, useRef, useState } from 'react';
 import { StringMappingType } from 'typescript';
 import { contains, now } from 'underscore';
-     import DropDown from './subcomponents/DropDown';
+     import { DropDown } from './subcomponents/DropDown';
 
 import { Link, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
+import { text } from 'stream/consumers';
 
      /* Definitions */
 interface FormProps {
@@ -301,7 +302,7 @@ export default AddNewTrans;
             filterableDDOptions.current.get(globalHeaders[props.index]) as string[] : [];
             dropDown = <DropDown 
             key={props.id+ '-' + options.length}  /* we can force child to update each time key changes */
-            data={options}
+            data={options.map((v: string) => {return {text: v}})}
             charLimit={12}
             styleClass={'dd-' + props.id + ' pt'}
             setSelectedData = {setSelectedData}

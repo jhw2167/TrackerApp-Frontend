@@ -53,6 +53,15 @@ export interface Summary {
     categories: string
 }
 
+export interface LinkedText {
+    text: string;
+    url?: string;
+    openIn?: number;
+}
+    export const REDIRECT=0;    //constants for openIn
+    export const NEW_TAB=1;
+
+
 
 //Data Structure Constants
 export const TRANS_DATA = {

@@ -7,7 +7,9 @@ import Layout from './main/Layout';
 
 //css
 import './css/General.css';
-import './css/misc/Background.css'
+import './css/Header.css';
+import './css/misc/Background.css';
+import './components/narrowcomponents/CSS/BurgerMenuDD.css';
 
 //lib components
   import '../node_modules/react-vis/dist/style.css';

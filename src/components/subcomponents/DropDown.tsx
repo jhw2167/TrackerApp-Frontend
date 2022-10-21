@@ -10,23 +10,36 @@ import React, { KeyboardEvent, MutableRefObject,
 
 
 /* Interfaces */
-interface DropDownProps {
-    data: Array<any>;
+export interface DDHtmlStructure {
+    div?: string;
+    table?: string;
+    tbody?: string;
+    tr?: string;
+    td?: string;
+}
+
+export interface DropDownProps {
+    data: Array<c.LinkedText>;
     charLimit?: number;
-    styleClass: string
+    styleClass: string                  //namespace for styles
+    addStyleClasses?: DDHtmlStructure;            //list of space seperated addtional style classes
+    inlineStyles?: Object;
     hovCellFunc?: Function;
     setSelectedData?: Function; //sets data selected by DD menu to container
     setFuncSetDDPosExternally?: Function;   //takes a "setStateFunction" that sets the state of a 
     /* container with a setState function internally in dropDown, so the dropDownPlace state can
-    be adjusted from outside this component */
+    be adjusted from outside this component e.g. const [myDDPlaceSetter, SetMyDDPlaceSetter] = useState<Function>(),
+    pass "SetMyDDPlaceSetter" to this field then use myDDPlaceSetter(somePlace) to set DDplace externally */
     animCellHeight?: number;
     cellHeight?: number;
-    afterClick?: (val: string) => void;  //sets drop down items to do something after they are clicked
+    afterClick?: (val: string) => void;  //sets drop down items to do something after they are clicked, e.g. pass
+                                        // a setState function for the selected value here
 }
+
 
 /* Global constants */
 
-function DropDown(props: DropDownProps ) {
+export function DropDown(props: DropDownProps ) {
 
      /* STATES */
     const [extHovCells, setExtHovCells] = useState<Set<any>>(new Set());
@@ -47,6 +60,18 @@ function DropDown(props: DropDownProps ) {
     children.item(0)?.  //inner tbody
     children.item(data.length-1)?.clientHeight as number;
     const ANIM_CELL_HEIGHT = (props.animCellHeight) ? props.animCellHeight : 0;
+    const rowStyleClassFunc = (i: number): string => {
+        const VAR: string = '${';
+        let val: string = (props.addStyleClasses?.tr) ? props.addStyleClasses?.tr : '';
+        if(!props.addStyleClasses?.tr)
+            return '';  //none provided, null string
+        else if(!val.includes(VAR))
+            return val; //not variable w/ respect to rows, return string
+        else {
+            let ind = val.indexOf(VAR);
+            return val.substring(0,  ind) + i + val.substring(ind + 4);
+        }
+    }
 
     const parentAfterClick = (props.afterClick) ? props.afterClick : (v: any) => {};
 
@@ -130,37 +155,43 @@ function DropDown(props: DropDownProps ) {
     if(!data || data.length<1) {
         //console.log("ret nothing!!! %s: " + props.data.length, props.headers);
         return ( 
-            <div ref={scrollableDivRef} className={c.addStyleClass(props.styleClass, 'drop-down-wrapper-div')}>
-        <div className={c.addStyleClass(props.styleClass, 'drop-down-nested-wrapper-div')}>
+            <div ref={scrollableDivRef} className={c.addStyleClass(props.styleClass, 'drop-down-wrapper-div')
+            + ' ' + props.addStyleClasses?.div}>
+      
             <table className={c.addStyleClass(props.styleClass, 'drop-down-table')}>
                     <tbody>
                         <tr className={c.addStyleClass(props.styleClass, 'dd-row') + ' empty-drop-down'}>
                              <td>No Options</td></tr>
                     </tbody>
                     </table>
-                </div>
             </div>
         )
     } else {
 
     return (
-        <div ref={scrollableDivRef} className={c.addStyleClass(props.styleClass, 'drop-down-wrapper-div')}>
-        <div className={c.addStyleClass(props.styleClass, 'drop-down-nested-wrapper-div')}>
-            <table className={c.addStyleClass(props.styleClass, 'drop-down-table')}>
-                    <tbody>
+        <div ref={scrollableDivRef} className={c.addStyleClass(props.styleClass, 'drop-down-wrapper-div') 
+        + ' ' + props.addStyleClasses?.div}>
+
+            <table className={c.addStyleClass(props.styleClass, 'drop-down-table') + ' ' + props.addStyleClasses?.table}>
+                    <tbody className={props.addStyleClasses?.tbody}>
                     {/*         Now return data row      */}
-                    {data.map( (value: string, index: number) => {
+                    {data.map( (value: c.LinkedText, index: number) => {
                         let isHov: number = (hovCells.has(value) || hovCells.has(index)) ? 1 : 0;
                         isHov += _.isEqual(deepHovCell, value) ? 1 : 0; //0-no hov, 1-hov, 2-deep hov
                         let hovRowStyleClass = (isHov > 0) ? 
                         c.addStyleClass(props.styleClass, 'dd-hov-row') : '';
-                        let displayVal = (props.charLimit && value.length > props.charLimit) ?
-                        value.slice(0, props.charLimit) + '...' : value;
+                        let displayVal = (props.charLimit && value.text.length > props.charLimit) ?
+                        value.text.slice(0, props.charLimit) + '...' : value.text;
                         
                         return <tr className= {c.addStyleClass(props.styleClass, 'dd-row')
-                        + ' ' + hovRowStyleClass}
+                        + ' ' + hovRowStyleClass + ' ' + rowStyleClassFunc(index)} 
+                        onClickCapture={ () => {  
+                            if(value.url && value?.openIn==c.REDIRECT)
+                             window.location.href=value.url }}
                         onClick={() => {
-                            parentAfterClick(value);
+                            if(value.url && value?.openIn==c.NEW_TAB)
+                                 window.open(value.url, "_blank"); //Open link in new tab
+                            parentAfterClick(value.text);
                             setDropDownPlace(index)}}
                         key={index}
                         onMouseEnter={() => {
@@ -174,7 +205,7 @@ function DropDown(props: DropDownProps ) {
                          >
                             {/*         Now return data COLS      */}
                             <td className={c.addStyleClass(props.styleClass, 'dd-col')} >
-                            {displayVal}
+                                <div>{displayVal}</div>
                             </td>
                         </tr>
                         })}
@@ -182,10 +213,6 @@ function DropDown(props: DropDownProps ) {
                     </tbody>
                 </table>
         </div>
-        </div>
     );
     } // end ELSE
 }//End COMPONENT DROP DOWN
-
-
-export default DropDown;
