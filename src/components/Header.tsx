@@ -20,6 +20,7 @@ function Header()  {
 
     return (
         <div className="row header-row">
+            <BurgerMenuDD {...B_MENU_OPTS}/>    
                 <div className='nested-banner-img'>
                     <img id="banner-img" src={banner}/>
                 </div>
@@ -30,7 +31,7 @@ function Header()  {
                 <div className='logo-subcontainer' id='feet1'><img src={logo}/></div>
             </div>
             </div>
-        <BurgerMenuDD {...B_MENU_OPTS}/>
+        
         </div>
     )
 

@@ -50,3 +50,83 @@
 
 
 /* Burger Menu */
+.header.burger-menu-wrapper {
+    position: relative;
+}
+
+.header.burger-menu {
+    position: relative;
+    left: 100%;
+    top: 10%;
+}
+
+.header.burger-list-wrapper {
+    
+}
+
+.header.burger-list-wrapper > *, .header.burger-icon > *  {
+    translate: -110%;
+}
+
+.header.burger-icon {
+    background-color: #232323;
+}
+
+/* Burger Animation */
+
+    .header.burger-menu span {
+    display: block;
+    width: 33px;
+    height: 4px;
+    margin-bottom: 5px;
+    position: relative;
+    
+    background: #cdcdcd;
+    border-radius: 3px;
+    
+    z-index: 1;
+    
+    transform-origin: 4px 0px;
+    
+    transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+                background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+                opacity 0.55s ease;
+    }
+
+    .header.burger-menu span:first-child
+    {
+    transform-origin: 0% 0%;
+    }
+
+    .header.burger-menu span:nth-last-child(2)
+    {
+    transform-origin: 0% 100%;
+    }
+
+    /* 
+    * Transform all the slices of hamburger
+    * into a crossmark.
+    */
+    .header.burger-menu input:checked ~ span
+    {
+    opacity: 1;
+    transform: rotate(45deg) translate(-2px, -1px);
+    background: #232323;
+    }
+
+    /*
+    * But let's hide the middle one.
+    */
+    .header.burger-menu input:checked ~ span:nth-last-child(3)
+    {
+    opacity: 0;
+    transform: rotate(0deg) scale(0.2, 0.2);
+    }
+
+    /*
+    * Ohyeah and the last one should go the other direction
+    */
+    .header.burger-menu input:checked ~ span:nth-last-child(2)
+    {
+    transform: rotate(-45deg) translate(0, -1px);
+    }

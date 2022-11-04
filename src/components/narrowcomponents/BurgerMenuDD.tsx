@@ -43,16 +43,18 @@ function BurgerMenuDD(props: BurgerMenuDDProps) {
       }
 
     return (
-        <div className={sc+"burger-menu wrapper"}>
+        <div className={sc+"burger-menu-wrapper"}>
+          <div className={sc+"burger-menu"}>
             <div className={sc+"burger-icon"} style={(replace) ? REPLACE_STYLE : {}}>
-                <div className={sc+"burger-bar "+ ((isOpen) ? 'open':'')}></div>
-                <div className={sc+"burger-bar "+ ((isOpen) ? 'open':'')}></div>
-                <div className={sc+"burger-bar "+ ((isOpen) ? 'open':'')}></div>
+                <span className={sc+"burger-bar "+ ((isOpen) ? 'open':'')}></span>
+                <span className={sc+"burger-bar "+ ((isOpen) ? 'open':'')}></span>
+                <span className={sc+"burger-bar "+ ((isOpen) ? 'open':'')}></span>
             </div>
          <div className={sc+"burger-list-wrapper"}>
            {dropDownJsx(props.options)}
          </div>
-        </div>
+       </div>
+      </div>
     )
 }
 
