@@ -86,10 +86,7 @@
 .header.burger-list-wrapper > *, .header.burger-icon {
     translate: -110%;
 }
-.header.burger-list-wrapper *:hover, .header.burger-list-wrapper {
-    width: auto;
-    overflow: hidden;
-}
+
 
 .header.burger-list-wrapper > div {
     min-width: 100px;
@@ -115,8 +112,8 @@
 
 .header.dd-row.hov {
     cursor: pointer;
-    scale: 1.1;
-    transition: scale 200ms;
+    line-height: 30px;
+    font-size: 1.2em;
 }
 
 /* Burger Animation */
