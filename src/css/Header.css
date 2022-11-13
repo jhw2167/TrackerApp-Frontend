@@ -1,6 +1,6 @@
 /* header div */
 .header-row{
-
+    position: relative;
     background-image: linear-gradient(
         -90deg, 
         var(--primary-col) 0%, 
@@ -8,6 +8,10 @@
         var(--primary-col) 90%
       );
     
+}
+
+.header-row > * {
+    top: 4px
 }
 
 .nested-banner-img {
@@ -50,38 +54,54 @@
 
 
 /* Burger Menu */
+.header {
+    --burger-icon-w: 30px;
+    --burger-menu-prim-col: var(--light-grey);
+    --burger-menu-sec-col: var(--tert-col);
+}
+
+
 .header.burger-menu-wrapper {
-    position: relative;
+    position: absolute;
+    width: 0;
+    right: 0;
 }
 
 .header.burger-menu {
     position: relative;
     left: 100%;
     top: 10%;
+    width: var(--burger-icon-w);
+}
+
+.header.burger-icon {
+    /* background-color: var(--burger-menu-prim-col); */
 }
 
 .header.burger-list-wrapper {
     
 }
 
-.header.burger-list-wrapper > *, .header.burger-icon > *  {
+.header.burger-list-wrapper > *, .header.burger-icon {
     translate: -110%;
 }
 
-.header.burger-icon {
-    background-color: #232323;
+.header.burger-list-wrapper > * {
+    background-color: var(--burger-menu-prim-col);
+    color: var(--burger-menu-sec-col);
 }
+
 
 /* Burger Animation */
 
-    .header.burger-menu span {
+.header.burger-menu span {
     display: block;
-    width: 33px;
+    width: var(--burger-icon-w);
     height: 4px;
     margin-bottom: 5px;
     position: relative;
     
-    background: #cdcdcd;
+    background: var(--burger-menu-sec-col);
     border-radius: 3px;
     
     z-index: 1;
@@ -93,40 +113,33 @@
                 opacity 0.55s ease;
     }
 
-    .header.burger-menu span:first-child
-    {
-    transform-origin: 0% 0%;
+    .header.burger-menu span:first-child {
+        transform-origin: 0% 0%;
     }
 
-    .header.burger-menu span:nth-last-child(2)
-    {
-    transform-origin: 0% 100%;
+    .header.burger-menu span:first-child {
+        transform-origin: 0% 0%;
+    }
+
+    .header.burger-menu span:nth-last-child(2) {
+        transform-origin: 0% 100%;
     }
 
     /* 
     * Transform all the slices of hamburger
     * into a crossmark.
     */
-    .header.burger-menu input:checked ~ span
-    {
-    opacity: 1;
-    transform: rotate(45deg) translate(-2px, -1px);
-    background: #232323;
+    .header.burger-menu.open span:nth-child(1) {
+        transform: rotate(45deg) translate(1px, -2px);
     }
 
-    /*
-    * But let's hide the middle one.
-    */
-    .header.burger-menu input:checked ~ span:nth-last-child(3)
+    .header.burger-menu.open span:nth-child(2)
     {
     opacity: 0;
     transform: rotate(0deg) scale(0.2, 0.2);
     }
 
-    /*
-    * Ohyeah and the last one should go the other direction
-    */
-    .header.burger-menu input:checked ~ span:nth-last-child(2)
-    {
-    transform: rotate(-45deg) translate(0, -1px);
-    }
+    .header.burger-menu.open span:nth-child(3) {
+        opacity: 1;
+        transform: rotate(-45deg) translate(-2px, -2px);
+        }

@@ -40,6 +40,7 @@ export interface DropDownProps {
 /* Global constants */
 
 export function DropDown(props: DropDownProps ) {
+    const sc = props.styleClass;
 
      /* STATES */
     const [extHovCells, setExtHovCells] = useState<Set<any>>(new Set());
@@ -160,7 +161,7 @@ export function DropDown(props: DropDownProps ) {
       
             <table className={c.addStyleClass(props.styleClass, 'drop-down-table')}>
                     <tbody>
-                        <tr className={c.addStyleClass(props.styleClass, 'dd-row') + ' empty-drop-down'}>
+                        <tr className={'dd-row' +  + ' empty-drop-down'}>
                              <td>No Options</td></tr>
                     </tbody>
                     </table>
@@ -169,22 +170,19 @@ export function DropDown(props: DropDownProps ) {
     } else {
 
     return (
-        <div ref={scrollableDivRef} className={c.addStyleClass(props.styleClass, 'drop-down-wrapper-div') 
-        + ' ' + props.addStyleClasses?.div}>
-
-            <table className={c.addStyleClass(props.styleClass, 'drop-down-table') + ' ' + props.addStyleClasses?.table}>
+        <div ref={scrollableDivRef} className={sc + 'drop-down-wrapper-div ' + props.addStyleClasses?.div}>
+            <table className={sc + 'drop-down-table ' + props.addStyleClasses?.table}>
                     <tbody className={props.addStyleClasses?.tbody}>
                     {/*         Now return data row      */}
                     {data.map( (value: c.LinkedText, index: number) => {
                         let isHov: number = (hovCells.has(value) || hovCells.has(index)) ? 1 : 0;
                         isHov += _.isEqual(deepHovCell, value) ? 1 : 0; //0-no hov, 1-hov, 2-deep hov
-                        let hovRowStyleClass = (isHov > 0) ? 
-                        c.addStyleClass(props.styleClass, 'dd-hov-row') : '';
+                        let hovRowStyleClass = (isHov > 0) ? (sc + 'hov') : '';
                         let displayVal = (props.charLimit && value.text.length > props.charLimit) ?
                         value.text.slice(0, props.charLimit) + '...' : value.text;
                         
-                        return <tr className= {c.addStyleClass(props.styleClass, 'dd-row')
-                        + ' ' + hovRowStyleClass + ' ' + rowStyleClassFunc(index)} 
+                        return <tr className= {sc + 'dd-row '+hovRowStyleClass+' ' +
+                        rowStyleClassFunc(index)} 
                         onClickCapture={ () => {  
                             if(value.url && value?.openIn==c.REDIRECT)
                              window.location.href=value.url }}
@@ -204,7 +202,7 @@ export function DropDown(props: DropDownProps ) {
                             setDeepHovCell(null);}}
                          >
                             {/*         Now return data COLS      */}
-                            <td className={c.addStyleClass(props.styleClass, 'dd-col')} >
+                            <td className={sc + 'dd-col'} >
                                 <div>{displayVal}</div>
                             </td>
                         </tr>

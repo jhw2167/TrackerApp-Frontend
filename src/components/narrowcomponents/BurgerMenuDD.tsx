@@ -44,14 +44,14 @@ function BurgerMenuDD(props: BurgerMenuDDProps) {
 
     return (
         <div className={sc+"burger-menu-wrapper"}>
-          <div className={sc+"burger-menu"}>
+          <div className={sc+"burger-menu" + ((isOpen)?" open":"")} onClick={(e)=>setOpen(!isOpen)}>
             <div className={sc+"burger-icon"} style={(replace) ? REPLACE_STYLE : {}}>
                 <span className={sc+"burger-bar "+ ((isOpen) ? 'open':'')}></span>
                 <span className={sc+"burger-bar "+ ((isOpen) ? 'open':'')}></span>
                 <span className={sc+"burger-bar "+ ((isOpen) ? 'open':'')}></span>
             </div>
          <div className={sc+"burger-list-wrapper"}>
-           {dropDownJsx(props.options)}
+           {(isOpen)?dropDownJsx(props.options):null}
          </div>
        </div>
       </div>
