@@ -38,7 +38,7 @@ function BurgerMenuDD(props: BurgerMenuDDProps) {
           return null;
   
         let ddProps: DropDownProps = {data: _.clone(data), styleClass: sc, addStyleClasses: {}};
-          ddProps.addStyleClasses = {tr: sc + '-dd-row-anim'+' burger option'};
+          ddProps.addStyleClasses = {tr: sc + 'dd-row-anim'+' burger option'};
             return <DropDown {...ddProps}/>;
       }
 

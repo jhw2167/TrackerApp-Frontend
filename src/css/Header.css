@@ -57,7 +57,8 @@
 .header {
     --burger-icon-w: 30px;
     --burger-menu-prim-col: var(--light-grey);
-    --burger-menu-sec-col: var(--tert-col);
+    --burger-menu-sec-col: var(--secondary-col);
+    --burger-menu-font-col: var(--prim-font-col);
 }
 
 
@@ -85,13 +86,14 @@
 .header.burger-list-wrapper > *, .header.burger-icon {
     translate: -110%;
 }
+.header.burger-list-wrapper *:hover, .header.burger-list-wrapper {
+    width: auto;
+    overflow: hidden;
+}
 
-.header.burger-list-wrapper > * {
+.header.burger-list-wrapper > div {
     min-width: 100px;
-
-    background-color: var(--burger-menu-prim-col);
-    color: var(--burger-menu-sec-col);
-    border-radius: 10px;
+    color: var(--burger-menu-font-col);
 }
 
 .header.drop-down-table {
@@ -100,15 +102,21 @@
 }
 
 .header.dd-row {
-    border: none;
+    background-image: linear-gradient(
+        160deg, 
+        rgb(255, 160, 100) 30%,
+        var(--primary-col) 90%
+      );
+      border-radius: 10px;
+    
     font-weight: bold;
+    border: 2px solid var(--secondary-col);
 }
 
 .header.dd-row.hov {
     cursor: pointer;
-    font-size: 1.2em;
-    text-decoration: underline var(--primary-col);
-    transition: font-size 200ms;
+    scale: 1.1;
+    transition: scale 200ms;
 }
 
 /* Burger Animation */
@@ -120,7 +128,7 @@
     margin-bottom: 5px;
     position: relative;
     
-    background: var(--burger-menu-sec-col);
+    background: var(--heavy-grey);
     border-radius: 3px;
     
     z-index: 1;

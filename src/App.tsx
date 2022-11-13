@@ -11,6 +11,9 @@ import './css/Header.css';
 import './css/misc/Background.css';
 import './components/narrowcomponents/CSS/BurgerMenuDD.css';
 
+  //Animations
+  import './css/animations.scss';
+
 //lib components
   import '../node_modules/react-vis/dist/style.css';
 
