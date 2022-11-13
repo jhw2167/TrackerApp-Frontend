@@ -87,10 +87,29 @@
 }
 
 .header.burger-list-wrapper > * {
+    min-width: 100px;
+
     background-color: var(--burger-menu-prim-col);
     color: var(--burger-menu-sec-col);
+    border-radius: 10px;
 }
 
+.header.drop-down-table {
+    width: 100%;
+    text-align: center;
+}
+
+.header.dd-row {
+    border: none;
+    font-weight: bold;
+}
+
+.header.dd-row.hov {
+    cursor: pointer;
+    font-size: 1.2em;
+    text-decoration: underline var(--primary-col);
+    transition: font-size 200ms;
+}
 
 /* Burger Animation */
 

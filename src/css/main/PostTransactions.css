@@ -255,6 +255,10 @@
 
         /* Form Styling */
 
+        .pt.dd-row {
+            background-color: var(--secondary-col);
+        }
+
 /* ------------------ */
 
 

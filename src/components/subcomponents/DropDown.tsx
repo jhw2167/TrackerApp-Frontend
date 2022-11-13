@@ -156,10 +156,9 @@ export function DropDown(props: DropDownProps ) {
     if(!data || data.length<1) {
         //console.log("ret nothing!!! %s: " + props.data.length, props.headers);
         return ( 
-            <div ref={scrollableDivRef} className={c.addStyleClass(props.styleClass, 'drop-down-wrapper-div')
-            + ' ' + props.addStyleClasses?.div}>
+            <div ref={scrollableDivRef} className={ sc + 'drop-down-wrapper-div ' + props.addStyleClasses?.div}>
       
-            <table className={c.addStyleClass(props.styleClass, 'drop-down-table')}>
+            <table className={sc + 'drop-down-table'}>
                     <tbody>
                         <tr className={'dd-row' +  + ' empty-drop-down'}>
                              <td>No Options</td></tr>
@@ -170,8 +169,8 @@ export function DropDown(props: DropDownProps ) {
     } else {
 
     return (
-        <div ref={scrollableDivRef} className={sc + 'drop-down-wrapper-div ' + props.addStyleClasses?.div}>
-            <table className={sc + 'drop-down-table ' + props.addStyleClasses?.table}>
+        <div ref={scrollableDivRef} className={sc + ' drop-down-wrapper-div ' + props.addStyleClasses?.div}>
+            <table className={sc + ' drop-down-table ' + props.addStyleClasses?.table}>
                     <tbody className={props.addStyleClasses?.tbody}>
                     {/*         Now return data row      */}
                     {data.map( (value: c.LinkedText, index: number) => {
@@ -181,7 +180,7 @@ export function DropDown(props: DropDownProps ) {
                         let displayVal = (props.charLimit && value.text.length > props.charLimit) ?
                         value.text.slice(0, props.charLimit) + '...' : value.text;
                         
-                        return <tr className= {sc + 'dd-row '+hovRowStyleClass+' ' +
+                        return <tr className= {sc + ' dd-row '+hovRowStyleClass+' ' +
                         rowStyleClassFunc(index)} 
                         onClickCapture={ () => {  
                             if(value.url && value?.openIn==c.REDIRECT)
@@ -202,7 +201,7 @@ export function DropDown(props: DropDownProps ) {
                             setDeepHovCell(null);}}
                          >
                             {/*         Now return data COLS      */}
-                            <td className={sc + 'dd-col'} >
+                            <td className={sc + ' dd-col'} >
                                 <div>{displayVal}</div>
                             </td>
                         </tr>
