@@ -21,6 +21,7 @@
 #pt-container {
     background-color: var(--secondary-col);
     background-color: black;
+    min-width: 1400px;
 }
 
 #pt-container > * {

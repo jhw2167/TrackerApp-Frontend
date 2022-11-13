@@ -38,7 +38,11 @@ function BurgerMenuDD(props: BurgerMenuDDProps) {
           return null;
   
         let ddProps: DropDownProps = {data: _.clone(data), styleClass: sc, addStyleClasses: {}};
-          ddProps.addStyleClasses = {tr: sc + 'dd-row-anim'+' burger option'};
+          ddProps.addStyleClasses = {
+          tr: sc + 'dd-row-anim'+' burger option', 
+          div: sc + 'burger' + ((isOpen)?" open":"")
+        };
+          
             return <DropDown {...ddProps}/>;
       }
 
@@ -51,7 +55,7 @@ function BurgerMenuDD(props: BurgerMenuDDProps) {
                 <span className={sc+"burger-bar "+ ((isOpen) ? 'open':'')}></span>
             </div>
          <div className={sc+"burger-list-wrapper"}>
-           {(isOpen)?dropDownJsx(props.options):null}
+           {dropDownJsx(props.options)}
          </div>
        </div>
       </div>

@@ -88,9 +88,22 @@
 }
 
 
-.header.burger-list-wrapper > div {
-    min-width: 100px;
+.header.burger.drop-down-wrapper-div {
+    min-width: 100px; 
     color: var(--burger-menu-font-col);
+
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height .5s ease;
+}
+
+.header.burger.drop-down-wrapper-div.open {
+    min-width: 100px; 
+    color: var(--burger-menu-font-col);
+
+    max-height: 500px;
+    overflow: none;
+    transition: max-height 2s ease;
 }
 
 .header.drop-down-table {
@@ -107,6 +120,9 @@
       border-radius: 10px;
     
     font-weight: bold;
+}
+
+.header.dd-col {
     border: 2px solid var(--secondary-col);
 }
 
