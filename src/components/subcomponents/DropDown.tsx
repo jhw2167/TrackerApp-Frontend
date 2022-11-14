@@ -25,7 +25,7 @@ export interface DropDownProps {
     addStyleClasses?: DDHtmlStructure;            //list of space seperated addtional style classes
     inlineStyles?: Object;
     hovCellFunc?: Function;
-    setSelectedData?: Function; //sets data selected by DD menu to container
+    setSelectedData?: (data: c.LinkedText)=> void ; //sets data selected by DD menu to container
     setFuncSetDDPosExternally?: Function;   //takes a "setStateFunction" that sets the state of a 
     /* container with a setState function internally in dropDown, so the dropDownPlace state can
     be adjusted from outside this component e.g. const [myDDPlaceSetter, SetMyDDPlaceSetter] = useState<Function>(),

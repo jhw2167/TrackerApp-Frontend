@@ -4,8 +4,8 @@
 */
 
 //project imports
-//import * as c from '../resources/constants';
-//import * as api from '../resources/api';
+import * as c from '../resources/constants';
+import * as api from '../resources/api';
 import React, { KeyboardEvent, MutableRefObject,
      ReactElement, RefObject, useEffect, useRef, useState } from 'react';
 import { StringMappingType } from 'typescript';
@@ -199,7 +199,6 @@ export default AddNewTrans;
 
     /* Subcomponents */
     function FormElemWrapper(props: FormElemProps) {
-
         switch(props.type) {
     
             case 'input':
@@ -269,10 +268,10 @@ export default AddNewTrans;
         let currentFieldVal: any = (formValues) ? formValues.current.at(props.index) : 
                                 ((props.default) ? props.default : '');
 
-        let setSelectedData = (val: any) => {
-            if(currentFieldVal.length > 0 && val.length===0)
+        let setSelectedData = (val: c.LinkedText) => {
+            if(currentFieldVal.length > 0 || !val.text || val.text.length===0)
                 return; //dont reset the val
-            onFormUpdate(val, props.index)
+            onFormUpdate(val.text, props.index)
         }
 
         let handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
