@@ -64,7 +64,7 @@ let _setDDPosExternally: Function;
 let _setFuncSetDDPosExternally: Function;
 
 let forceUpdate: Function;
-let style_ns: string = '';
+let sc: string = '';
 
 const FORM_STATES = {
     cmpt: 'COMPLETE',
@@ -90,7 +90,7 @@ function AddNewTrans(props: FormProps) {
         useRef<Map<string, Array<string>>>((props.options) ? props.options : new Map());
 
     
-    [style_ns] = useState<string>( (props.styleNamespace) ? props.styleNamespace+'-' : '');
+    [sc] = useState<string>( (props.styleNamespace) ? props.styleNamespace+' ' : '');
     const [, updateState] = React.useState<Object>();
     forceUpdate = React.useCallback(() => updateState({}), []);
     
@@ -163,10 +163,10 @@ function AddNewTrans(props: FormProps) {
                   //console.log("Val: %s : ValState: %s \n -----------------",
                    //props.headers[i], formValueStates.current[i]);
                     //console.log("options: %s", JSON.stringify(props.options));
-                    let stateClass = style_ns + 'data-col-' + formValueStates.current[i].toLowerCase()
+                    let stateClass = sc + 'data-col-' + formValueStates.current[i].toLowerCase()
                     return(
-                        <td  key={i} id={data.id + '-col'} className={style_ns + 'data-col ' + 
-                        style_ns + data.id + '-tuple ' + stateClass}>
+                        <td  key={i} id={data.id + '-col'} className={sc + 'data-col ' + 
+                        sc + data.id + '-tuple ' + stateClass}>
                         {FormElemWrapper(data)}
                         </td>
                     )
@@ -177,8 +177,8 @@ function AddNewTrans(props: FormProps) {
                 let id = v.replace(' ', '-').toLowerCase();
 
                 let errSt = formValueStates.current[i].toLowerCase();
-                let baseClass = style_ns + 'data-header ' + style_ns + ' ' + id + '-tuple ';
-                let stateClass = style_ns + 'data-header-' + errSt;
+                let baseClass = sc + 'data-header ' + sc + ' ' + id + '-tuple ';
+                let stateClass = sc + 'data-header-' + errSt;
                  return (<th key={i} className={baseClass + stateClass}
                  id={id +'-header'}>
                      <label id={'lb-' + id} htmlFor={id}>{v}
@@ -220,7 +220,7 @@ export default AddNewTrans;
     function DropDownElem(props: DDProps) {
     
         return(
-            <select className={style_ns + 'form-field pt-form-select'} id={props.id}
+            <select className={sc + 'form-field form-select'} id={props.id}
         onChange={(e) => {onFormUpdate(e.target.value, props.index)}}
         defaultValue={props.default}>
         </select>)
@@ -311,7 +311,7 @@ export default AddNewTrans;
             />}
         }
 
-        return( <> <input className={style_ns + 'form-field ' + style_ns + 'form-input'} id={props.id} 
+        return( <> <input className={sc + 'form-field ' + 'form-input'} id={props.id} 
         type={props.subtype}
         value={currentFieldVal}
         ref={inputRef}

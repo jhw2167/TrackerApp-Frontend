@@ -459,7 +459,7 @@ function PostTransactions() {
                   </div> 
                   {/* End row section header content */} 
                         
-                   <div className='row pt-bordered-section' id="transaction-form-div">
+                   <div className='row pt bordered-section' id="transaction-form-div">
                         <div className='col-12' id='transaction-form-container'>
                                 <AddNewTrans key={ADD_NEW_TRANS_FORM_ID + countFormRefresh}
                                 headers={Object.entries(FORM_HEADERS).map(
@@ -529,7 +529,7 @@ function PostTransactions() {
                         </div>
                 {/* End row section title content */} 
 
-                        <div className='row pt-bordered-section pt-table-section' id="pending-table-row">
+                        <div className='row pt bordered-section table-section' id="pending-table-row">
                                 <div className='col-12'>
                                 {/* Component goes here */} 
                                 <GeneralTable<PlaidTransaction> 
@@ -582,7 +582,7 @@ function PostTransactions() {
                         </div>
                 {/* End row section title content */} 
 
-                        <div className='row pt-bordered-section pt-table-section' id="prepared-table-row">
+                        <div className='row pt bordered-section table-section' id="prepared-table-row">
                                 <div className='col-12'>
                                 <GeneralTable<Transaction> 
                                 id='prepared-table'
@@ -636,7 +636,7 @@ function PostTransactions() {
                         </div>
                 {/* End row section title content */} 
 
-                        <div className='row pt-bordered-section pt-table-section' id="posted-table-row">
+                        <div className='row pt bordered-section table-section' id="posted-table-row">
                          <div className='col-12'>
                                 {/* Component goes here */} <div className='scroll-sample'></div>               
                          </div>

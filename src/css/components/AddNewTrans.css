@@ -7,7 +7,7 @@ form {
 }
 
 /* Table Styling */
-.pt-add-new-trans-form-wrapper-table {
+#pt-add-new-trans-form-wrapper-table {
     width: 100%;
 
     margin-top: 1%;
@@ -17,11 +17,11 @@ form {
     border-spacing: 20px 0px;
 }
 
-.pt-add-new-trans-form-wrapper-table > tbody {
+#pt-add-new-trans-form-wrapper-table > tbody {
     display: table;
 }
 
-.pt-add-new-trans-form-wrapper-table > tbody > tr > th {
+#pt-add-new-trans-form-wrapper-table > tbody > tr > th {
     color: var(--primary-col);
     font-size: medium;
     vertical-align: top;
@@ -29,7 +29,7 @@ form {
     position: relative;
 }
 
-.pt-add-new-trans-form-wrapper-table > tbody > tr > * {
+#pt-add-new-trans-form-wrapper-table > tbody > tr > * {
     max-width: 200px;
     min-width: 30px;
 
@@ -38,7 +38,7 @@ form {
 
 
 /* Specific Form Styling */
-.pt-form-field {
+.pt.form-field {
     width: 100%;
 
     font-size: 1.2em;
@@ -47,13 +47,13 @@ form {
    
 }
 
-#pt-add-new-trans-form-wrapper-table > tbody > tr > td > input {
+ input.pt {
     appearance: none;
     -webkit-appearance: none;
     outline: none;
 }
 
-.pt-add-new-trans-form-wrapper-table > tbody > tr > td > input {
+input.pt {
     
     background-color: transparent;
     color: white;
@@ -68,7 +68,7 @@ form {
 
 /* Errors */
 
-.pt-data-col::after {
+.pt.data-col::after {
     position: absolute;
     padding-top: 2px;
     padding-left: 3px;
@@ -76,84 +76,84 @@ form {
     font-weight: 400;
 }
 
-.pt-data-col-error > input {
+.pt.data-col-error > input {
     border-bottom: 2px solid var(--error-red) !important;
 }
 
-.pt-data-header-error {
+.pt.data-header-error {
     color: var(--error-red) !important;
 }
 
-.pt-data-col-error::after {
+.pt.data-col-error::after {
     color: var(--error-red);
     content: "\26A0";
 }
 
 /* Check */
-.pt-data-col-complete > input {
+.pt.data-col-complete > input {
     border-bottom: 2px solid var(--check-green);
 }
 
-.pt-data-col-complete::after {
+.pt.data-col-complete::after {
   color: var(--check-green);
   content: "\2611";
 }
 
 /* Unvisited */
 
-.pt-data-col-unvisited > input {
+.pt.data-col-unvisited > input {
     border-bottom: 2px solid var(--trans-grey) !important;
 }
 
-.pt-data-header-unvisited {
+.pt.data-header-unvisited {
     color: var(--trans-grey) !important;
 }
 
 
 /* Specific Field Styling */
 
-.pt-data-col {
+.pt.data-col {
     width: 8%;
 }
 
-.pt-purchase-date-tuple {
+.pt.purchase-date-tuple {
     width: 1%;
 }
 
-    input[type="date" i].pt-form-field {
+    input[type="date" i].pt.form-field {
         max-width: 5.8em;
         position: relative;
         top: 1px;
 
     }
 
-    input[type="date" i].pt-form-field::-webkit-calendar-picker-indicator {
+    input[type="date" i].pt.form-field::-webkit-calendar-picker-indicator {
         display: none;
     }
 
-    input[type="date" i].pt-form-field::-webkit-calendar-picker-indicator,
-    input[type="date" i].pt-form-field::-webkit-calendar-picker-indicator {
+    input[type="date" i].pt.form-field::-webkit-calendar-picker-indicator,
+    input[type="date" i].pt.form-field::-webkit-calendar-picker-indicator {
         -webkit-appearance: none; 
         margin: 0; 
     }
 
     /* VENDOR TUPLE */
-    .pt-amount-tuple {
+    .pt.amount-tuple {
         width: 4%;
     }
 
     /* VENDOR TUPLE */
-    .pt-vendor-tuple {
+    .pt.vendor-tuple {
         width: 14%;
     }
 
     /* CATEGORY TUPLE */
-    .pt-category-tuple {
+    .pt.category-tuple {
         width: 12%;
     }
 
     /* Reimbursements */
-    #reimburses.pt-form-field {
+    #reimburses.pt.form-field {
 
     }
 
@@ -163,39 +163,39 @@ form {
     }
 
     /* PAY STATUS */
-    .pt-pay-status-tuple {
+    .pt.pay-status-tuple {
         width: 10%;
     }
 
     /* INCOME TUPLE */
-.pt-income-tuple {
+.pt.income-tuple {
     width: 1%;
 }
 
-#income.pt-form-field {
+#income.pt.form-field {
     position: relative;
     outline: 2px solid var(--tert-col);
     border: 0px;
     bottom: -5px;    
 }
-    .pt-data-col::-webkit-scrollbar {
+    .pt.data-col::-webkit-scrollbar {
         display: none;
     }
 
-    .pt-form-field {
+    .pt.form-field {
         -ms-overflow-style: none;  /* IE and Edge */
         scrollbar-width: none;  /* Firefox */
     }
 
-    #income[type="checkbox" i].pt-form-field {
+    #income[type="checkbox" i].pt.form-field {
         height: 20px;
         width: 20px;
         border-radius: 2px;
         background-color: var(--primary-col);
     }
 
-    #income[type="checkbox" i].pt-form-field:hover, 
-    #income[type="checkbox" i].pt-form-field::selection {
+    #income[type="checkbox" i].pt.form-field:hover, 
+    #income[type="checkbox" i].pt.form-field::selection {
         background-color: var(--tert-col);
         transition: background-color 0.2s;
     }
@@ -224,7 +224,7 @@ input[type="search"]::-webkit-search-results-decoration {
 
 
 /* DROP DOWN CSS FOR PT */
-.pt-drop-down-wrapper-div {
+.pt.drop-down-wrapper-div {
     max-width: 200px;
     min-width: 180px;
     max-height: 200px;
@@ -237,7 +237,7 @@ input[type="search"]::-webkit-search-results-decoration {
     border-right: 0px; border-left: 0px;                
 }
 
-.pt-drop-down-nested-wrapper-div {
+.pt.drop-down-nested-wrapper-div {
     min-width: 100%;
     width: fit-content;
     background: var(--secondary-col);
@@ -245,7 +245,7 @@ input[type="search"]::-webkit-search-results-decoration {
     border-bottom: 0px;    
 }
 
-.pt-drop-down-table {
+.pt.drop-down-table {
     min-width: fit-content;
     padding-right: 50px;
     width: 100%;
@@ -257,7 +257,7 @@ input[type="search"]::-webkit-search-results-decoration {
 */
 
 /* Scrollbar */
-        .pt-drop-down-wrapper-div::-webkit-scrollbar {
+        .pt.drop-down-wrapper-div::-webkit-scrollbar {
             width: 8px;
             border-radius: 10px;
             background-color: transparent;
@@ -268,7 +268,7 @@ input[type="search"]::-webkit-search-results-decoration {
             background-color: transparent;
         }
 
-        .pt-drop-down-wrapper-div::-webkit-scrollbar-track:hover {
+        .pt.drop-down-wrapper-div::-webkit-scrollbar-track:hover {
             background-color: var(--med-grey) ;
             border-radius: 10px;
         }
@@ -279,10 +279,10 @@ input[type="search"]::-webkit-search-results-decoration {
             border-radius: 20px;
         }
 
-.pt-dd-row {
+.pt.dd-row {
     font-weight: bold;
 }
 
-.pt-dd-hov-row {
+.pt.dd-hov-row {
     cursor: default;
 }

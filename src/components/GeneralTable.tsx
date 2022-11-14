@@ -100,13 +100,13 @@ function GeneralTable<T>(props: GeneralTableProps<T>) {
     } else {
 
     return ( 
-        <div className={c.addStyleClass(sc, 'general-table-wrapper-div') + ' ' + props.id}>
+        <div className={sc +' general-table-wrapper-div' + ' ' + props.id}>
     
-                <table className={c.addStyleClass(sc, 'general-table')}>
+                <table className={sc +' general-table'}>
                     <tbody>
                     {/*             Table Header            */}
                     {(props.headers) ?
-                    <tr className={c.addStyleClass(sc, 'general-table-header')}>{
+                    <tr className={sc +' general-table-header'}>{
                         cols.map((key: string, i)  => {       
                         return <th key={i}>{props.headers.get(key)}</th>})
                     }</tr>:null}
@@ -120,10 +120,10 @@ function GeneralTable<T>(props: GeneralTableProps<T>) {
                         let rowStyle = (!!props.aggFunction && index==data.length-1) ? rowStyles?.aggRowCSS : rowStyles?.normCSS;
                         rowStyle = (isHov > 0) ? {...rowStyle, ...rowStyles?.hoverCSS} : rowStyle;
                         let aggRowClassName = (!!props.aggFunction && index==data.length-1) ?
-                        c.addStyleClass(props.id, 'general-table-aggregate-row-') : '';
+                        (props.id+ ' general-table-aggregate-row-') : '';
                         let rowState = (rowStyles?.state) ? ' ' + rowStyles.state[index] : '';
 
-                        return<tr className= {c.addStyleClass(sc, 'general-table-row') + ' data-table-row ' +
+                        return<tr className= {sc +' general-table-row' + ' data-table-row ' +
                         aggRowClassName + rowState} style={rowStyle}
                        key={index}
                        onMouseEnter={() => {
@@ -159,7 +159,7 @@ function GeneralTable<T>(props: GeneralTableProps<T>) {
                                 
                                let val:string = (!value[col]) ?  bufStyles.bufferContent?.get(col) as string : adjValFunc(value[col]); 
                                //console.log('[col]: %s, val[col] %s', col, value[col]);
-                               return <td className={c.addStyleClass(sc, 'general-table-entry')}
+                               return <td className={sc +' general-table-entry'}
                                style={innerStyle}
                                key={i}
                                onMouseOver= {() => { hovCells.clear(); hovCells.add(i); forceUpdate();}}

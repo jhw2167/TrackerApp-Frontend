@@ -54,7 +54,7 @@
     font-size: 4em;
 }
 
-.pt-bordered-section {
+.pt.bordered-section {
     width: var(--bordered-sec-width);
     margin-left: var(--bordered-sec-margin);
     margin-right: 0;
@@ -63,7 +63,7 @@
     border-left: 0; border-right: 0;
 }
 
-.pt-table-section {
+.pt.table-section {
     height: var(--interal-sec-height);
 }
 
@@ -266,7 +266,7 @@
 
 
 /* Table Styling */
-.pt-general-table-wrapper-div {
+.pt.general-table-wrapper-div {
     margin-top: 1%;
     margin-bottom: 1%;
     height: calc(var(--interal-sec-height) - 4vh);
@@ -276,34 +276,34 @@
 }
 
     /* Scrollbar */
-    .pt-general-table-wrapper-div::-webkit-scrollbar {
+    .pt.general-table-wrapper-div::-webkit-scrollbar {
         width: 8px;
         border-radius: 10px;
         background-color: transparent;
     }
 
 
-    .pt-general-table-wrapper-div::-webkit-scrollbar-track {
+    .pt.general-table-wrapper-div::-webkit-scrollbar-track {
         background-color: transparent;
     }
 
-    .pt-general-table-wrapper-div:hover::-webkit-scrollbar-track {
+    .pt.general-table-wrapper-div:hover::-webkit-scrollbar-track {
         background-color: var(--med-grey) ;
         border-radius: 10px;
     }
     
     /* Handle */
-    .pt-general-table-wrapper-div::-webkit-scrollbar-thumb {
+    .pt.general-table-wrapper-div::-webkit-scrollbar-thumb {
         background-color: var(--primary-col-trans);
         opacity: 0;
         border-radius: 20px;
     }
 
-    .pt-general-table-wrapper-div:hover::-webkit-scrollbar-thumb {
+    .pt.general-table-wrapper-div:hover::-webkit-scrollbar-thumb {
         background-color: var(--primary-col);
     }
 
-.pt-general-table {
+.pt.general-table {
     table-layout: fixed;
     width: 96%;
     margin-left: 2%;
@@ -316,18 +316,18 @@
     line-height: 2em;
 }
 
-.pt-general-table-header {
+.pt.general-table-header {
     line-height: 1.4;
     border-bottom: 3px solid var(--primary-col);
     padding-bottom: 20%;
     color: var(--primary-col);
 }
 
-.pt-general-table-header > th {
+.pt.general-table-header > th {
     padding-bottom: 10px;
 }
 
-.pt-general-table-row {
+.pt.general-table-row {
     border-color: var(--heavy-grey);
     border: 0;
     font-size: inherit;
@@ -337,7 +337,7 @@
 /* ------------------ */
 
 /* Tooltip Styling */
-.pt-tooltip {
+.pt.tooltip {
     font-weight: 600;
 }
 
@@ -346,7 +346,7 @@
 }
 
 /* #add-new-trans-tooltip */
-.pt-tooltip > .tooltip-arrow::before {
+.pt.tooltip > .tooltip-arrow::before {
     transform: rotate(-45deg); 
     top: 1px;
 }
