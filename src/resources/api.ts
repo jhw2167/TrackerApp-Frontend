@@ -8,7 +8,8 @@ export const DOMAIN = "http://localhost";
 export const PORT = ":8080/";
 
 //Server calls
-export const SERVER_ALL_TRANSACTIONS = DOMAIN + PORT + "transactions";
+export const SERVER_ALL_TRANSACTIONS = DOMAIN + PORT + 
+"finances/users/20230303JACKHENRYWELSH@GMAIL.COM/transactions";
 export const SERVER_ALL_CATEGORIES = SERVER_ALL_TRANSACTIONS + "/categories";
 export const SERVER_ALL_PAYMETHODS = SERVER_ALL_TRANSACTIONS + "/payMethods";
 export const SERVER_ALL_BOUGHTFOR = SERVER_ALL_TRANSACTIONS + "/boughtFor";
@@ -54,10 +55,10 @@ export const SERVER_ALL_VENDORS = SERVER_ALL_TRANSACTIONS + "/vendors";
     }
 
     //Build request with dates
-    export function SERVER_ALL_TRANSACTIONS_RECENT(limit: Number, offset: number = 0): string {
+    export function SERVER_ALL_TRANSACTIONS_RECENT(size: Number, page: number = 0): string {
         return SERVER_ALL_TRANSACTIONS + "/recent" 
-        + "?limit=" + limit +
-        "&offset=" + Math.max(offset, 0);
+        + "?size=" + size +
+        "&page=" + Math.max(page, 0);
     }
 
     export function SERVER_QUERY_VENDOR_NAME(vendor_name: string) {

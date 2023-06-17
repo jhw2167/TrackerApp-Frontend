@@ -32,7 +32,8 @@ const SENSITIVE_DATA = false;
 function Overview(props: OverviewProps) {
 
     //Constants
-    const MAX_TRANS_PAGE: number = 30;
+    const TRANS_PAGE_OFFSET: number = 1;
+    const TRANS_RCNT_TBL_SIZE: number = 30;
     const DATA_TABLE_HEADERS: Array<string> = [
         "Date", "Vendor", "Amount", "Category"
     ]
@@ -63,7 +64,7 @@ function Overview(props: OverviewProps) {
     const [recentTransactionsDisplayable, setRecentTransactionsDisplayable] = useState<Transaction[]>([]);
     const [monthlyTransactionsDisplayable, setMonthlyTransactionsDisplayable] = useState<Transaction[]>([]);
 
-    const [offsetTransactions, setOffsetTransactions] = useState<number>(0);
+    const [offsetTransactionsPageNum, setoffsetTransactionsPageNum] = useState<number>(0);
 
     const [incomeSummary, setIncomeSummary] = useState<Summary[]>([]);
     const [expenseSummary, setExpenseSummary] = useState<Summary[]>([]);
@@ -91,8 +92,8 @@ function Overview(props: OverviewProps) {
         let [] = await Promise.all([ // eslint-disable-line no-empty-pattern
         api.getRequest(api.SERVER_ALL_TRANSACTIONS_DATES(start, end), 
         (data: Array<Transaction>) => {setMonthlyTransactions(c.formatData(data, 'Transaction'))}),
-        api.getRequest(api.SERVER_ALL_TRANSACTIONS_RECENT(offsetTransactions + MAX_TRANS_PAGE,
-             offsetTransactions), (data: Array<Transaction>) => {setRecentTransactions(c.formatData(data, 'Transaction'))}),
+        api.getRequest(api.SERVER_ALL_TRANSACTIONS_RECENT(TRANS_RCNT_TBL_SIZE,
+             offsetTransactionsPageNum), (data: Array<Transaction>) => {setRecentTransactions(c.formatData(data, 'Transaction'))}),
 
         api.getRequest(api.SERVER_INCOME_SUMMARY(start, end),
         (data: Array<Summary>) => {setIncomeSummary(c.formatData(data, 'Summary'))}),
@@ -135,10 +136,11 @@ function Overview(props: OverviewProps) {
         //console.log(3);
         if(isMounted.current) {
             //console.log("hello3")
-            api.getRequest(api.SERVER_ALL_TRANSACTIONS_RECENT(offsetTransactions + MAX_TRANS_PAGE,
-                offsetTransactions), setRecentTransactions);
+            api.getRequest(api.SERVER_ALL_TRANSACTIONS_RECENT(TRANS_RCNT_TBL_SIZE,
+                offsetTransactionsPageNum), setRecentTransactions)
+   
         }
-    }, [offsetTransactions]);
+    }, [offsetTransactionsPageNum]);
 
     useEffect( () =>  {
         //console.log(4);
@@ -215,8 +217,8 @@ function Overview(props: OverviewProps) {
 
     //positive offset is further back in the logs
     const updateRecentTransactions = (dir: number) => {
-        const offSet = MAX_TRANS_PAGE * dir;
-        setOffsetTransactions(Math.max(0, offsetTransactions + offSet));
+        const offSet = TRANS_PAGE_OFFSET * dir;
+        setoffsetTransactionsPageNum(Math.max(0, offsetTransactionsPageNum + offSet));
     }
 
     //hide sensitive values by giving them random vals
@@ -322,8 +324,8 @@ function Overview(props: OverviewProps) {
                         toolTipColNames= {DATA_TABLE_TT_COLS}
                         toolTipHeaders={DATA_TABLE_TT_COLS.map((v)=> {return c.titleCase(v)})}
                         data=       {recentTransactionsDisplayable}
-                        maxRows=      {MAX_TRANS_PAGE}
-                        minRows=      {MAX_TRANS_PAGE}
+                        maxRows=      {TRANS_RCNT_TBL_SIZE}
+                        minRows=      {TRANS_RCNT_TBL_SIZE}
                         hovCellFunc=   {setHovCellFunc}
                         updateDataHyperlink={updateRecentTransactions}
                         />
