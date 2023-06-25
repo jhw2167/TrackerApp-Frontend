@@ -7,20 +7,28 @@ import '../components/narrowcomponents/BurgerMenuDD'
 import logo from '../resources/img/logo.png';
 import banner from '../resources/img/blank_banner.png';
 import BurgerMenuDD, { BurgerMenuDDProps } from '../components/narrowcomponents/BurgerMenuDD';
+import { InitiatePlaidLinkButton } from '../resources/apiPlaid';
+import { useEffect, useState } from 'react';
 
-const B_MENU_OPTS: BurgerMenuDDProps = {
-    styeclass: "header ",
-    transition: "below",
-    options: [{text: "Overview", openIn:0, url:"/finances/overview"},
-            {text: "Post", openIn:0, url:"/finances/post"}
- ]
-}
 
 function Header()  {
 
+
+    const [burgerMenuOpts, updateBurgerMenuOptions] = useState<BurgerMenuDDProps>(
+        {
+            styeclass: "header ",
+            transition: "below",
+            options: [{text: "Overview", openIn:0, url:"/finances/overview"},
+                {text: "Post", openIn:0, url:"/finances/post"},
+                {text: "",
+                jsx: InitiatePlaidLinkButton({userId: "20230303JackHenryWelsh@gmail.com"})}            
+         ]
+        }
+    );
+
     return (
         <div className="row header-row">
-            <BurgerMenuDD {...B_MENU_OPTS}/>    
+            <BurgerMenuDD {...burgerMenuOpts}/>    
                 <div className='nested-banner-img'>
                     <img id="banner-img" src={banner}/>
                 </div>

@@ -9,7 +9,7 @@ import * as api from "./api";
 
 //Server calls
 export const SERVER_USERS_PLAID = (userId: string) => {
-    api.DOMAIN + api.PORT + "finances/users/plaid" + userId ;
+    return api.DOMAIN + api.PORT + "finances/users/plaid" + userId ;
 }
 
 export const SERVER_POST_TOKEN = (userId: string) => {
@@ -24,7 +24,7 @@ export interface initPlaidLinkProps {
 
 
 /* MODULES */
-export function initiatePlaidLinkButton(props: initPlaidLinkProps ) {
+export function InitiatePlaidLinkButton(props: initPlaidLinkProps ) {
 
     const userId = props.userId;
     //const [linkToken, updateLinkToken] = useState("");
@@ -32,23 +32,29 @@ export function initiatePlaidLinkButton(props: initPlaidLinkProps ) {
 
     const onSuccess = (publicToken: string) => {
         api.postRequest(SERVER_POST_TOKEN(userId),
-         {"plaidToken": publicToken},
-         updateServerPostTokenResponse);
+         {"plaidToken": publicToken}
+         ,updateServerPostTokenResponse);
+         //);
       }
   
     const config: Parameters<typeof usePlaidLink>[0] = {
       token: "",
-      onSuccess,
+      onSuccess
     };
   
     const { open, ready } = usePlaidLink(config);
 
+    useEffect(() => {
+      if (ready) {
+        open();
+      }
+    }, [ready, open]);
+
     return (
-      <div id="plaid-button-wrapper-div">
-       <button id="plaid-button" type="button" onClick={() => open()} disabled={!ready}>
+      //<div id="plaid-button-wrapper-div">
+       <button id="plaid-button" type="button" onClick={() => open()}>
         Add Account
        </button>
-      </div>
     );
 
 }

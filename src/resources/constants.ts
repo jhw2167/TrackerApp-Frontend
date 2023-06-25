@@ -2,6 +2,8 @@
 
 */
 
+import React from "react";
+
 export const axios = require('axios').default;
 
 
@@ -58,8 +60,15 @@ export interface LinkedText {
     url?: string;
     openIn?: number;
 }
+
     export const REDIRECT=0;    //constants for openIn
     export const NEW_TAB=1;
+
+export interface LinkedTextJSX extends LinkedText{
+    jsx?: React.ReactNode
+}
+
+    
 
 
 

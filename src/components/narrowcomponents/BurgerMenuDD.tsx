@@ -14,7 +14,7 @@ import {DropDown, DropDownProps, DDHtmlStructure} from "../subcomponents/DropDow
 export interface BurgerMenuDDProps {
     styeclass?: string;
     transition?: string; //below, replace
-    options: c.LinkedText[];
+    options: c.LinkedTextJSX[];
 }
 
 //Styles

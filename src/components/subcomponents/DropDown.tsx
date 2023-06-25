@@ -19,7 +19,7 @@ export interface DDHtmlStructure {
 }
 
 export interface DropDownProps {
-    data: Array<c.LinkedText>;
+    data: c.LinkedTextJSX[];
     charLimit?: number;
     styleClass: string                  //namespace for styles
     addStyleClasses?: DDHtmlStructure;            //list of space seperated addtional style classes
@@ -173,7 +173,8 @@ export function DropDown(props: DropDownProps ) {
             <table className={sc + ' drop-down-table ' + props.addStyleClasses?.table}>
                     <tbody className={props.addStyleClasses?.tbody}>
                     {/*         Now return data row      */}
-                    {data.map( (value: c.LinkedText, index: number) => {
+                    {data.map( (value: c.LinkedTextJSX, index: number) => {
+
                         let isHov: number = (hovCells.has(value) || hovCells.has(index)) ? 1 : 0;
                         isHov += _.isEqual(deepHovCell, value) ? 1 : 0; //0-no hov, 1-hov, 2-deep hov
                         let hovRowStyleClass = (isHov > 0) ? (sc + 'hov') : '';
@@ -202,7 +203,7 @@ export function DropDown(props: DropDownProps ) {
                          >
                             {/*         Now return data COLS      */}
                             <td className={sc + ' dd-col'} >
-                                <div>{displayVal}</div>
+                                <div>{(value.jsx) ? value.jsx : displayVal}</div>
                             </td>
                         </tr>
                         })}
