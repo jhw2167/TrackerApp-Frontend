@@ -38,7 +38,7 @@ export function InitiatePlaidLinkButton(props: initPlaidLinkProps ) {
       }
   
     const config: Parameters<typeof usePlaidLink>[0] = {
-      token: "",
+      token: "link-development-a8ade467-8337-4501-b2d7-8726ec865b37",
       onSuccess
     };
   
