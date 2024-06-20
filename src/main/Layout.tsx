@@ -19,7 +19,7 @@ function Layout() {
             setSearchParams={setSearchParams} />} />
 
           <Route path="/post" element={<PostTransactions/>} />
-          <Route path="*" element={<Navigate to="/post" />} />
+          <Route path="*" element={<Navigate to="/overview" />} />
 
            </Routes>          
     );

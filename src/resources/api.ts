@@ -7,9 +7,20 @@ export const CONST_VAR = "CONSTANT VARS GO HERE";
 export const DOMAIN = "http://localhost";
 export const PORT = ":8080/";
 
+//URI Constants
+export const URI_PARAMS = {
+    USER_ID: "userId",
+    TRANSACTION_ID: "transactionId"
+
+}
+
+//Property Constants
+export const DEFAULT_USER_ID = '20230303JACKHENRYWELSH@GMAIL.COM';
+
+
 //Server calls
-export const SERVER_ALL_TRANSACTIONS = DOMAIN + PORT + 
-"finances/users/20230303JACKHENRYWELSH@GMAIL.COM/transactions";
+export const SERVER_CONFIG = DOMAIN + PORT + "server/config";
+export const SERVER_ALL_TRANSACTIONS = DOMAIN + PORT +  "finances/users/{" + URI_PARAMS.USER_ID + "}/transactions";
 export const SERVER_ALL_CATEGORIES = SERVER_ALL_TRANSACTIONS + "/categories";
 export const SERVER_ALL_PAYMETHODS = SERVER_ALL_TRANSACTIONS + "/payMethods";
 export const SERVER_ALL_BOUGHTFOR = SERVER_ALL_TRANSACTIONS + "/boughtFor";
@@ -72,6 +83,25 @@ export const SERVER_ALL_VENDORS = SERVER_ALL_TRANSACTIONS + "/vendors";
 
 /* REQUESTS */
 
+/*
+    Description: Hydrate API request URL with user or id parameters
+    Parameters: url: string, Array<string> args
+
+    Sample url: "http://localhost:8080/finances/users/{userId}/transactions/{transactionId}"
+    Sample args: ["1234@google.com", "5678"]
+    Returns: http://localhost:8080/finances/users/1234@google.com/transactions/5678"
+
+*/
+
+export const hydrateURIParams = function(url: string, uriParams: Map<string,string>): string {
+    let ret: string = url;
+    uriParams.forEach( (v, k) => {
+        ret = ret.replace("{" + k + "}", v);
+    });
+    return ret;
+}
+
+
 export const getRequest = async function getRequest(url: string, setData: Function) {
 
     const config: AxiosRequestConfig<any> = {
@@ -82,7 +112,7 @@ export const getRequest = async function getRequest(url: string, setData: Functi
    //console.log("Making call to: " + url)
     await axios(config).then( (resp) =>
     {
-        //console.log("Transactions returned: " + url );//+ JSON.stringify(resp.data));
+        //console.log("Transactions returned: " + url + " " +  JSON.stringify(resp));
         setData(resp.data);
         return resp;
     }).catch( (reason) => {

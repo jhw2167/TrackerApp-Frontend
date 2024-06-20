@@ -1,9 +1,9 @@
-import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { render } from "react-dom";
 
 //project
 import Layout from './main/Layout';
+import { ConfigProvider } from './Context';
 
 //css
 import './css/General.css';
@@ -33,9 +33,12 @@ import './components/narrowcomponents/CSS/BurgerMenuDD.css';
 
 
 function App() {
+
   return (
     <BrowserRouter basename='/finances'>
+      <ConfigProvider>
         <Layout />
+      </ConfigProvider>
     </BrowserRouter>
   );
 }

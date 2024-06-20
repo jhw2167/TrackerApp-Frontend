@@ -46,15 +46,18 @@ body {
 
 /* DataTable Div */
 .right-data-table {
-    float: right;
+    max-width: 90%;
     margin: auto;
-    margin-right: 7%;
-
-    position: relative;
-    left: -3%;
-
-    text-align: center;
+    margin-right: 8%;
 }
+
+    /*When screen is small*/
+    @media only screen and (max-width: 1000px) {
+        .right-data-table {
+            max-width: 95%;
+            margin: auto;
+        }
+    }
 
 /* Divs with text indicate waiting for data retrieval */
 .loading-data-try {
@@ -67,7 +70,7 @@ body {
 
 .overview-arrow {
     position: relative;
-    top: 10px;
+    top: 6px;
     padding: 4px;
     margin: auto;
 

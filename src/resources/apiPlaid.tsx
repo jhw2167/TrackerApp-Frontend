@@ -17,6 +17,7 @@ export const SERVER_POST_TOKEN = (userId: string) => {
 }
 
 export interface initPlaidLinkProps {
+  linkToken: string | undefined;
   userId: string;
 }
 
@@ -30,7 +31,7 @@ export function InitiatePlaidLinkButton(props: initPlaidLinkProps ) {
     //const [linkToken, updateLinkToken] = useState("");
     const [serverPostTokenResponse, updateServerPostTokenResponse] = useState<any>({});
 
-    const onSuccess = (publicToken: string) => {
+    const onSuccessfulServerPlaidTokenPost = (publicToken: string) => {
         api.postRequest(SERVER_POST_TOKEN(userId),
          {"plaidToken": publicToken}
          ,updateServerPostTokenResponse);
@@ -38,23 +39,23 @@ export function InitiatePlaidLinkButton(props: initPlaidLinkProps ) {
       }
   
     const config: Parameters<typeof usePlaidLink>[0] = {
-      token: "link-development-a8ade467-8337-4501-b2d7-8726ec865b37",
-      onSuccess
+      token: props.linkToken as string,
+      onSuccess: onSuccessfulServerPlaidTokenPost
     };
   
     const { open, ready } = usePlaidLink(config);
 
     useEffect(() => {
       if (ready) {
-        open();
+        //open();
       }
     }, [ready, open]);
 
     return (
       //<div id="plaid-button-wrapper-div">
-       <button id="plaid-button" type="button" onClick={() => open()}>
-        Add Account
-       </button>
+       <div id="plaid-button" onClick={() => open()}>
+        Login
+       </div>
     );
 
 }

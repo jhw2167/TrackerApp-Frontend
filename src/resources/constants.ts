@@ -119,7 +119,6 @@ export const SUMMARY_DATA = {
 }
 
 
-
 /* COLORS */
     export const PRIM_COLOR = 'rgb(255, 80, 10)';
     export const SEC_COLOR = 'black';
@@ -219,13 +218,13 @@ export const MONTHS= ["january","february","march","april","may","june","july",
             "august","september","october","november","december"];
 export const MNTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul","aug", "sep", "oct", "nov", "dec"];
 
-    export const convMnYrToTimeFrame = function(mn: string | undefined | null,
+    export const convMnYrToTimeFrameDates = function(mn: string | undefined | null,
          yr: string | undefined | null, asStrings: boolean = false): [Date, Date] {
 
         //Get Iso month and year
         let temp = -1;
         mn = mn ? mn?.toLocaleLowerCase() : "";
-        if(!mn || ( (MNTHS.indexOf(mn)==-1) && (MNTHS.indexOf(mn)==-1) ) ) {
+        if(!mn || ( (MNTHS.indexOf(mn)==-1) && (MONTHS.indexOf(mn)==-1) ) ) {
             temp = (new Date(Date.now())).getMonth()+1;
         } else if (mn?.length == 3) {
             temp = MNTHS.indexOf(mn)+1;
@@ -278,7 +277,7 @@ export const MNTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul","aug", "se
     }
 
     export const formatISODate = function(date: Date | number): string {
-        if(date==NaN) return 'NaN Passed';
+        if(Number.isNaN(date)) return 'NaN Passed to formatISODate';
         return new Date((new Date(date)).toLocaleString('en-US', { timeZone: 'America/Chicago' }).
         split(",")[0]).toISOString().split('T')[0];
     }
@@ -289,7 +288,11 @@ export const avg = (arr: Array<number>) => { return arr.reduce((a, b) => a + b) 
 //Returns object parsed by categories
 export const aggregateTransactions = function(data: Transaction[], categories: string[] | Set<string>, limit: number = Infinity): DataTuple[]  {
     let map: Map<string, number> = new Map<string, number>();
+    let res: DataTuple[] = [];
 
+    //console.log("Data: " + data);
+    if( !data || data.length == 0) 
+        return res;
     //Append array for each category
     Object.entries(categories).map(([key, val]) => {
         map.set(val, 0);
@@ -301,7 +304,6 @@ export const aggregateTransactions = function(data: Transaction[], categories: s
     })
 
     //Return array of DataTuples
-    let res: DataTuple[] = [];
     map.forEach( (value, key) => {
         res.push({label: key, data: value});
     })

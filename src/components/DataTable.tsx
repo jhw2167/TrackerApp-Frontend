@@ -21,6 +21,7 @@ interface DataTableProps {
     title: string;
     headers: string[];
     colNames: string[];
+    isViewingRecentTransactions: boolean;
     toolTipColNames?: string[];
     toolTipHeaders?: string[];
     data: Array<any>;
@@ -56,6 +57,7 @@ function DataTable(props: DataTableProps) {
     const [extHovCells, setExtHovCells] = useState<Set<any>>(new Set());
     const [hovCells, setHovCells] = useState<Set<any>>(new Set());
     const [deepHovCell, setDeepHovCell] = useState<any>();
+    const [isViewingRecentTransactions, setIsViewingRecentTransactions] = useState<boolean>(props.isViewingRecentTransactions);
     let rowRefs = useRef<Array<HTMLTableRowElement | null>>([]);
 
     /* EFFECTS */
@@ -65,6 +67,11 @@ function DataTable(props: DataTableProps) {
         }
     }
     , [])
+
+    useEffect( () => {
+        setIsViewingRecentTransactions(props.isViewingRecentTransactions);
+    }
+    , [props.isViewingRecentTransactions])
 
     useEffect(() => {
         rowRefs.current = rowRefs.current.slice(0, props.data.length);

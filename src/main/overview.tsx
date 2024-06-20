@@ -65,6 +65,8 @@ function Overview(props: OverviewProps) {
     const [recentTransactionsDisplayable, setRecentTransactionsDisplayable] = useState<Transaction[]>([]);
     const [monthlyTransactionsDisplayable, setMonthlyTransactionsDisplayable] = useState<Transaction[]>([]);
 
+    //Boolean state to indicate user viewing monthly or recent transactions in table
+    const [isViewingRecentTransactions, setIsViewingRecentTransactions] = useState<boolean>(true);
     const [offsetTransactionsPageNum, setoffsetTransactionsPageNum] = useState<number>(0);
 
     const [incomeSummary, setIncomeSummary] = useState<Summary[]>([]);
@@ -77,6 +79,11 @@ function Overview(props: OverviewProps) {
     const [categoriesData, setCategoriesData] = useState<DataTuple[]>([]);
     const [currentDateByMonth, setCurrentDateByMonth] = useState<Date>( () => {
         let date = new Date(Date.now());
+        if( props.mn && props.yr)
+        {
+            let [start, end] = c.convMnYrToTimeFrameDates(props.mn, props.yr);
+            date = start;
+        }
         return new Date(date.getFullYear(), date.getMonth(), 1);
     });
 
@@ -95,6 +102,7 @@ function Overview(props: OverviewProps) {
         //transactions
         //console.log("st: %s and end: %s", start, end);
         
+        const URL_TRANS_CATEGORIES = api.hydrateURIParams(api.SERVER_ALL_CATEGORIES, USER_PARAMS);
         const URL_TRANS_BY_DATE = api.hydrateURIParams(api.SERVER_ALL_TRANSACTIONS_DATES(start, end), USER_PARAMS);
         const URL_TRANS_RECENT = api.hydrateURIParams(api.SERVER_ALL_TRANSACTIONS_RECENT(TRANS_RCNT_TBL_SIZE, offsetTransactionsPageNum), USER_PARAMS);
         const URL_INCOME_SUMMARY = api.hydrateURIParams(api.SERVER_INCOME_SUMMARY(start, end), USER_PARAMS);
@@ -102,8 +110,9 @@ function Overview(props: OverviewProps) {
 
         let [] = await Promise.all([ 
             // eslint-disable-line no-empty-pattern
-        api.getRequest( URL_TRANS_BY_DATE,  (data: Array<Transaction>) => {setMonthlyTransactions(c.formatData(data, 'Transaction'))}),
+        api.getRequest( URL_TRANS_CATEGORIES, (data: Array<string>) => {setCategories(c.formatData(data, 'string'))}),
         api.getRequest( URL_TRANS_RECENT, (data: Array<Transaction>) => {setRecentTransactions(c.formatData(data, 'Transaction'))}),
+        api.getRequest( URL_TRANS_BY_DATE,  (data: Array<Transaction>) => {setMonthlyTransactions(c.formatData(data, 'Transaction'))}),
         api.getRequest( URL_INCOME_SUMMARY, (data: Array<Summary>) => {setIncomeSummary(c.formatData(data, 'Summary'))}),
         api.getRequest( URL_EXPENSE_SUMMARY, (data: Array<Summary>) => {setExpenseSummary(c.formatData(data, 'Summary'))})
         ]);
@@ -111,50 +120,79 @@ function Overview(props: OverviewProps) {
 
     const onLanding = useCallback( async () => {
         //Date stuff
-        const [start, end] = c.convMnYrToTimeFrame(props.mn, props.yr);
-        //setCurrentDateByMonth(start);
-
-        //api Calls
-        //console.log(1);
-        await api.getRequest(api.SERVER_ALL_CATEGORIES, 
-            (data: Array<Summary>) => {setCategories(c.formatData(data, 'string'))});
-
-        updateOnDateChange(start, end);
+        const [start, end] = c.convMnYrToTimeFrameDates(props.mn, props.yr);
         const srchParamStr = "?mn=" + c.MONTHS.at(start.getMonth()) + "&yr=" + start.getFullYear();
         props.setSearchParams(srchParamStr);
-
         isMounted.current = true;
     }, [])
 
     //OnLanding
-    useEffect( () => {onLanding()}, [onLanding]);
+    useEffect( () => {onLanding()}, []);
 
 
     //On update to dependencies
     useEffect( () => {
         //console.log(2);
         if(isMounted.current){
-            //console.log("hello")
             setCategoriesData(c.aggregateTransactions(monthlyTransactionsDisplayable, categories));
         }
     }, [categories, monthlyTransactionsDisplayable]);
 
     useEffect( () => {
         //console.log(3);
-        if(isMounted.current) {
-            //console.log("hello3")
-            const URL_TRANS_RECENT = api.hydrateURIParams(api.SERVER_ALL_TRANSACTIONS_RECENT(TRANS_RCNT_TBL_SIZE, offsetTransactionsPageNum), USER_PARAMS);
-            api.getRequest( URL_TRANS_RECENT, setRecentTransactions);
+        if(isMounted.current) 
+        {
+            if( isViewingRecentTransactions )
+            {
+                //console.log("hello3")
+                const URL_TRANS_RECENT = api.hydrateURIParams(api.SERVER_ALL_TRANSACTIONS_RECENT(TRANS_RCNT_TBL_SIZE, offsetTransactionsPageNum), USER_PARAMS);
+                api.getRequest( URL_TRANS_RECENT, setRecentTransactions);
+            }
+            else    //Viewing monthly transactions
+            {
+                let showMoreTransactions = ( monthlyTransactions.length > TRANS_RCNT_TBL_SIZE ) && 
+                    ((offsetTransactionsPageNum * TRANS_RCNT_TBL_SIZE) < monthlyTransactions.length);
+                //If there are more transactions in this month to show, show them
+                if( showMoreTransactions )
+                {
+                    let start = offsetTransactionsPageNum * TRANS_RCNT_TBL_SIZE;
+                    let end = Math.min( monthlyTransactions.length - start, 30);
+                    setRecentTransactions( monthlyTransactions.slice(start, start + end) );
+                }
+                else if( offsetTransactionsPageNum > 0)
+                {
+                    //Go to previous month
+                    setoffsetTransactionsPageNum(0);
+                    updateCurrentMonth(-1);
+                    console.log("Going to previous month");
+                }
+                
+            }
+            
         }
     }, [offsetTransactionsPageNum]);
+
+    useEffect( () => {
+        setoffsetTransactionsPageNum(0);
+        if( isViewingRecentTransactions)
+        {
+            console.log("Setting Recent transactions");
+            const URL_TRANS_RECENT = api.hydrateURIParams(api.SERVER_ALL_TRANSACTIONS_RECENT(TRANS_RCNT_TBL_SIZE, offsetTransactionsPageNum), USER_PARAMS);
+            api.getRequest( URL_TRANS_RECENT, (data: Array<Transaction>) => {setRecentTransactions(c.formatData(data, 'Transaction'))});
+            setoffsetTransactionsPageNum(0);
+        }
+    }, [isViewingRecentTransactions]);
 
     useEffect( () =>  {
         //console.log(4);
         if(isMounted.current) {
-            //console.log("hello4")
-            updateOnDateChange(currentDateByMonth, 
-                new Date(currentDateByMonth.getFullYear(), currentDateByMonth.getMonth()+1, 1));
+            updateOnDateChange(currentDateByMonth, new Date(currentDateByMonth.getFullYear(), currentDateByMonth.getMonth()+1, 1));
+            //console.log("New mn and year from updated: " + c.MONTHS.at(currentDateByMonth.getMonth()) + " " + currentDateByMonth.getFullYear());
         }
+        const srchParamStr = "?mn=" + c.MONTHS.at(currentDateByMonth.getMonth()) + "&yr=" + currentDateByMonth.getFullYear();
+        props.setSearchParams(srchParamStr);
+
+        setIsViewingRecentTransactions(false);
     }
     , [currentDateByMonth])
     
@@ -172,6 +210,8 @@ function Overview(props: OverviewProps) {
         let rts: c.Transaction[] = recentTransactions.map( (t) => {return properlyCaseTransaction(t);});
         if(SENSITIVE_DATA)
             rts = rts.map( (t) => {return setSensitiveTransactions(t)} );
+
+        console.log("Recent Transactions: " + rts);
         setRecentTransactionsDisplayable(rts);
     }, [recentTransactions])
 
@@ -180,6 +220,9 @@ function Overview(props: OverviewProps) {
         if(SENSITIVE_DATA)
             mts = mts.map( (t) => {return setSensitiveTransactions(t)} );
         setMonthlyTransactionsDisplayable(mts);
+        if( !isViewingRecentTransactions) {
+            setRecentTransactions(monthlyTransactions);
+        }
     }, [monthlyTransactions])
 
     useEffect( () => {
@@ -224,7 +267,11 @@ function Overview(props: OverviewProps) {
     //positive offset is further back in the logs
     const updateRecentTransactions = (dir: number) => {
         const offSet = TRANS_PAGE_OFFSET * dir;
-        setoffsetTransactionsPageNum(Math.max(0, offsetTransactionsPageNum + offSet));
+        const newOffset = offsetTransactionsPageNum + offSet;
+        if( newOffset < 0 && !isViewingRecentTransactions )
+            setIsViewingRecentTransactions(true);
+        else
+            setoffsetTransactionsPageNum(Math.max(0, offsetTransactionsPageNum + offSet));
     }
 
     //hide sensitive values by giving them random vals
@@ -262,12 +309,12 @@ function Overview(props: OverviewProps) {
             <div className="row  main-content-row center-div gradient"> 
                 <div className="col-lg-6 left-col">
 
-                    <div className="left-data-graph">
+                    <div className="row left-data-graph">
                     <DataGraph
                         data=          {categoriesData} 
                         exclusions=    {DATA_GRAPH_EXC_FUNC}
                         limit=         {DATA_GRAPH_LIMIT}
-                        title=         {c.properCase(c.MONTHS[currentDateByMonth.getMonth()])}
+                        title=         {c.properCase(c.MONTHS[currentDateByMonth.getMonth()] + " " + currentDateByMonth.getFullYear())}
                         setHovSegment= {setHovCategory}
                         height=        {Math.min(winWidth * .60 * .90, 340)}
                         width=         {Math.min(winWidth * .60 * .90, 380)}
@@ -323,10 +370,11 @@ function Overview(props: OverviewProps) {
                 {/*div for transactions table, right side entire length */}
                 <div className="col-lg-6">
 
-                    <div className='right-data-table'>
+                    <div className='right-data-table d-flex justify-content-center'>
                         <DataTable headers={DATA_TABLE_HEADERS}
-                        title=      {'Recent Transactions'} 
+                        title=      { (isViewingRecentTransactions) ? 'Recent Transactions' : 'Monthly Transactions'} 
                         colNames=   {DATA_TABLE_COLS}
+                        isViewingRecentTransactions={isViewingRecentTransactions}
                         toolTipColNames= {DATA_TABLE_TT_COLS}
                         toolTipHeaders={DATA_TABLE_TT_COLS.map((v)=> {return c.titleCase(v)})}
                         data=       {recentTransactionsDisplayable}

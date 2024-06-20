@@ -92,12 +92,10 @@ function DataGraph(props: DataGraphProps) {
 
         //Updates
         useEffect( () => {
-            if(props.data.length > 0) {
-                let graphData = genGraphData(props.data, props.exclusions, props.limit);
-                setStateData(graphData);
-                setLegendItems(calcLegendData(graphData));
-            }
             
+            let graphData = genGraphData(props.data, props.exclusions, props.limit);
+            setStateData(graphData);
+            setLegendItems(calcLegendData(graphData));    
             //console.log("running");
         }, [props.data])
 
@@ -144,99 +142,112 @@ function DataGraph(props: DataGraphProps) {
         
     return (
         
-
-        <div className="data-graph-wrapper">
+        //set min height and width on this div derived from props
+        <div className="col data-graph-wrapper" 
+        style={{minHeight: props.height*1.2, minWidth: props.width*.8}}>
 
             <div className="row content-header justify-content-center" id="data-graph-full-title">
-            <div className="col-8">
-            <div className="row no-internal-padding no-internal-flex justify-content-center">
-                    <div className="col">
+            <div className="col-xl-12">
+            <div className="row d-flex no-internal-padding justify-content-center">
+                    <div className="col-sm-2">
                 <Arrow direction={'left'} styleClass={'overview-arrow'} onClick={() => arrowFunc(1)}/>
                     </div>
-                    <div className="col fit-content">
+                    <div className="flex-grow-* fit-content no-internal-padding justify-content-center">
                  <h2 className="content-header-title" id="data-graph-title">{props.title}</h2>        
                     </div>
-                    <div className="col">
+                    <div className="col-sm-2">
                     <Arrow direction={'right'} styleClass={'overview-arrow'} onClick={() => arrowFunc(-1)}/>
                     </div>
             </div>
             </div>
             </div>
             
+            {/* ######## CONDITIONAL LOAD NO DATA ########  */ }
+            
+            { (!stateData || stateData.length === 0) ? 
+
+                /* center height vertically, div must be 100% of parent */
+
+                ( <div className="row h-100 d-flex justify-content-center m-auto">
+                    <div className="col flex-grow align-items-center m-auto loading-data-try"> No transaction data this month :/ </div>
+                </div>
+                )
+
+            : //ELSE
+
+            (
+            <div className="graph-components-wrapper">
+                
+                <div className="data-graph-plot">
+                    <XYPlot 
+                    xDomain={[-.78, 1]}
+                    yDomain={[-.78, 1]}
+                    height={graphDims[0] as number}
+                    width={graphDims[1] as number}
+                    strokeType={'literal'}
+                    >
+
+                    <ArcSeries
+                    center={{x: 0, y: 0}}
+                    data={stateData.map( (value) => {
+                        return {...value, style: (value.color === hovColor) ? ANIM_CHART_STYLE : DEF_CHART_STYLE} as ArcSeriesPoint
+                    })}
+                    colorType={'literal'}
+                    onValueMouseOver={(value) => { if(!legItemClick) setHovValueByColor(value.color as string)}}
+                    onValueMouseOut={ () => { if(!legItemClick) setHovValueByColor('none') }}
+                    />
+
+                {/* ######## TOOLTIP ########  */ }
+                {/* ######## TOOLTIP ########  */ }
+                {/* ######## TOOLTIP ########  */ }
+
+                    {hovValue ? (
+                    <Hint value={buildValue(hovValue)}>
+                        <div className="data-graph-tooltip">
+                            <p className="sublabel-title">{hovValue.label}</p>
+                            <p>{"$" + (hovValue.value as number).toFixed(2) +
+                            ",  " + (hovValue.pct*100).toFixed(1) + "%"}</p>
+                        </div>
+                    </Hint> ) 
+                        : null}
+
+                    </XYPlot>
+                </div>
+
+                {/* ######## LEGEND ########  */ }
+                {/* ######## LEGEND ########  */ }
+                {/* ######## LEGEND ########  */ }
 
 
-        <div className="graph-components-wrapper">
-        
-        {/*<div className="loading-data-try"> No Data this month :/ </div> */}
+                <div className="data-graph-legend">
 
-            <div className="data-graph-plot">
-                <XYPlot 
-                xDomain={[-.78, 1]}
-                yDomain={[-.78, 1]}
-                height={graphDims[0] as number}
-                width={graphDims[1] as number}
-                strokeType={'literal'}
-                >
-
-                <ArcSeries
-                center={{x: 0, y: 0}}
-                data={stateData.map( (value) => {
-                    return {...value, style: (value.color === hovColor) ? ANIM_CHART_STYLE : DEF_CHART_STYLE} as ArcSeriesPoint
-                })}
-                colorType={'literal'}
-                onValueMouseOver={(value) => { if(!legItemClick) setHovValueByColor(value.color as string)}}
-                onValueMouseOut={ () => { if(!legItemClick) setHovValueByColor('none') }}
-                />
-
-            {/* ######## TOOLTIP ########  */ }
-            {/* ######## TOOLTIP ########  */ }
-            {/* ######## TOOLTIP ########  */ }
-
-                {hovValue ? (
-                <Hint value={buildValue(hovValue)}>
-                    <div className="data-graph-tooltip">
-                        <p className="sublabel-title">{hovValue.label}</p>
-                        <p>{"$" + (hovValue.value as number).toFixed(2) +
-                         ",  " + (hovValue.pct*100).toFixed(1) + "%"}</p>
-                    </div>
-                </Hint> ) 
-                    : null}
-
-                </XYPlot>
-            </div>
-
-            {/* ######## LEGEND ########  */ }
-            {/* ######## LEGEND ########  */ }
-            {/* ######## LEGEND ########  */ }
-
-
-            <div className="data-graph-legend">
-
-            <DiscreteColorLegend orientation="horizontal" 
-            width={graphDims[1] as number}
-            items={legendItems.slice(0, PER_LEGEND).map((value) => {
-                return buildStyledLegend(value);
-            })}
-            onItemMouseEnter={(item) => {if(!legItemClick) setHovValueByColor(item.color)}}
-            onItemMouseLeave={() => {if(!legItemClick) setHovValueByColor("") }}
-           //onItemClick={(item: any) => {setLegItemClick(item); setHovValueByColor(item.color);}} 
-           /* LATER DEVELOPMENT */
-            >
-                </DiscreteColorLegend>
-
-            {/* lower row */}
                 <DiscreteColorLegend orientation="horizontal" 
                 width={graphDims[1] as number}
-                items={legendItems.slice(PER_LEGEND, MAX_DATA_DISPLAY).map( (value) => {
+                items={legendItems.slice(0, PER_LEGEND).map((value) => {
                     return buildStyledLegend(value);
-                    })}
-                    onItemMouseEnter={(item) => {if(!legItemClick) setHovValueByColor(item.color)}}
-                    onItemMouseLeave={() => {if(!legItemClick) setHovValueByColor("") }}
-                 />
-    
-            </div> {/* END DATA GRAPH LEGEND */}
+                })}
+                onItemMouseEnter={(item) => {if(!legItemClick) setHovValueByColor(item.color)}}
+                onItemMouseLeave={() => {if(!legItemClick) setHovValueByColor("") }}
+            //onItemClick={(item: any) => {setLegItemClick(item); setHovValueByColor(item.color);}} 
+            /* LATER DEVELOPMENT */
+                >
+                    </DiscreteColorLegend>
+
+                {/* lower row */}
+                    <DiscreteColorLegend orientation="horizontal" 
+                    width={graphDims[1] as number}
+                    items={legendItems.slice(PER_LEGEND, MAX_DATA_DISPLAY).map( (value) => {
+                        return buildStyledLegend(value);
+                        })}
+                        onItemMouseEnter={(item) => {if(!legItemClick) setHovValueByColor(item.color)}}
+                        onItemMouseLeave={() => {if(!legItemClick) setHovValueByColor("") }}
+                    />
         
-        </div>
+                </div> {/* END DATA GRAPH LEGEND */}
+            
+            </div>
+            )}
+            {/* END GRAPH COMPONENTS WRAPPER */}
         </div>
         //end data graph wrapper
                     

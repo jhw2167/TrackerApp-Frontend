@@ -9,8 +9,9 @@ import {contains, now } from 'underscore';
 
 //project imports
 import * as c from '../resources/constants';
-import {Transaction, Vendor, PlaidTransaction} from '../resources/constants';
 import * as api from '../resources/api';
+import { useConfig } from '../Context';
+import {Transaction, Vendor, PlaidTransaction} from '../resources/constants';
 //import DataTable from '../components/DataTable';
 //import SubTable from '../components/SubTable';
 import Header from '../components/Header';
@@ -188,6 +189,10 @@ function PostTransactions() {
 
         /* Const */
 
+        
+    const USER_PARAMS: Map<string, string> = new Map<string, string>([[api.URI_PARAMS.USER_ID,
+        useConfig().get(api.URI_PARAMS.USER_ID) as string]]);
+
         /* States */
         const [rolloverStyles, setRollOverStyles] = useState<Array<any>>([
                 ROLLOVER_BLANK_STYLE, ROLLOVER_BLANK_STYLE, ROLLOVER_BLANK_STYLE
@@ -322,22 +327,29 @@ function PostTransactions() {
                         }
                 }
 
+                const URL_ALL_CATEGORIES = api.hydrateURIParams(api.SERVER_ALL_CATEGORIES, USER_PARAMS);
+                const URL_ALL_PAYMETHODS = api.hydrateURIParams(api.SERVER_ALL_PAYMETHODS, USER_PARAMS);
+                const URL_ALL_PAYSTATUS = api.hydrateURIParams(api.SERVER_ALL_PAYSTATUS, USER_PARAMS);
+                const URL_ALL_BOUGHTFOR = api.hydrateURIParams(api.SERVER_ALL_BOUGHTFOR, USER_PARAMS);
+                const URL_ALL_VENDORS = api.hydrateURIParams(api.SERVER_ALL_VENDORS, USER_PARAMS);
+
                 let [] = await Promise.all([ // eslint-disable-line no-empty-pattern
                 //GET Options for
                 //Category
-                api.getRequest(api.SERVER_ALL_CATEGORIES, getSetData(FORM_HEADERS.CAT)),        
+
+                api.getRequest( URL_ALL_CATEGORIES, getSetData(FORM_HEADERS.CAT)),        
 
                 //Pay Method
-                api.getRequest(api.SERVER_ALL_PAYMETHODS, getSetData(FORM_HEADERS.PMETHOD)),
+                api.getRequest( URL_ALL_PAYMETHODS, getSetData(FORM_HEADERS.PMETHOD)),
 
                 //Pay Status
-                api.getRequest(api.SERVER_ALL_PAYSTATUS, getSetData(FORM_HEADERS.PSTATUS)),
+                api.getRequest( URL_ALL_PAYSTATUS, getSetData(FORM_HEADERS.PSTATUS)),
 
                 //Bought For
-                api.getRequest(api.SERVER_ALL_BOUGHTFOR, getSetData(FORM_HEADERS.BOTFOR)),
+                api.getRequest( URL_ALL_BOUGHTFOR, getSetData(FORM_HEADERS.BOTFOR)),
 
                 //Vendor (?) dyn search box?
-                api.getRequest(api.SERVER_ALL_VENDORS, getSetData(FORM_HEADERS.VEND))
+                api.getRequest( URL_ALL_VENDORS, getSetData(FORM_HEADERS.VEND))
 
                 ]);// END PROMISE.ALL
         }       
@@ -399,7 +411,8 @@ function PostTransactions() {
                         case 'POST':
                                 //post results
                                 console.log('Post Results')
-                                api.postRequest(api.SERVER_ALL_TRANSACTIONS, [t]);
+                                const URL_POST_TRANS = api.hydrateURIParams(api.SERVER_ALL_TRANSACTIONS, USER_PARAMS);
+                                api.postRequest(URL_POST_TRANS, [t]);
                                 break;
                         
                         case 'PREPARE':
