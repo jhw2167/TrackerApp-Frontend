@@ -8,8 +8,9 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 //project imports
 import * as c from '../resources/constants';
-import {DataTuple, Transaction, Summary} from '../resources/constants';
+import * as context from '../Context';
 import * as api from '../resources/api';
+import {DataTuple, Transaction, Summary} from '../resources/constants';
 import useWindowDimensions from '../resources/WindowDims';
 
 import Header from '../components/Header';
@@ -84,21 +85,27 @@ function Overview(props: OverviewProps) {
 
     const isMounted = useRef(false);
 
+    const USER_PARAMS: Map<string, string> = new Map<string, string>([[api.URI_PARAMS.USER_ID,
+        context.useConfig().get(api.URI_PARAMS.USER_ID) as string]]);
+
+
     //Grouped functions
     const updateOnDateChange = async (start: Date, end: Date) => {
 
         //transactions
         //console.log("st: %s and end: %s", start, end);
-        let [] = await Promise.all([ // eslint-disable-line no-empty-pattern
-        api.getRequest(api.SERVER_ALL_TRANSACTIONS_DATES(start, end), 
-        (data: Array<Transaction>) => {setMonthlyTransactions(c.formatData(data, 'Transaction'))}),
-        api.getRequest(api.SERVER_ALL_TRANSACTIONS_RECENT(TRANS_RCNT_TBL_SIZE,
-             offsetTransactionsPageNum), (data: Array<Transaction>) => {setRecentTransactions(c.formatData(data, 'Transaction'))}),
+        
+        const URL_TRANS_BY_DATE = api.hydrateURIParams(api.SERVER_ALL_TRANSACTIONS_DATES(start, end), USER_PARAMS);
+        const URL_TRANS_RECENT = api.hydrateURIParams(api.SERVER_ALL_TRANSACTIONS_RECENT(TRANS_RCNT_TBL_SIZE, offsetTransactionsPageNum), USER_PARAMS);
+        const URL_INCOME_SUMMARY = api.hydrateURIParams(api.SERVER_INCOME_SUMMARY(start, end), USER_PARAMS);
+        const URL_EXPENSE_SUMMARY = api.hydrateURIParams(api.SERVER_EXPENSE_SUMMARY(start, end), USER_PARAMS);
 
-        api.getRequest(api.SERVER_INCOME_SUMMARY(start, end),
-        (data: Array<Summary>) => {setIncomeSummary(c.formatData(data, 'Summary'))}),
-        api.getRequest(api.SERVER_EXPENSE_SUMMARY(start, end), 
-        (data: Array<Summary>) => {setExpenseSummary(c.formatData(data, 'Summary'))})
+        let [] = await Promise.all([ 
+            // eslint-disable-line no-empty-pattern
+        api.getRequest( URL_TRANS_BY_DATE,  (data: Array<Transaction>) => {setMonthlyTransactions(c.formatData(data, 'Transaction'))}),
+        api.getRequest( URL_TRANS_RECENT, (data: Array<Transaction>) => {setRecentTransactions(c.formatData(data, 'Transaction'))}),
+        api.getRequest( URL_INCOME_SUMMARY, (data: Array<Summary>) => {setIncomeSummary(c.formatData(data, 'Summary'))}),
+        api.getRequest( URL_EXPENSE_SUMMARY, (data: Array<Summary>) => {setExpenseSummary(c.formatData(data, 'Summary'))})
         ]);
     }
 
@@ -136,9 +143,8 @@ function Overview(props: OverviewProps) {
         //console.log(3);
         if(isMounted.current) {
             //console.log("hello3")
-            api.getRequest(api.SERVER_ALL_TRANSACTIONS_RECENT(TRANS_RCNT_TBL_SIZE,
-                offsetTransactionsPageNum), setRecentTransactions)
-   
+            const URL_TRANS_RECENT = api.hydrateURIParams(api.SERVER_ALL_TRANSACTIONS_RECENT(TRANS_RCNT_TBL_SIZE, offsetTransactionsPageNum), USER_PARAMS);
+            api.getRequest( URL_TRANS_RECENT, setRecentTransactions);
         }
     }, [offsetTransactionsPageNum]);
 
@@ -263,8 +269,8 @@ function Overview(props: OverviewProps) {
                         limit=         {DATA_GRAPH_LIMIT}
                         title=         {c.properCase(c.MONTHS[currentDateByMonth.getMonth()])}
                         setHovSegment= {setHovCategory}
-                        height={Math.min(winWidth * .60 * .90, 340)}
-                        width={Math.min(winWidth * .60 * .90, 380)}
+                        height=        {Math.min(winWidth * .60 * .90, 340)}
+                        width=         {Math.min(winWidth * .60 * .90, 380)}
                         updateDataHyperlink={updateCurrentMonth}
                         />
                     </div>
