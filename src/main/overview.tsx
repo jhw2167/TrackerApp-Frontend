@@ -19,6 +19,7 @@ import DataGraph from '../components/DataGraph';
 import DataTable from '../components/DataTable';
 import SubTable from '../components/SubTable';
 import { includes } from 'underscore';
+import { isPrefixUnaryExpression } from 'typescript';
 
 interface OverviewProps {
     mn?: string | null;
@@ -26,13 +27,12 @@ interface OverviewProps {
     setSearchParams: Function;
 }
 
-const SENSITIVE_DATA = false;
-
 ///finances/overview?mn=August&yr=21
 //Guess we'll have to take some params here
 function Overview(props: OverviewProps) {
 
     //Constants
+    const SENSITIVE_DATA = context.useConfig().get(context.CONFIG_KEYS.DATA_USE_SENSITIVE_DATA) == 'true';
     const TRANS_PAGE_OFFSET: number = 1;
     const TRANS_RCNT_TBL_SIZE: number = 30;
     const DATA_TABLE_HEADERS: Array<string> = [
@@ -84,7 +84,8 @@ function Overview(props: OverviewProps) {
             let [start, end] = c.convMnYrToTimeFrameDates(props.mn, props.yr);
             date = start;
         }
-        return new Date(date.getFullYear(), date.getMonth(), 1);
+        //return new Date(date.getFullYear(), date.getMonth(), 1);
+        return new Date(2022, 6, 1);
     });
 
     const [hovCategory, setHovCategory] = useState<string>("");
@@ -123,8 +124,13 @@ function Overview(props: OverviewProps) {
         const [start, end] = c.convMnYrToTimeFrameDates(props.mn, props.yr);
         const srchParamStr = "?mn=" + c.MONTHS.at(start.getMonth()) + "&yr=" + start.getFullYear();
         props.setSearchParams(srchParamStr);
+    }, [])
+
+    const onRenderComplete = useCallback( async () => {
+        //Date stuff
         isMounted.current = true;
     }, [])
+
 
     //OnLanding
     useEffect( () => {onLanding()}, []);
@@ -133,9 +139,7 @@ function Overview(props: OverviewProps) {
     //On update to dependencies
     useEffect( () => {
         //console.log(2);
-        if(isMounted.current){
-            setCategoriesData(c.aggregateTransactions(monthlyTransactionsDisplayable, categories));
-        }
+        setCategoriesData(c.aggregateTransactions(monthlyTransactionsDisplayable, categories));
     }, [categories, monthlyTransactionsDisplayable]);
 
     useEffect( () => {
@@ -164,7 +168,7 @@ function Overview(props: OverviewProps) {
                     //Go to previous month
                     setoffsetTransactionsPageNum(0);
                     updateCurrentMonth(-1);
-                    console.log("Going to previous month");
+                    //console.log("Going to previous month");
                 }
                 
             }
@@ -176,7 +180,7 @@ function Overview(props: OverviewProps) {
         setoffsetTransactionsPageNum(0);
         if( isViewingRecentTransactions)
         {
-            console.log("Setting Recent transactions");
+            //console.log("Setting Recent transactions");
             const URL_TRANS_RECENT = api.hydrateURIParams(api.SERVER_ALL_TRANSACTIONS_RECENT(TRANS_RCNT_TBL_SIZE, offsetTransactionsPageNum), USER_PARAMS);
             api.getRequest( URL_TRANS_RECENT, (data: Array<Transaction>) => {setRecentTransactions(c.formatData(data, 'Transaction'))});
             setoffsetTransactionsPageNum(0);
@@ -186,17 +190,19 @@ function Overview(props: OverviewProps) {
     useEffect( () =>  {
         //console.log(4);
         if(isMounted.current) {
-            updateOnDateChange(currentDateByMonth, new Date(currentDateByMonth.getFullYear(), currentDateByMonth.getMonth()+1, 1));
-            //console.log("New mn and year from updated: " + c.MONTHS.at(currentDateByMonth.getMonth()) + " " + currentDateByMonth.getFullYear());
+            setIsViewingRecentTransactions(false);   
         }
+        
+        updateOnDateChange(currentDateByMonth, new Date(currentDateByMonth.getFullYear(), currentDateByMonth.getMonth()+1, 1));
+        //console.log("New mn and year from updated: " + c.MONTHS.at(currentDateByMonth.getMonth()) + " " + currentDateByMonth.getFullYear());
+
         const srchParamStr = "?mn=" + c.MONTHS.at(currentDateByMonth.getMonth()) + "&yr=" + currentDateByMonth.getFullYear();
         props.setSearchParams(srchParamStr);
-
-        setIsViewingRecentTransactions(false);
     }
     , [currentDateByMonth])
     
     useEffect( () => {
+        //console.log(5);
         if(hovCategory && hovCellFunc) {
             let hovCells = new Set<any>();
             recentTransactions.forEach((v) => { if(v.category==hovCategory) { hovCells.add(v);} })
@@ -207,25 +213,30 @@ function Overview(props: OverviewProps) {
     }, [hovCategory]);
 
     useEffect( () => {
+        //console.log(6);
         let rts: c.Transaction[] = recentTransactions.map( (t) => {return properlyCaseTransaction(t);});
         if(SENSITIVE_DATA)
             rts = rts.map( (t) => {return setSensitiveTransactions(t)} );
 
-        console.log("Recent Transactions: " + rts);
+        //console.log("Recent Transactions: " + rts);
         setRecentTransactionsDisplayable(rts);
     }, [recentTransactions])
 
     useEffect( () => {
+        //console.log(7);
         let mts: c.Transaction[] = monthlyTransactions;
         if(SENSITIVE_DATA)
             mts = mts.map( (t) => {return setSensitiveTransactions(t)} );
         setMonthlyTransactionsDisplayable(mts);
         if( !isViewingRecentTransactions) {
+            //console.log( "7.5");
+            //console.log(" isViewingRecentTransactions: " + isViewingRecentTransactions );
             setRecentTransactions(monthlyTransactions);
         }
     }, [monthlyTransactions])
 
     useEffect( () => {
+        //console.log(8);
         let s: c.Summary[] = incomeSummary;
         if(SENSITIVE_DATA)
             s = s.map( (a) => {return setSensitiveSummary(a)} );
@@ -234,11 +245,16 @@ function Overview(props: OverviewProps) {
 
 
     useEffect( () => {
+        
+        console.log(9 + "Sensitive Data: " + SENSITIVE_DATA);
         let s: c.Summary[] = expenseSummary;
         if(SENSITIVE_DATA)
             s = s.map( (a) => {return setSensitiveSummary(a)} );
         setExpenseSummaryDisplayable(s);
     }, [expenseSummary])
+
+     //OnLanding
+     useEffect( () => {onRenderComplete()}, []);
 
 
     /* # # # # #  */
@@ -269,9 +285,14 @@ function Overview(props: OverviewProps) {
         const offSet = TRANS_PAGE_OFFSET * dir;
         const newOffset = offsetTransactionsPageNum + offSet;
         if( newOffset < 0 && !isViewingRecentTransactions )
+        {
             setIsViewingRecentTransactions(true);
+        }
         else
+        {
             setoffsetTransactionsPageNum(Math.max(0, offsetTransactionsPageNum + offSet));
+        }
+            
     }
 
     //hide sensitive values by giving them random vals
@@ -300,9 +321,10 @@ function Overview(props: OverviewProps) {
     //Only Render if we have all our data:
 
     return (
-
+        
+        <div className="" id="overview-background">    
         <div className="container d-flex flex-column g-0" id="overview-container">
-
+        
             <Header />   
 
             {/*Large div contains entire vertical length page*/}
@@ -391,7 +413,8 @@ function Overview(props: OverviewProps) {
             </div> {/* Container row class */}
             <Footer />
 
-    </div>); {/* END CONTAINER WRAPPER */}
+    </div> {/* END CONTAINER WRAPPER */}
+    </div>);
     //END REACT OVERVIEW ELEMENT
 }
 

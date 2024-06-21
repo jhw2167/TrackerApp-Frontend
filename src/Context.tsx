@@ -23,7 +23,8 @@ interface ConfigProviderProps {
 
  export const CONFIG_KEYS = {
     PLAID_LINK_TOKEN: 'frontend.plaid.dev.token',
-    TRANSACTION_MOST_RECENT_DATE: 'transaction.mostRecentDate',
+    DATA_USE_SENSITIVE_DATA: 'frontend.data.use_sensitive_data',
+    TRANSACTION_MOST_RECENT_DATE: 'transaction.mostRecentDate'
 }
 
 

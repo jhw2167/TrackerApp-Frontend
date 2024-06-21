@@ -15,7 +15,9 @@
     --light-grey: rgba(96,96,96);
     --med-grey: rgba(48,48,48);
     --heavy-grey: rgba(18,18,18);
+    --very-heavy-trans-grey: rgba(6,6,6, 0.8);
     --very-heavy-grey: rgba(6,6,6);
+    --black: black;
 
     --error-red: red;
     --check-green: rgb(11, 211, 11);
@@ -121,6 +123,7 @@ footer > div {
 
 .no-scroll {
     overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 .no-internal-padding > * {
