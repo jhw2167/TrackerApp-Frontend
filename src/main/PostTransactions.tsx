@@ -9,9 +9,9 @@ import {contains, now } from 'underscore';
 
 //project imports
 import * as c from '../resources/constants';
+import {Transaction, Vendor, PayMethod, PlaidTransaction} from '../resources/constants';
 import * as api from '../resources/api';
 import { useConfig } from '../Context';
-import {Transaction, Vendor, PlaidTransaction} from '../resources/constants';
 //import DataTable from '../components/DataTable';
 //import SubTable from '../components/SubTable';
 import Header from '../components/Header';
@@ -25,6 +25,7 @@ import { Link, Element, Events, animateScroll as scroll, scrollSpy, scroller } f
 import PTSectionFooter from '../components/narrowcomponents/PTSectionFooter';
 import GeneralTable, { ColStyle } from '../components/GeneralTable';
 import { ContinuousColorLegend } from 'react-vis';
+import { createHash } from 'crypto';
 
 //CSS
 //fgdfgdfgf
@@ -317,13 +318,27 @@ function PostTransactions() {
         const getOptions = async function name() {
 
                 const getSetData = (header: string) => {
-                        return (data: Array<string>) => {
+                        return (data: any) => {
+                                if( c.isEmpty(data) )
+                                {
+                                  map.set(header, []); 
+                                  return;
+                                }
+
                                 if(header == FORM_HEADERS.VEND)
-                                        map.set(header, c.formatData(data, 'Vendor'));
+                                {
+                                  map.set(header, c.formatData(data, 'Vendor'));
+                                }
                                 else if(header==FORM_HEADERS.PMETHOD)
-                                map.set(header, data);
+                                {
+                                  map.set(header, c.formatData(data, 'Pay Method'));
+                                }
                                 else
-                                        map.set(header, c.formatData(data, 'string'));
+                                {
+                                  map.set(header, c.formatData(data, 'string'));
+                                }
+                                
+                                console.log( "In getSetData: " + header + " " + map.get(header) );
                         }
                 }
 
@@ -359,11 +374,18 @@ function PostTransactions() {
                 let makeApiCall = (async () => {
                         await getOptions();
 
-                        let vendorObjectArr: Array<c.Vendor> = map.get(FORM_HEADERS.VEND) as Array<c.Vendor>;
-                        map.set(FORM_HEADERS.VEND, vendorObjectArr?.map( (value: c.Vendor, key) => {
-                                return value.vendor;
+                        let vendorObjectArr: Array<Vendor> = map.get(FORM_HEADERS.VEND) as Array<Vendor>;
+                        map.set(FORM_HEADERS.VEND, vendorObjectArr?.map( (value: Vendor, key) => {
+                                return value.vendorName;
                         }  ));
-        
+
+                        //Repeat same for array of pay methods
+                        let payMethodObjectArr: Array<PayMethod> = map.get(FORM_HEADERS.PMETHOD) as Array<PayMethod>;
+                        map.set(FORM_HEADERS.PMETHOD, payMethodObjectArr?.map( (value: PayMethod, key) => {
+                                return value.payMethod;
+                        }  ));
+                        
+                        console.log("In makeApiCall: " + map.get(FORM_HEADERS.VEND));
                         setFormOptions(map);
                         //console.log("In form options: " );
                         formOptions.forEach( (val, key) => {
@@ -374,6 +396,51 @@ function PostTransactions() {
                
         }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+        /*
+                Aggregate all prepared transactions into an array "data" and post
+                to the server. Update each transaction with its database id provided
+                by the server response.
+        */
+        let doPostNewTransaction = ( prepdTransIndices: Array<number> ) => {
+          
+        /* Validate no negative indices */
+          prepdTransIndices = prepdTransIndices.filter( (i) => {return i >= 0;});
+        
+          console.log('Posting Transactions: ' + prepdTransIndices);
+          if(prepdTransIndices.length == 0)
+                return;
+
+          //Aggregate data
+          let data: Array<Transaction> = prepdTransIndices.map( (i, k) => {
+               let hashedTransaction: Transaction = prepdTrans.at(i) as Transaction;
+                hashedTransaction.tid =  (prepdTrans.length + k).toString();
+                return hashedTransaction;
+          })
+          
+          //console.log('Posting Transactions DATA: ' + data);
+          //Define function for updating IDs when data returns from server; triggers refresh
+          let functionUpdateTransactionIdsOnPost = (data: api.MultiStatusResponse) => { 
+
+                let inc = 0;
+                let postedTransactions: Array<Transaction> = prepdTrans.map( (t, k) => {
+                        //if index exists in prepdTransIndices, update the id
+                        if( k == prepdTransIndices[inc] ) {
+                                t.tid = data.responses[inc].id;
+                                inc++;
+                        }
+                        return t;
+                });
+
+                setPrepdTrans(postedTransactions);
+                setPostedTrans(postedTransactions);
+
+          };
+
+          //Post to server
+          const URL_POST_TRANS = api.hydrateURIParams(api.SERVER_ALL_TRANSACTIONS, USER_PARAMS);
+          api.postRequest(URL_POST_TRANS, data, functionUpdateTransactionIdsOnPost);
+          
+        }
 
         /* Other Functions */
         let onAddNewTransSubmit = (action: string ) => {
@@ -405,20 +472,18 @@ function PostTransactions() {
                         return; //form didn't clear, form will mark existing errors
                         
                 console.log('after firing form submit');
-                //if condition - post or don't post
+
+                //push results to prepared table
+                setPrepdTrans([...prepdTrans, t]);
                 switch(action)
                 {
-                        case 'POST':
-                                //post results
-                                console.log('Post Results')
-                                const URL_POST_TRANS = api.hydrateURIParams(api.SERVER_ALL_TRANSACTIONS, USER_PARAMS);
-                                api.postRequest(URL_POST_TRANS, [t]);
+                        case 'POST':    //post most recently added transaction
+                                console.log('Post Results');
+                                doPostNewTransaction([prepdTrans.length-1]);                            
                                 break;
                         
                         case 'PREPARE':
-                                //push results to prepared table
-                                prepdTrans.push(t);
-                                setPrepdTrans(prepdTrans);
+                                //No POST, just moved into table
                                 console.log('Prep results')
                                 break;
                         default:
@@ -431,6 +496,30 @@ function PostTransactions() {
                         formValues.current = DEF_FORM_VALS;              
 
                 setCountFormRefresh(countFormRefresh+1);        //will force addNewTrans form refresh
+        }
+
+        let onMovePreparedTransactions = (action: string ) => {
+                console.log('POST Prepared Transactions');
+               //Switch case between "SINGLE" and "AGGREGATE"
+               switch(action)
+               {
+                       case 'SINGLE':
+                        //Filter prepdTransactions to find earliest transaction without id field
+                        doPostNewTransaction([prepdTrans.findIndex
+                                ( (t) => {return t.tid == '?';})]);
+                         break;
+
+                       case 'AGGREGATE':
+                        //Filter prepdTransactions to find all transactions without id field
+                        doPostNewTransaction(prepdTrans.map( (t, k) => {
+                                return (t.tid == '?') ? k : -1;
+                        }));
+                               break;
+                       default:
+                               console.log('No action taken');
+                               return;
+               }
+ 
         }
 
         return (
@@ -620,8 +709,9 @@ function PostTransactions() {
                            offsets={[[0, -90], [0, -80]]}
                            classNames={['col post-trans-double-plus post-trans-subsec-footer-item post-trans-hoverable',
                            'col post-trans-subsec-footer-item post-trans-arrow-outer-div']}
-                           children={[ <DoublePlus key={'dp'} styleClass='post-trans-hoverable post-trans-double-plus' />,
-                           <Arrow key={'a'} height={ARROW_DIMS.h} width={ARROW_DIMS.w} styleClass='post-trans-hoverable post-trans-arrow'/>
+                           children={[ 
+                           <DoublePlus key={'dp'} onClick={ () => onMovePreparedTransactions("AGGREGATE") } styleClass='post-trans-hoverable post-trans-double-plus' />,
+                           <Arrow key={'a'}  onClick={ () => onMovePreparedTransactions("SINGLE") }  height={ARROW_DIMS.h} width={ARROW_DIMS.w} styleClass='post-trans-hoverable post-trans-arrow'/>
                            ]}/>
                   </div>
                   {/* End row section footer content */} 
@@ -651,7 +741,22 @@ function PostTransactions() {
 
                         <div className='row pt bordered-section table-section' id="posted-table-row">
                          <div className='col-12'>
-                                {/* Component goes here */} <div className='scroll-sample'></div>               
+                         <div className='row pt bordered-section table-section' id="posted-table-row">
+                                <div className='col-12'>
+                                <GeneralTable<Transaction> 
+                                id='posted-table'
+                                styleClass='pt'
+                                colNames={PENDING_COLS}
+                                data={postedTrans}
+                                headers={PENDING_HEADERS}
+                                limit={Infinity}
+                                minRows={MIN_ROWS}
+
+                                rowStyling={{hoverCSS: HOV_ROW_STYLE}}
+                                colStyling={PREPARED_COL_STYLE}
+                                />              
+                                </div>
+                        </div>             
                          </div>
                         </div>
                 {/* End row section component content */} 
@@ -671,12 +776,22 @@ function PostTransactions() {
                 </div>
                 {/* END MAIN SCROLLABLE ROW*/}
 
-                <div className='row post-trans-tab-down-arrow'>
-                <div className='col-12 justify-contents-center'>
-                        <div className='sample'> ^ </div>
-                </div>
-                </div>
 
+                <div className='row post-trans-tab-down-arrow-wrapper'>
+                <div className='col-12 justify-content-center post-trans-tab-down-arrow-wrapper'>
+                {
+                  [0, 1, 2].map( (i) => {
+                        return <div key={i} className='row justify-content-center post-trans-tab-down-arrow'
+                          style={{color: (rolloverStyles[i] != ROLLOVER_BLANK_STYLE) ? 'var(--primary-col)' : 'var(--med-grey)'}}
+                          >
+                          <div className='col-1'>
+                                        <div className=''> ^ </div>
+                          </div>
+                        </div>
+                  })
+                }
+                </div>
+                </div>
 
                 </div>
                 {/* END MAIN CONTENT ROW*/}

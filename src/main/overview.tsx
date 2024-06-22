@@ -246,7 +246,7 @@ function Overview(props: OverviewProps) {
 
     useEffect( () => {
         
-        console.log(9 + "Sensitive Data: " + SENSITIVE_DATA);
+        //console.log(9 + "Sensitive Data: " + SENSITIVE_DATA);
         let s: c.Summary[] = expenseSummary;
         if(SENSITIVE_DATA)
             s = s.map( (a) => {return setSensitiveSummary(a)} );

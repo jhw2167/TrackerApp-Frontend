@@ -51,6 +51,7 @@ form {
     appearance: none;
     -webkit-appearance: none;
     outline: none;
+    cursor: cursor;
 }
 
 input.pt {

@@ -5,13 +5,23 @@
     --interal-sec-height: 28vh;
 }
 
-.sample {
-    height: 100px;
-    text-align: center;
-    font-size: 5em;
-    z-index: 1005;
+.col-12.post-trans-tab-down-arrow-wrapper {
+    position: relative;
+    top: -20px;
 }
 
+.col-12.post-trans-tab-down-arrow-wrapper > * {
+    height: 24Px;
+    text-align: center;
+    font-size: 2.5em;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.col-12.post-trans-tab-down-arrow-wrapper > *:hover {
+    color: var(--tert-col) !important;
+    transition: color 0.2s;
+}
 
 .scroll-sample {
     height: 100px;

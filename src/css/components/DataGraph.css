@@ -69,6 +69,7 @@
     color: var(--prim-font-col);
     text-align: center;
     padding: 5px 10px ;          /* top left */
+    cursor: pointer;
 }
 
 .rv-discrete-color-legend-item.clickable:hover {

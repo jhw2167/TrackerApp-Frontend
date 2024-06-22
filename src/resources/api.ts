@@ -20,14 +20,30 @@ export const DEFAULT_USER_ID = '20230303JACKHENRYWELSH@GMAIL.COM';
 
 //Server calls
 export const SERVER_CONFIG = DOMAIN + PORT + "server/config";
-export const SERVER_ALL_TRANSACTIONS = DOMAIN + PORT +  "finances/users/{" + URI_PARAMS.USER_ID + "}/transactions";
+export const SERVER_USER_BASE = DOMAIN + PORT +  "finances/users/{" + URI_PARAMS.USER_ID + "}";
+export const SERVER_ALL_TRANSACTIONS = SERVER_USER_BASE + "/transactions";
+
 export const SERVER_ALL_CATEGORIES = SERVER_ALL_TRANSACTIONS + "/categories";
 export const SERVER_ALL_PAYMETHODS = SERVER_ALL_TRANSACTIONS + "/payMethods";
 export const SERVER_ALL_BOUGHTFOR = SERVER_ALL_TRANSACTIONS + "/boughtFor";
 export const SERVER_ALL_PAYSTATUS = SERVER_ALL_TRANSACTIONS + "/payStatus";
 
-export const SERVER_ALL_VENDORS = SERVER_ALL_TRANSACTIONS + "/vendors";
+export const SERVER_ALL_VENDORS_BASE = SERVER_USER_BASE + "/vendors";
+export const SERVER_ALL_VENDORS = SERVER_ALL_VENDORS_BASE;
 
+/* API Server Data Structures */
+
+export interface SingleStatusResponse{
+    status: string;
+    data: any;
+    id: string;
+    message: string;
+}
+
+export interface MultiStatusResponse {
+    message: string;
+    responses: Array<SingleStatusResponse>;
+}
 
 /*Utility functions */
 
@@ -109,14 +125,15 @@ export const getRequest = async function getRequest(url: string, setData: Functi
         url: url
     }
 
-   //console.log("Making call to: " + url)
+   console.log("Making call to: " + url)
     await axios(config).then( (resp) =>
     {
-        //console.log("Transactions returned: " + url + " " +  JSON.stringify(resp));
+        console.log("Transactions returned: " + url + " " +  JSON.stringify(resp));
         setData(resp.data);
         return resp;
     }).catch( (reason) => {
         console.log("Error from GET request from: " + url + " with error: " + reason);
+        return {};
     });
     //end axios call   
 }

@@ -35,14 +35,21 @@ export interface PlaidTransaction {
 }
 
 export interface Vendor {
-    cc_id: string,
-    cc: string,
-    vendor: string,
+    vendorName: string,
     amount: number,
     category: string,
     typicallyIncome: boolean
 }
 
+export interface PayMethod {
+    pmId: string,
+    payMethod: string,
+    balance: string,
+    creditLine: string,
+    cashBack: string,
+    description: string,
+    website: string
+}
 
 export interface DataTuple {
     label: string;
@@ -285,6 +292,10 @@ export const MNTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul","aug", "se
 /* FUNCTION CONSTANTS */
 export const avg = (arr: Array<number>) => { return arr.reduce((a, b) => a + b) / arr.length };
 
+export function isEmpty(obj: any) {
+    return Object.keys(obj).length === 0;
+  }
+
 //Returns object parsed by categories
 export const aggregateTransactions = function(data: Transaction[], categories: string[] | Set<string>, limit: number = Infinity): DataTuple[]  {
     let map: Map<string, number> = new Map<string, number>();
@@ -328,9 +339,15 @@ export const formatData = function(data: Array<any>, type: string): Array<any> {
         
         case 'Vendor':
             return data.map( (v: Vendor) => {
-                v.vendor = toTitles(v.vendor);
+                v.vendorName = toTitles(v.vendorName);
                 v.category = toTitles(v.category);
                 return v;
+            })
+
+        case 'Pay Method':
+            return data.map( (p: PayMethod) => {
+                p.payMethod = toTitles(p.payMethod);
+                return p;
             })
 
         case 'Summary':
