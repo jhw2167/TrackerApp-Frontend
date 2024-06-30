@@ -153,16 +153,13 @@ function DataTable(props: DataTableProps) {
                                         break;
 
                                     case c.TRANS_DATA.VEND:
-                                        if(val.length > MAX_VENDOR_DISP_LEN ) {
-                                            val = val.slice(0, 12);
-                                            val += '...'
-                                        }
+                                        val = c.truncString(val, MAX_VENDOR_DISP_LEN);
                                         innerStyle= {['width' as any]: '50%'};
                                         break;
 
                                     case c.TRANS_DATA.AMT:
                                         innerStyle= {['textAlign' as any]: 'left',
-                                        ['paddingLeft' as any]: isHov > 1 ? '6%' : '9%'};
+                                        ['paddingLeft' as any]: isHov > 1 ? '5%' : '7%'};
                                         val = '$' + Number(val).toFixed(2);
                                         break;
 
@@ -182,9 +179,13 @@ function DataTable(props: DataTableProps) {
                         onMouseLeave={() => setDeepHovCell(null)}
                         >
                             <ul>
-                                {props.toolTipColNames.map((v, i) => {
-                                    return (<li key={i}>{(props.toolTipHeaders as string[])[i]
-                                         + ': ' + value[v.toString()] as string}</li>)
+                                {props.toolTipColNames.filter( (v) => { return value[v.toString()] != undefined} ).map((v, i) => {
+                                    return (
+                                        <li key={i}>
+                                            <span className="text-bold no-wrap"> {(props.toolTipHeaders as string[])[i] + ': '}</span>
+                                            <span>{value[v.toString()].toString()}</span>
+                                        </li>
+                                        )
                                 })}
                             </ul>
                         </Tooltip>

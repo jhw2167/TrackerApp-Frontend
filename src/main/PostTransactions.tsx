@@ -16,19 +16,17 @@ import { useConfig } from '../Context';
 //import SubTable from '../components/SubTable';
 import Header from '../components/Header';
 import * as CSS from 'csstype';
-
 import Arrow from '../resources/subcomponents/arrow';
 import DoublePlus from '../resources/subcomponents/double_plus';
 import AddNewTrans from '../components/AddNewTrans';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { Link, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 import PTSectionFooter from '../components/narrowcomponents/PTSectionFooter';
 import GeneralTable, { ColStyle } from '../components/GeneralTable';
-import { ContinuousColorLegend } from 'react-vis';
-import { createHash } from 'crypto';
+import { animateScroll as scroll, scrollSpy } from 'react-scroll';
+import { wait } from '@testing-library/user-event/dist/utils';
 
 //CSS
-//fgdfgdfgf
+
 
 //Constants
 const ROLLOVER_DIV_FIXED_STYLE: CSS.Properties = {
@@ -54,11 +52,12 @@ const ROLLOVER_BLANK_STYLE: CSS.Properties = {
                 ["border" as any]: 'solid 3px var(--tert-col)',
                 ["lineHeight" as any]: '2.2em'
         };
-            
+
+const THRESHOLDS = [0, 700, 1380, 1400];
 
 /* Form Constants */
 const FORM_HEADERS = {
-        tid: 'Transaction ID',
+        //tid: 'Transaction ID',
 	PURCHDATE: 'Purchase Date', 
 	AMT: 'Amount', 
 	VEND: 'Vendor', 
@@ -73,7 +72,7 @@ const FORM_HEADERS = {
 }
 
 const FORM_INP_TYPES = {
-        tid: 'input-text',
+        //tid: 'input-text',
 	PURCHDATE: 'input-date', 
 	AMT: 'input-text', 
 	VEND: 'input-text', 
@@ -87,6 +86,21 @@ const FORM_INP_TYPES = {
 	NOTES: 'input-text'
 }
 
+const DEF_FORM_VALS = [
+        //"",     //trans id
+        c.formatISODate(now()),     //Purchased Date
+        "85",     //amount
+        "Varsity Energy",     //vendor
+        "Domestic",     //category
+        "Georgetown",     //PayMethod
+        "",     //BoughtFor
+        "",     //PayStatus
+        "",     //Income
+        "",     //Reimburses
+        c.formatISODate(now()),     //Posted Date
+        ""     //Notes
+]
+
 /* Table Constants */
 const MIN_ROWS = 1;
 const MAX_STR_LEN = 14;
@@ -94,7 +108,7 @@ const MAX_STR_LEN = 14;
 const PLTRS = Object.entries(c.PLAID_TRANS);
 const PENDING_COLS = PLTRS.map(([k, v]) => {return v;});
 const PENDING_HEADERS = new Map<string, string>(PLTRS.map(([k, v]) => {
- return [v, c.titleCase(v)];}));
+ return [v, c.titleCaseHeaders(v)];}));
 const PENDING_COL_STYLE = new Map<string, ColStyle>(PLTRS.map(([k, col]) => { 
         let cs: ColStyle = {
                 content: (v: string) => {return v;},
@@ -109,7 +123,7 @@ const PENDING_COL_STYLE = new Map<string, ColStyle>(PLTRS.map(([k, col]) => {
                 cs.content = (v: string) => {return '$' + Number(v).toFixed(2);};
                 break;
 
-                case c.PLAID_TRANS.POSTDATE:
+                //case c.PLAID_TRANS.POSTDATE:
                 case c.PLAID_TRANS.PURCHDATE:
                 cs.content = (v: string) => {return c.formatISODate(Date.parse(v))};
                 break;
@@ -128,16 +142,25 @@ const PENDING_COL_STYLE = new Map<string, ColStyle>(PLTRS.map(([k, col]) => {
          return [col, cs];
 }));
 
-const TRS = Object.entries(c.TRANS_DATA);
-const PREPARED_COLS = TRS.map(([k, v]) => {return v;});
-const PREPARED_HEADERS = new Map<string, string>(TRS.map(([k, v]) => {
- return [v, c.titleCase(v)];}));
-const PREPARED_COL_STYLE = new Map<string, ColStyle>(TRS.map(([k, col]) => { 
+const PREPARED_COLS: Array<string> = [
+        c.TRANS_DATA.ID,
+        c.TRANS_DATA.PURCHDATE,
+        c.TRANS_DATA.VEND,
+        c.TRANS_DATA.AMT,
+        c.TRANS_DATA.CAT,
+        c.TRANS_DATA.PMETHOD,
+        c.TRANS_DATA.BOTFOR,
+        c.TRANS_DATA.PSTATUS,
+        c.TRANS_DATA.INCOME
+    ]
+
+const PREPARED_HEADERS = new Map<string, string>(PREPARED_COLS.map((v) => { return [v, c.titleCaseHeaders(v)];}));
+const PREPARED_COL_STYLE = new Map<string, ColStyle>(PREPARED_COLS.map((v) => { 
         let cs: ColStyle = {
                 hoverCSS: HOV_COL_STYLE
          }
 
-         switch(col) {
+         switch(v) {
                 case c.TRANS_DATA.AMT:
                 cs.css = {['textAlign' as any]: 'right',
                 ['paddingRight' as any]: '1%'};
@@ -162,7 +185,7 @@ const PREPARED_COL_STYLE = new Map<string, ColStyle>(TRS.map(([k, col]) => {
                 return c.truncString(v, MAX_STR_LEN-3);
        };
 
-         return [col, cs];
+         return [v, cs];
 }));
 
 
@@ -196,7 +219,7 @@ function PostTransactions() {
 
         /* States */
         const [rolloverStyles, setRollOverStyles] = useState<Array<any>>([
-                ROLLOVER_BLANK_STYLE, ROLLOVER_BLANK_STYLE, ROLLOVER_BLANK_STYLE
+                ROLLOVER_DIV_FIXED_STYLE, ROLLOVER_BLANK_STYLE, ROLLOVER_BLANK_STYLE
         ]);
 
         const [countFormRefresh, setCountFormRefresh] = useState<number>(0);
@@ -220,27 +243,14 @@ function PostTransactions() {
                 (val: string) => {return true;}     //Notes
         ];
 
-        const todayISO: string = c.formatISODate(now());
-                const DEF_FORM_VALS = [
-                        "",     //trans id
-                        todayISO,     //Purchased Date
-                        "85",     //amount
-                        "Var",     //vendor
-                        "Domestic",     //category
-                        "Georgetown",     //PayMethod
-                        "",     //BoughtFor
-                        "",     //PayStatus
-                        "",     //Income
-                        "",     //Reimburses
-                        todayISO,     //Posted Date
-                        ""     //Notes
-                ]
+        
                 let [formValues, setFormValues] = useState<React.MutableRefObject<any[]>>();
                 const [formOptions, setFormOptions] = useState<Map<string, Array<any>>>(new Map());  //drop down options for form
                 const addNewFormRef = useRef<HTMLFormElement>(null);
 
                 const [, updateState] = React.useState<Object>();
                 const forceUpdate = React.useCallback(() => updateState({}), []);
+                const [scrollEvent, setScrollEvent] = useState<number>(0);
 
                 //Stylistic states
                 const scrollableRowRef = useRef<HTMLDivElement>(null);
@@ -248,6 +258,7 @@ function PostTransactions() {
                 const [scrollPos, setScrollPos] = useState<number>(0);
                 const MAX_SCROLL = 70;
                 const MIN_SCROLL = 20;
+                const [rolloverThresholds, setRolloverThresholds] = useState<Array<number>>(THRESHOLDS);
 
 
         //table states
@@ -258,60 +269,98 @@ function PostTransactions() {
         /* Effects */
         const scrollInnerDiv = (deltaY: number) => {
                 //console.log('----- -----');
-                let dir = deltaY/Math.abs(deltaY)
-                //console.log('dir: ' + dir);
+                let newScrollPos = scrollPos;
+
                 let ref: HTMLDivElement;
                 if(scrollableRowRef.current)
                   ref = scrollableRowRef.current;
                 else 
                   return;
+                  
+                const MAX_HEIGHT = ref.children[0].clientHeight;
 
-                const BUFFER = 5;
-                let distFromTop = rolloverRows.current.map( (v) => {
-                        return (v) ? v.getBoundingClientRect().y - (ref.getBoundingClientRect().y + BUFFER) : 0;
-                })
-
-                let i = 0;
-                while(i<rolloverRows.current.length && distFromTop[i] < 0 ) {
-                        //for fixed rollovers, keep them fixed unless user tries to scroll down
-                        rolloverStyles[i++] = {...ROLLOVER_DIV_FIXED_STYLE, top: ref.getBoundingClientRect().top };
-                }
-
-                let scrollDist = 0;
-                let jump=0;
-                if(i < rolloverRows.current.length) {
-                        scrollDist = (dir>0) ? Math.min(MAX_SCROLL, Math.max(distFromTop[i]/4, MIN_SCROLL))*dir : MAX_SCROLL*dir;
-                        //console.log("dist: " + scrollDist);
-
-                } else if(dir < 0) { //user attempting to scroll down when all divs are locked; loosen last
-                        scrollDist = -MIN_SCROLL*3;
-                        jump = -MIN_SCROLL*2;
-                        rolloverStyles[i-1] = ROLLOVER_BLANK_STYLE;
-                }
-                
-                //console.log('Row height: '  + ref.getBoundingClientRect().height);
-                //console.log('Dist From: ' + JSON.stringify(distFromTop));
-
-                const LOOSEN_LEN = 2.2;
-                if(i!=0 && i != rolloverRows.current.length && (dir<0) &&
-                        distFromTop[i] - scrollDist > ref.getBoundingClientRect().height*LOOSEN_LEN) 
+                let dir = 0;
+                if( deltaY != 0 )
                 {
-                        //console.log('loosening');
-                        rolloverStyles[i-1] = ROLLOVER_BLANK_STYLE; //loosen previous fixed div
+                        dir = deltaY/Math.abs(deltaY);
+                        let scrollDist = 0;
+                        scrollDist = ((MIN_SCROLL + MAX_SCROLL)/2) *dir;
+                        newScrollPos = Math.min(Math.max(scrollPos+scrollDist, 0), 2*MAX_HEIGHT/3 + 30);
+                        if( scrollDist == 0 )
+                                newScrollPos= scrollPos;
+                        
                 }
-                while(i < rolloverRows.current.length) {
-                        rolloverStyles[i++] = ROLLOVER_BLANK_STYLE;
+                //set thresholds every 1/3 max height
+                let newThresholds = [0, MAX_HEIGHT/3, 2*MAX_HEIGHT/3, MAX_HEIGHT];
+                newThresholds = newThresholds.map( (v) => {return Math.max(v - 280, 0);});
+
+                console.log('Thresholds: ' + newThresholds);
+                if( dir < 0 )
+                {
+                        /*
+                                If user scrolls up, we want to set these divs to ROLL over as blank style
+                        */
+                                               
+
+                        if( newScrollPos < newThresholds[1] )
+                        {
+                          
+                          rolloverStyles[2] = ROLLOVER_BLANK_STYLE;
+                          rolloverStyles[1] = ROLLOVER_BLANK_STYLE;
+                        }
+                        else if( newScrollPos < newThresholds[2] )
+                        {
+                          rolloverStyles[2] = ROLLOVER_BLANK_STYLE;
+                        }
                 }
+                else
+                {
+                        /*
+                                If user scrolls DOWN, we want to set these divs to FIXED when they reach the top
+                        */
+
+                        if( newScrollPos > newThresholds[2] )
+                        {
+                           rolloverStyles[2] = {...ROLLOVER_DIV_FIXED_STYLE, top: ref.getBoundingClientRect().top };
+                           rolloverStyles[1] = {...ROLLOVER_DIV_FIXED_STYLE, top: ref.getBoundingClientRect().top };
+                        }
+                        else if( newScrollPos > newThresholds[1] )
+                        {
+                          rolloverStyles[1] = {...ROLLOVER_DIV_FIXED_STYLE, top: ref.getBoundingClientRect().top };
+                        }
+                        else
+                        {
+                          rolloverStyles[0] = {...ROLLOVER_DIV_FIXED_STYLE, top: ref.getBoundingClientRect().top };
+                        }
+                        
+                }
+           
+                setRolloverThresholds(newThresholds);
                 setRollOverStyles(rolloverStyles);
-                let newScrollPos = Math.min(Math.max(scrollPos+scrollDist, 0), ref.children[0].clientHeight)+jump;
+                
                 //console.log('SP: %d', scrollPos);
-                //console.log("scrolls:  " + (newScrollPos))
+                console.log("new pos:  " + (newScrollPos))
                 scrollableRowRef.current?.scroll(0, newScrollPos);
                 //console.log('s')                        
                 //console.log('\n\n\n')
                 setScrollPos(newScrollPos);
-                //state doesnt update until after function terminates
+
         };
+
+        let scrollToTargetTable = (target: number) => {
+
+                rolloverStyles.forEach( (v, k) => {
+                        if(k > target)
+                                rolloverStyles[k] = ROLLOVER_BLANK_STYLE;
+                });
+                rolloverRows.current[target]?.scrollIntoView({behavior: 'smooth', block: 'start'});
+                setScrollPos(rolloverThresholds[target] + 15);
+                wait(500).then( () => { 
+                        setScrollEvent(scrollEvent+1); 
+                });
+        }
+
+
 
         /* Api Calls */
         let map: Map<string, Array<any>> = new Map();
@@ -338,7 +387,7 @@ function PostTransactions() {
                                   map.set(header, c.formatData(data, 'string'));
                                 }
                                 
-                                console.log( "In getSetData: " + header + " " + map.get(header) );
+                                //console.log( "In getSetData: " + header + " " + map.get(header) );
                         }
                 }
 
@@ -385,7 +434,7 @@ function PostTransactions() {
                                 return value.payMethod;
                         }  ));
                         
-                        console.log("In makeApiCall: " + map.get(FORM_HEADERS.VEND));
+                        //console.log("In makeApiCall: " + map.get(FORM_HEADERS.VEND));
                         setFormOptions(map);
                         //console.log("In form options: " );
                         formOptions.forEach( (val, key) => {
@@ -396,49 +445,57 @@ function PostTransactions() {
                
         }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+        //Setup useEffect to trigger "scrollInnerDiv" on scroll event
+        useEffect(() => {
+                scrollInnerDiv(0);
+        }, [scrollEvent]); // eslint-disable-line react-hooks/exhaustive-deps
+
+
         /*
-                Aggregate all prepared transactions into an array "data" and post
-                to the server. Update each transaction with its database id provided
+                Aggregate all prepared transactions into an array "data" to post
+                to the server
+        */
+        function getPostableTransactions( prepdTransIndices: Array<number> ): Array<Transaction> 
+        {
+                /* Validate no negative indices */
+         prepdTransIndices = prepdTransIndices.filter( (i) => {return i >= 0;});
+        
+         if(prepdTransIndices.length == 0)
+               return new Array<Transaction>();
+        
+          //Aggregate data
+         return prepdTransIndices.map( (i, k) => { return prepdTrans.at(i) as Transaction; });
+                
+        }
+                
+        /*
+                After POSTing to server, update each transaction with its database id provided
                 by the server response.
         */
-        let doPostNewTransaction = ( prepdTransIndices: Array<number> ) => {
-          
-        /* Validate no negative indices */
-          prepdTransIndices = prepdTransIndices.filter( (i) => {return i >= 0;});
+        function doPostNewTransaction( transactions: Array<Transaction> ) 
+        {
         
-          console.log('Posting Transactions: ' + prepdTransIndices);
-          if(prepdTransIndices.length == 0)
-                return;
-
-          //Aggregate data
-          let data: Array<Transaction> = prepdTransIndices.map( (i, k) => {
-               let hashedTransaction: Transaction = prepdTrans.at(i) as Transaction;
-                hashedTransaction.tid =  (prepdTrans.length + k).toString();
-                return hashedTransaction;
-          })
-          
-          //console.log('Posting Transactions DATA: ' + data);
+          transactions = transactions.map( (t) => { t.tid = ""; return t; });
+          console.log('Posting Transactions DATA: ');
+          console.log(transactions);
           //Define function for updating IDs when data returns from server; triggers refresh
           let functionUpdateTransactionIdsOnPost = (data: api.MultiStatusResponse) => { 
 
-                let inc = 0;
-                let postedTransactions: Array<Transaction> = prepdTrans.map( (t, k) => {
-                        //if index exists in prepdTransIndices, update the id
-                        if( k == prepdTransIndices[inc] ) {
-                                t.tid = data.responses[inc].id;
-                                inc++;
-                        }
+                let postedTransactions: Array<Transaction> = data.responses.filter( (v) => {
+                       return api.SERVER_RESPONSE_STATUS_MAP.get( api.SERVER_ALL_TRANSACTIONS )?.includes(v.status); })
+                .map( (v, k) => {
+                        let t: Transaction = v.data;
+                        t.tid = v.id;
                         return t;
                 });
 
                 setPrepdTrans(postedTransactions);
                 setPostedTrans(postedTransactions);
-
           };
 
           //Post to server
           const URL_POST_TRANS = api.hydrateURIParams(api.SERVER_ALL_TRANSACTIONS, USER_PARAMS);
-          api.postRequest(URL_POST_TRANS, data, functionUpdateTransactionIdsOnPost);
+          api.postRequest(URL_POST_TRANS, transactions, functionUpdateTransactionIdsOnPost);
           
         }
 
@@ -474,17 +531,17 @@ function PostTransactions() {
                 console.log('after firing form submit');
 
                 //push results to prepared table
-                setPrepdTrans([...prepdTrans, t]);
                 switch(action)
                 {
                         case 'POST':    //post most recently added transaction
                                 console.log('Post Results');
-                                doPostNewTransaction([prepdTrans.length-1]);                            
+                                doPostNewTransaction([t]);
                                 break;
                         
                         case 'PREPARE':
                                 //No POST, just moved into table
                                 console.log('Prep results')
+                                setPrepdTrans([...prepdTrans, t]);
                                 break;
                         default:
                                 console.log('Form cleared with no action')
@@ -501,17 +558,17 @@ function PostTransactions() {
         let onMovePreparedTransactions = (action: string ) => {
                 console.log('POST Prepared Transactions');
                //Switch case between "SINGLE" and "AGGREGATE"
+               let transactions = new Array<Transaction>();
                switch(action)
                {
                        case 'SINGLE':
                         //Filter prepdTransactions to find earliest transaction without id field
-                        doPostNewTransaction([prepdTrans.findIndex
-                                ( (t) => {return t.tid == '?';})]);
+                        transactions = getPostableTransactions([prepdTrans.findIndex( (t) => {return t.tid == '?';})]);
                          break;
 
                        case 'AGGREGATE':
                         //Filter prepdTransactions to find all transactions without id field
-                        doPostNewTransaction(prepdTrans.map( (t, k) => {
+                        transactions = getPostableTransactions(prepdTrans.map( (t, k) => {
                                 return (t.tid == '?') ? k : -1;
                         }));
                                break;
@@ -519,7 +576,8 @@ function PostTransactions() {
                                console.log('No action taken');
                                return;
                }
- 
+               
+               doPostNewTransaction(transactions);
         }
 
         return (
@@ -589,8 +647,7 @@ function PostTransactions() {
                         <div className='col post-trans-double-plus post-trans-subsec-footer-item
                         post-trans-hoverable'>
                         <OverlayTrigger offset={[0, -90]} overlay={rndrBtnTooltip('Post Now', 'bottom', 'post-form-trans-now')}>
-                                 <div onClick={() => { console.log("calling " + JSON.stringify(formValues));
-                                 onAddNewTransSubmit('POST');}}>
+                                 <div onClick={() => onAddNewTransSubmit('POST')}>
                                  <DoublePlus styleClass='post-trans-hoverable post-trans-double-plus' />
                                   </div>
                         </OverlayTrigger>
@@ -739,26 +796,24 @@ function PostTransactions() {
                         </div>
                 {/* End row section title content */} 
 
-                        <div className='row pt bordered-section table-section' id="posted-table-row">
-                         <div className='col-12'>
-                         <div className='row pt bordered-section table-section' id="posted-table-row">
-                                <div className='col-12'>
-                                <GeneralTable<Transaction> 
-                                id='posted-table'
-                                styleClass='pt'
-                                colNames={PENDING_COLS}
-                                data={postedTrans}
-                                headers={PENDING_HEADERS}
-                                limit={Infinity}
-                                minRows={MIN_ROWS}
+                      
+                <div className='row pt bordered-section table-section' id="posted-table-row">
+                        <div className='col-12'>
+                        <GeneralTable<Transaction> 
+                        id='posted-table'
+                        styleClass='pt'
+                        colNames={PREPARED_COLS}
+                        data={postedTrans}
+                        headers={PREPARED_HEADERS}
+                        limit={Infinity}
+                        minRows={MIN_ROWS}
 
-                                rowStyling={{hoverCSS: HOV_ROW_STYLE}}
-                                colStyling={PREPARED_COL_STYLE}
-                                />              
-                                </div>
-                        </div>             
-                         </div>
+                        rowStyling={{hoverCSS: HOV_ROW_STYLE}}
+                        colStyling={PREPARED_COL_STYLE}
+                        />              
                         </div>
+                </div>             
+ 
                 {/* End row section component content */} 
 
                       
@@ -778,14 +833,14 @@ function PostTransactions() {
 
 
                 <div className='row post-trans-tab-down-arrow-wrapper'>
-                <div className='col-12 justify-content-center post-trans-tab-down-arrow-wrapper'>
+                <div className='col-1 justify-content-center m-auto post-trans-tab-down-arrow-wrapper'>
                 {
                   [0, 1, 2].map( (i) => {
                         return <div key={i} className='row justify-content-center post-trans-tab-down-arrow'
                           style={{color: (rolloverStyles[i] != ROLLOVER_BLANK_STYLE) ? 'var(--primary-col)' : 'var(--med-grey)'}}
                           >
-                          <div className='col-1'>
-                                        <div className=''> ^ </div>
+                          <div onClick={() => scrollToTargetTable(i)} className='col-1'>
+                                        <div style={{ transform: 'rotate(180deg)' }} className=''> ^ </div>
                           </div>
                         </div>
                   })

@@ -2,7 +2,7 @@
 /* CSS for data table designed in components/DataTable.tsx */
 
 .data-table-wrapper {
-  min-width: 450px;
+  min-width: 500px;
 }
 
 /* Table CSS */
@@ -11,6 +11,7 @@
   color: var(--prim-font-col);
   border: solid 2px;
   border-color: var(--trans-grey);
+  font-size: 16px; 
 }
 
 #data-table-title {
@@ -53,7 +54,6 @@
     border-color: var(--trans-grey);
 
     font-weight: 400;
-    font-size: 14px; 
     overflow-x: none;
 
     white-space: nowrap;
@@ -66,7 +66,6 @@
     word-wrap: unset;
   }
 
-
   /* Data Overlay styling */
 .dt-tooltip > .tooltip-inner {
   border: 1px solid var(--primary-col);
@@ -74,6 +73,7 @@
   border-radius: inherit;
   padding: 10px 10px 0px 0px;     /* Top right bottom left */
   padding-left: 0;
+  min-width: 250px;
 
 }
 

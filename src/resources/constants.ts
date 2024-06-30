@@ -10,6 +10,7 @@ export const axios = require('axios').default;
 /* Interfaces */
 export interface Transaction {
     tid: string;
+    userId?: string;
     purchaseDate: Date;
     amount: number;
     vendor: string;
@@ -17,7 +18,7 @@ export interface Transaction {
     boughtFor: string;
     payMethod: string;
     payStatus: string;
-    isIncome: boolean;
+    isIncome: Boolean;
     reimburses: string;
     postedDate: Date;
     notes: string;
@@ -82,21 +83,22 @@ export interface LinkedTextJSX extends LinkedText{
 //Data Structure Constants
 export const TRANS_DATA = {
 	ID: 'tid', 
-	PURCHDATE: 'purchaseDate', 
+	PURCHDATE: 'purchaseDate',
+    USERID: 'userId',
 	AMT: 'amount', 
 	VEND: 'vendor', 
 	CAT: 'category', 
 	BOTFOR: 'boughtFor', 
 	PMETHOD: 'payMethod', 
 	PSTATUS: 'payStatus', 
-	INCOME: 'income', 
+	INCOME: 'isIncome', 
 	REIMB: 'reimburses',
 	POSTDATE: 'postedDate', 
 	NOTES: 'notes'
 }
 
 export const PLAID_TRANS = {
-	ID: 'tid', 
+	//ID: 'tid', 
 	PURCHDATE: 'purchaseDate', 
 	AMT: 'amount',
     VENDID: 'vendorID',
@@ -105,8 +107,8 @@ export const PLAID_TRANS = {
 	PMETHOD: 'payMethod', 
     CCID: 'creditID', 
 	PSTATUS: 'payStatus', 
-	INCOME: 'income', 
-	POSTDATE: 'postedDate', 
+	INCOME: 'income'
+	//POSTDATE: 'postedDate',
 }
 
 
@@ -250,15 +252,7 @@ export const MNTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul","aug", "se
         return [start, end];
     }
 
-    export const truncString = function(a: string, l: number): string {
-        return (a.length > l) ? a.slice(0, Math.min(l, a.length)) + '...' : a;
-    }
-
-    export const properCase = function(a: string): string {
-        return a.charAt(0).toUpperCase() + a.slice(1).toLowerCase();
-    }
-
-    export const titleCase = function(a: string): string {
+    export const titleCaseHeaders = function(a: string): string {
         switch(a) {
             case TRANS_DATA.ID:
                 return 'ID';
@@ -322,8 +316,16 @@ export const aggregateTransactions = function(data: Transaction[], categories: s
     return res;
 }
 
-//to 'Title Case'
-function toTitles(s: string){ return s.replace(/\w\S*/g, function(t) { return t.charAt(0).toUpperCase() + t.substring(1).toLowerCase(); }); }
+export const truncString = function(a: string, l: number): string {
+    return (a.length > l) ? a.slice(0, Math.min(l, a.length)) + '...' : a;
+}
+
+export const toProperCase = function(a: string): string {
+    return a.charAt(0).toUpperCase() + a.slice(1).toLowerCase();
+}
+
+//write a function that capitalizes the first letter of every word in a string
+function toTitleCase(s: string){ return s.replace(/\w\S*/g, function(t) { return t.charAt(0).toUpperCase() + t.substring(1).toLowerCase(); }); }
 
 //Formats data of certain object type properly
 export const formatData = function(data: Array<any>, type: string): Array<any> {
@@ -331,38 +333,38 @@ export const formatData = function(data: Array<any>, type: string): Array<any> {
     switch(type) {
         case 'Transaction':
             return data.map( (v: Transaction) => {
-                v.vendor = toTitles(v.vendor);
-                v.category = toTitles(v.category);
-                v.boughtFor = toTitles(v.boughtFor);
+                v.vendor = toTitleCase(v.vendor);
+                v.category = toTitleCase(v.category);
+                v.boughtFor = toTitleCase(v.boughtFor);
                 return v;
             })
         
         case 'Vendor':
             return data.map( (v: Vendor) => {
-                v.vendorName = toTitles(v.vendorName);
-                v.category = toTitles(v.category);
+                v.vendorName = toTitleCase(v.vendorName);
+                v.category = toTitleCase(v.category);
                 return v;
             })
 
         case 'Pay Method':
             return data.map( (p: PayMethod) => {
-                p.payMethod = toTitles(p.payMethod);
+                p.payMethod = toTitleCase(p.payMethod);
                 return p;
             })
 
         case 'Summary':
             return data.map( (v: Summary) => {
-                v.categories = (v.categories.split('/').length < 2) ? toTitles(v.categories)
-                 : v.categories.split('/').map( (v) => {return toTitles(v);}).reduce( (prev: string, v: string) => {
+                v.categories = (v.categories.split('/').length < 2) ? toTitleCase(v.categories)
+                 : v.categories.split('/').map( (v) => {return toTitleCase(v);}).reduce( (prev: string, v: string) => {
                     return prev += '/' + v;
                 });
-                v.aggregateCol = toTitles(v.aggregateCol);
+                v.aggregateCol = toTitleCase(v.aggregateCol);
                 return v;
             })
 
         case 'string':
             return data.map( (v: string) => {
-                return toTitles(v);
+                return toTitleCase(v);
             })
     
         default:

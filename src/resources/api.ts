@@ -45,6 +45,10 @@ export interface MultiStatusResponse {
     responses: Array<SingleStatusResponse>;
 }
 
+export const SERVER_RESPONSE_STATUS_MAP: Map<string, string[]> = new Map([
+    [ SERVER_ALL_TRANSACTIONS, ['CREATED']]
+]);
+
 /*Utility functions */
 
     //Build request with dates
@@ -128,7 +132,7 @@ export const getRequest = async function getRequest(url: string, setData: Functi
    console.log("Making call to: " + url)
     await axios(config).then( (resp) =>
     {
-        console.log("Transactions returned: " + url + " " +  JSON.stringify(resp));
+        //console.log("Transactions returned: " + url + " " +  JSON.stringify(resp));
         setData(resp.data);
         return resp;
     }).catch( (reason) => {
@@ -151,11 +155,10 @@ export const postRequest = async function postRequest(url: string, data: any,
         data: data
     }
 
-    console.log("Making POST call to: " + url + " with data: " + JSON.stringify(data))
+    //console.log("Making POST call to: " + url + " with data: " + JSON.stringify(data))
     await axios(config).then( (resp) =>
     {
-        console.log("POST returned: " + resp.status + 
-        " with data: " + resp.data);//+ JSON.stringify(resp.data));
+        //console.log("POST returned: " + resp.status +  " with data: " + resp.data);//+ JSON.stringify(resp.data));
         if(setPostData) setPostData(resp.data);
     }).catch( (reason) => {
         console.log("Error from POST request from: " + url + " with error: " + reason);

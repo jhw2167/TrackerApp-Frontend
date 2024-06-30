@@ -2,25 +2,7 @@
 :root {
     --bordered-sec-width: 94%;
     --bordered-sec-margin: 3%;
-    --interal-sec-height: 28vh;
-}
-
-.col-12.post-trans-tab-down-arrow-wrapper {
-    position: relative;
-    top: -20px;
-}
-
-.col-12.post-trans-tab-down-arrow-wrapper > * {
-    height: 24Px;
-    text-align: center;
-    font-size: 2.5em;
-    z-index: 1;
-    cursor: pointer;
-}
-
-.col-12.post-trans-tab-down-arrow-wrapper > *:hover {
-    color: var(--tert-col) !important;
-    transition: color 0.2s;
+    --interal-sec-height: 32vh;
 }
 
 .scroll-sample {
@@ -117,7 +99,7 @@
 
 .rollover-row-spacer {
     height: 0%;
-    padding-bottom: 50%;
+    padding-bottom: 550px;
     opacity: 0;
 
     position: relative;
@@ -329,7 +311,7 @@
 .pt.general-table-header {
     line-height: 1.4;
     border-bottom: 3px solid var(--primary-col);
-    padding-bottom: 20%;
+    padding-bottom: 40%;
     color: var(--primary-col);
 }
 
@@ -371,6 +353,26 @@
 
 #prepare-trans-now-tooltip > .tooltip-inner {
     max-width: 150px;
+}
+
+
+.col-1.post-trans-tab-down-arrow-wrapper {
+    position: relative;
+    top: -30px;
+    left: -5px;
+}
+
+.col-1.post-trans-tab-down-arrow-wrapper > * {
+    height: 36px;
+    text-align: center;
+    font-size: 3.5em;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.col-1.post-trans-tab-down-arrow-wrapper > *:hover {
+    color: var(--tert-col) !important;
+    transition: color 0.2s;
 }
 
 

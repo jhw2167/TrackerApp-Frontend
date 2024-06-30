@@ -34,7 +34,7 @@ function Overview(props: OverviewProps) {
     //Constants
     const SENSITIVE_DATA = context.useConfig().get(context.CONFIG_KEYS.DATA_USE_SENSITIVE_DATA) == 'true';
     const TRANS_PAGE_OFFSET: number = 1;
-    const TRANS_RCNT_TBL_SIZE: number = 30;
+    const TRANS_RCNT_TBL_SIZE: number = 24;
     const DATA_TABLE_HEADERS: Array<string> = [
         "Date", "Vendor", "Amount", "Category"
     ]
@@ -46,8 +46,9 @@ function Overview(props: OverviewProps) {
         c.TRANS_DATA.CAT
     ]
 
-    const DATA_TABLE_TT_COLS: Array<string> = Object.entries(c.TRANS_DATA).filter( ([key, v]) => {
-        return !includes(DATA_TABLE_COLS, v);}).map(([key, val]) => {return val});
+    const DATA_TABLE_TT_COLS: Array<string> = Object.values( c.TRANS_DATA ).filter( (v) => {
+        return ![c.TRANS_DATA.AMT, c.TRANS_DATA.USERID].includes(v);
+    });
 
 
     const DATA_GRAPH_EXCLUSIONS = new Set<string>(['Income', 'Returns']);
@@ -85,7 +86,7 @@ function Overview(props: OverviewProps) {
             date = start;
         }
         //return new Date(date.getFullYear(), date.getMonth(), 1);
-        return new Date(2022, 6, 1);
+        return new Date(2022, 11, 1);
     });
 
     const [hovCategory, setHovCategory] = useState<string>("");
@@ -150,7 +151,7 @@ function Overview(props: OverviewProps) {
             {
                 //console.log("hello3")
                 const URL_TRANS_RECENT = api.hydrateURIParams(api.SERVER_ALL_TRANSACTIONS_RECENT(TRANS_RCNT_TBL_SIZE, offsetTransactionsPageNum), USER_PARAMS);
-                api.getRequest( URL_TRANS_RECENT, setRecentTransactions);
+                api.getRequest( URL_TRANS_RECENT, (data: Array<Transaction>) => {setRecentTransactions(c.formatData(data, 'Transaction'))});
             }
             else    //Viewing monthly transactions
             {
@@ -214,7 +215,7 @@ function Overview(props: OverviewProps) {
 
     useEffect( () => {
         //console.log(6);
-        let rts: c.Transaction[] = recentTransactions.map( (t) => {return properlyCaseTransaction(t);});
+        let rts: c.Transaction[] = properlyCaseTransaction( recentTransactions )
         if(SENSITIVE_DATA)
             rts = rts.map( (t) => {return setSensitiveTransactions(t)} );
 
@@ -272,11 +273,9 @@ function Overview(props: OverviewProps) {
         }
     }
 
-    const properlyCaseTransaction = (t: Transaction) => {
-        t.boughtFor = c.properCase(t.boughtFor);
-        t.category = c.properCase(t.category);
-        t.payStatus = c.properCase(t.payStatus);
-        t.vendor = c.properCase(t.vendor);
+    const properlyCaseTransaction = (t: Array<Transaction>) => {
+        t = c.formatData(t, 'Transaction');
+        t.forEach((v) => { v.payStatus = c.toProperCase(v.payStatus) });
         return t;
     }
 
@@ -298,11 +297,11 @@ function Overview(props: OverviewProps) {
     //hide sensitive values by giving them random vals
     const setSensitiveTransactions = (t: c.Transaction) => {
         //t.amount = Math.random() * 100;
-        if(t.vendor=="Revature") {
-            t.vendor="Bank of Am.";
-            t.amount*=2;
+        if(t.vendor.toLowerCase().includes("revature") || 
+            ( t.vendor.toLowerCase().includes("bank of america") && t.isIncome) ) {
+            t.vendor="Work";
         }  
-        if(t.vendor.includes("M line"))
+        if(t.vendor.toLowerCase().includes("m line"))
             t.vendor="Rent";
         return t;
     }
@@ -336,7 +335,7 @@ function Overview(props: OverviewProps) {
                         data=          {categoriesData} 
                         exclusions=    {DATA_GRAPH_EXC_FUNC}
                         limit=         {DATA_GRAPH_LIMIT}
-                        title=         {c.properCase(c.MONTHS[currentDateByMonth.getMonth()] + " " + currentDateByMonth.getFullYear())}
+                        title=         {c.toProperCase(c.MONTHS[currentDateByMonth.getMonth()] + " " + currentDateByMonth.getFullYear())}
                         setHovSegment= {setHovCategory}
                         height=        {Math.min(winWidth * .60 * .90, 340)}
                         width=         {Math.min(winWidth * .60 * .90, 380)}
@@ -398,7 +397,7 @@ function Overview(props: OverviewProps) {
                         colNames=   {DATA_TABLE_COLS}
                         isViewingRecentTransactions={isViewingRecentTransactions}
                         toolTipColNames= {DATA_TABLE_TT_COLS}
-                        toolTipHeaders={DATA_TABLE_TT_COLS.map((v)=> {return c.titleCase(v)})}
+                        toolTipHeaders={DATA_TABLE_TT_COLS.map((v)=> {return c.titleCaseHeaders(v)})}
                         data=       {recentTransactionsDisplayable}
                         maxRows=      {TRANS_RCNT_TBL_SIZE}
                         minRows=      {TRANS_RCNT_TBL_SIZE}
