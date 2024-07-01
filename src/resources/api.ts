@@ -129,14 +129,15 @@ export const getRequest = async function getRequest(url: string, setData: Functi
         url: url
     }
 
-   console.log("Making call to: " + url)
+   //console.log("Making call to: " + url)
     await axios(config).then( (resp) =>
     {
         //console.log("Transactions returned: " + url + " " +  JSON.stringify(resp));
         setData(resp.data);
         return resp;
     }).catch( (reason) => {
-        console.log("Error from GET request from: " + url + " with error: " + reason);
+        let urlStr = url.replace(DOMAIN + PORT, "");
+        console.log("Error from GET request from: " + urlStr + " with error: " + reason);
         return {};
     });
     //end axios call   
@@ -161,7 +162,9 @@ export const postRequest = async function postRequest(url: string, data: any,
         //console.log("POST returned: " + resp.status +  " with data: " + resp.data);//+ JSON.stringify(resp.data));
         if(setPostData) setPostData(resp.data);
     }).catch( (reason) => {
-        console.log("Error from POST request from: " + url + " with error: " + reason);
+        //remove domain and port from URL
+        let urlStr = url.replace(DOMAIN + PORT, "");
+        console.log("Error from POST request from: " + urlStr + " with error: " + reason);
     });
     //end axios call   
 

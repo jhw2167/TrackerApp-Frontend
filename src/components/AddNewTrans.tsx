@@ -3,17 +3,17 @@
     component in its form fields.
 */
 
+import * as CSS from 'csstype';
+
 //project imports
 import * as c from '../resources/constants';
 import * as api from '../resources/api';
 import React, { KeyboardEvent, MutableRefObject,
      ReactElement, RefObject, useEffect, useRef, useState } from 'react';
 import { StringMappingType } from 'typescript';
-import { contains, now } from 'underscore';
      import { DropDown } from './subcomponents/DropDown';
+import { table } from 'console';
 
-import { Link, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
-import { text } from 'stream/consumers';
 
      /* Definitions */
 interface FormProps {
@@ -29,9 +29,11 @@ interface FormProps {
     styleNamespace?: string;     //short string that namespaces all classes
 }
 
+
 interface BaseInput {
     id: string;
     index: number;
+    style?: CSS.Properties;
     default?: string;
     options?: string[];
 }
@@ -40,15 +42,19 @@ interface DDProps extends BaseInput {
 }
 
 interface InputProps extends BaseInput {
+    //holds reference to immediate parent element
     subtype: string;
+    parentRef?: React.MutableRefObject<HTMLElement | null>;
 }
 
 interface FormElemProps extends BaseInput {
     type: string;
     subtype?: string;
+    parentRef?: React.MutableRefObject<HTMLElement | null>;
 }
 
 /* Global consts */
+let wrapperRef: React.MutableRefObject<HTMLDivElement | null>;
 let formValues: React.MutableRefObject<Array<any>>;
 let formValueStates: React.MutableRefObject<Array<any>>;
 let activeFields: React.MutableRefObject<Set<any>>;
@@ -79,6 +85,10 @@ let chat = (v: any) => {    //eslint-disable-line @typescript-eslint/no-unused-v
 
 function AddNewTrans(props: FormProps) {
 
+    /* Refs */
+    //Make a ref that holds an array of Mutable Ref objects
+    wrapperRef = useRef<HTMLDivElement>(null);
+
     /* States */
     formValues = useRef<Array<any>>(Array.from (props.headers.map(() => {return ''})));
     formValueStates = useRef<Array<string>>(Array.from (props.headers.map(() => {return FORM_STATES.unvis})));
@@ -98,9 +108,9 @@ function AddNewTrans(props: FormProps) {
 
     /* Functions */
     onFormUpdate = (v: any, i: number) => {
-        formValues.current = formValues.current.map( (val, ind) => {
-            return (i===ind) ? v : val;
-        })
+        formValues.current.forEach( (val, ind, arr) => {
+            arr[ind] = (ind===i) ? v : val;
+        });
         forceUpdate();  //forces component updated each time form is changed
     }
 
@@ -144,7 +154,7 @@ function AddNewTrans(props: FormProps) {
 
 
    return (
-       <div className={props.id + "-wrapper-div"} id={props.id + '-div'}>
+       <div ref={wrapperRef} className={props.id + "-wrapper-div"} id={props.id + '-div'}>
         <form ref={props.formRef} id={props.id} onSubmit={onFormSubmit}>
             <table className={props.id + "-wrapper-table"} id={props.id + "-wrapper-table"}>
                 <tbody>
@@ -220,9 +230,11 @@ export default AddNewTrans;
     function DropDownElem(props: DDProps) {
     
         return(
-            <select className={sc + 'form-field form-select'} id={props.id}
-        onChange={(e) => {onFormUpdate(e.target.value, props.index)}}
-        defaultValue={props.default}>
+            <select className={sc + 'form-field form-select'} 
+            id={props.id}
+            onChange={(e) => {onFormUpdate(e.target.value, props.index)}}
+            defaultValue={props.default}>
+            
         </select>)
     }
     
@@ -231,9 +243,14 @@ export default AddNewTrans;
         let inputRef = useRef<HTMLInputElement>(null);
 
         let handleDropDownFilter = () => {
-            if(props.options && !usingDropDown.current) {
-            
-            
+            if(props.options && !usingDropDown.current && filterableDDOptions.current) 
+            {
+            //console.log("ERROR LINES");
+            //console.log(filterableDDOptions);
+            //console.log(filterableDDOptions.current);
+            //console.log(globalHeaders);
+            //console.log(props.index);
+            //console.log('-------------------');
             filterableDDOptions.current.set(globalHeaders[props.index],
                 props.options.filter( (str: string) => {
                     return (currentFieldVal.length > 0) ? 
@@ -269,8 +286,11 @@ export default AddNewTrans;
                                 ((props.default) ? props.default : '');
 
         let setSelectedData = (val: c.LinkedText) => {
-            if(currentFieldVal.length > 0 || !val.text || val.text.length===0)
+            console.log("Setting selected data: %s %s", val.text, props.index);
+
+            if(!val.text || val.text.length===0)
                 return; //dont reset the val
+            
             onFormUpdate(val.text, props.index)
         }
 
@@ -292,6 +312,20 @@ export default AddNewTrans;
             onFormUpdate('', -1);
         }
 
+        let buildInlineStyles = () => {
+            let style = {};
+
+            if( wrapperRef.current ) 
+            {
+                //React query the dom for the column width by id of column
+                let rect = document.getElementById(props.id + '-col')?.getBoundingClientRect();
+                if(rect)
+                    style = { width: rect.width + 'px' }
+            }
+            return style;
+        }
+
+
         //Custom searchable DropDown menu conditionally rendered depending on if options are provided
         let dropDown: ReactElement = <></>;
         if(props.options && !(typeof(selectedFormField)=='undefined')) {
@@ -299,14 +333,16 @@ export default AddNewTrans;
             handleDropDownFilter();
             let options: Array<string> = (filterableDDOptions.current) ? 
             filterableDDOptions.current.get(globalHeaders[props.index]) as string[] : [];
+
             dropDown = <DropDown 
             key={props.id+ '-' + options.length}  /* we can force child to update each time key changes */
             data={options.map((v: string) => {return {text: v}})}
             charLimit={12}
             styleClass={'dd-' + props.id + ' pt'}
+            inlineStyles={ buildInlineStyles() }
             setSelectedData = {setSelectedData}
             setFuncSetDDPosExternally = {_setFuncSetDDPosExternally}
-            afterClick = { (v: string) => {selectedFormField.current=-1;}}//turn off Drop Down}
+            afterClick = { (v: c.LinkedText) => {selectedFormField.current=-1; setSelectedData(v); forceUpdate(); }}
             animCellHeight={35}
             />}
         }
@@ -320,7 +356,7 @@ export default AddNewTrans;
         onFocus={handleOnFocus}
         onBlur={ () => {if(activeFields) activeFields.current.delete(props.index)
             onFormUpdate('', -1);}} //just to trigger state update
-        onKeyDown={(e) => handleArrowsOnDropDown(e)}
+        onKeyDown={(e) => { handleArrowsOnDropDown(e)}}
         >
         </input>
         {dropDown}

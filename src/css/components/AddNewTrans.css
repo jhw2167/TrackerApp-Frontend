@@ -22,7 +22,6 @@ form {
 }
 
 #pt-add-new-trans-form-wrapper-table > tbody > tr > th {
-    color: var(--primary-col);
     font-size: medium;
     vertical-align: top;
 
@@ -226,16 +225,20 @@ input[type="search"]::-webkit-search-results-decoration {
 
 /* DROP DOWN CSS FOR PT */
 .pt.drop-down-wrapper-div {
-    max-width: 200px;
     min-width: 180px;
     max-height: 200px;
 
     padding-right: 10px;
-    border: solid 1px;
+    border: solid 2px var(--primary-col);
+    border-radius: 10px;             
+    border-right: 0px;
+    /*
     --d: 92%;
     border-image: linear-gradient(to right, white var(--d),
      var(--secondary-col) var(--d)) 1;
-    border-right: 0px; border-left: 0px;                
+    border-right: 0px; border-left: 0px;
+    */
+    
 }
 
 .pt.drop-down-nested-wrapper-div {
@@ -251,6 +254,11 @@ input[type="search"]::-webkit-search-results-decoration {
     padding-right: 50px;
     width: 100%;
     font-size: 1.2em;
+}
+
+.pt.drop-down-wrapper-div > table > tbody > tr > td > div {
+    padding-left: 10px;
+    color: var(--tert-col);
 }
 
 /* fiddle: https://jsfiddle.net/z728ukxg/16/

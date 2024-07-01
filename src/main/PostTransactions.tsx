@@ -229,7 +229,7 @@ function PostTransactions() {
         //let BOT_FOR_VALS: string[]; // = ['PERSONAL', 'GROUP', 'FAMILY', 'DATE', ''];
         //let PAY_STAT_VALS: string[]; //= ['COMPLETE', 'COVERED', 'OWED', 'PENDING', 'OWED_PARTIAL', ''];
         const FORM_VALD_FUNCS: ((val: string) => boolean)[]  = [
-                (val: string) => {return (!isNaN(Number(val)) && Number(val) >= 0);},     //trans id - not recommended
+                //(val: string) => {return (!isNaN(Number(val)) && Number(val) >= 0);},     //trans id - not recommended
                 (val: string) => {return true;},     //Purchased Date
                 (val: string) => {return (!isNaN(Number(val)) && Number(val) >= 0);},     //amount, Must be an actual number and be >= 0                                                
                 (val: string) => {return BAD_CHARS.every( (c: string) => {return val && !val.includes(c)});},     //vendor
@@ -294,7 +294,7 @@ function PostTransactions() {
                 let newThresholds = [0, MAX_HEIGHT/3, 2*MAX_HEIGHT/3, MAX_HEIGHT];
                 newThresholds = newThresholds.map( (v) => {return Math.max(v - 280, 0);});
 
-                console.log('Thresholds: ' + newThresholds);
+                //console.log('Thresholds: ' + newThresholds);
                 if( dir < 0 )
                 {
                         /*
@@ -339,7 +339,7 @@ function PostTransactions() {
                 setRollOverStyles(rolloverStyles);
                 
                 //console.log('SP: %d', scrollPos);
-                console.log("new pos:  " + (newScrollPos))
+                //console.log("new pos:  " + (newScrollPos))
                 scrollableRowRef.current?.scroll(0, newScrollPos);
                 //console.log('s')                        
                 //console.log('\n\n\n')
@@ -489,8 +489,8 @@ function PostTransactions() {
                         return t;
                 });
 
-                setPrepdTrans(postedTransactions);
-                setPostedTrans(postedTransactions);
+                setPrepdTrans([...prepdTrans, ...postedTransactions]);
+                setPostedTrans([...postedTrans, ...postedTransactions]);
           };
 
           //Post to server
@@ -507,7 +507,8 @@ function PostTransactions() {
                 let fv = (formValues) ? formValues.current : [];
 
                 let t: Transaction = {
-                        tid: (fv[i++]) ? fv[i] : '?',
+                        //tid: (fv[i++]) ? fv[i] : '?',
+                        tid: '?',
                         purchaseDate: fv[i++],
                         amount: fv[i++],
                         vendor: fv[i++],
@@ -549,8 +550,9 @@ function PostTransactions() {
                 }
                 //END SWITCH
                 
-                if(formValues)
-                        formValues.current = DEF_FORM_VALS;              
+                //We only want to refresh form if submission was successful
+                //if(formValues)
+                        //formValues.current = DEF_FORM_VALS;              
 
                 setCountFormRefresh(countFormRefresh+1);        //will force addNewTrans form refresh
         }
@@ -577,6 +579,11 @@ function PostTransactions() {
                                return;
                }
                
+               if(transactions.length == 0)
+               {
+                       console.log('No transactions to post');
+                       return;
+               }
                doPostNewTransaction(transactions);
         }
 

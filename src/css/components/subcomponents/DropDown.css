@@ -29,14 +29,15 @@
     border-left: 0px; border-right: 0px;
 }
 
-.dd-hov-row {
+.dd-row:hover, .pt-hov {
 
     line-height: 34px;
     border: 2px solid var(--primary-col);
-    background-color: var(--tert-col);
+    background-color: var(--med-grey) !important;
 
     font-weight: bolder;
     font-size: 1.2em;
     border-left: 0px; border-right: 0px;
+    cursor: pointer;
 
 }

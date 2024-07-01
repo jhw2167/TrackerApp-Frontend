@@ -6,6 +6,7 @@ import _, { PairValue, values } from 'underscore';
 import * as CSS from 'csstype';
 import React, { KeyboardEvent, MutableRefObject,
     ReactElement, useEffect, useRef, useState } from 'react';
+import { wait } from '@testing-library/user-event/dist/utils';
 
 
 
@@ -32,7 +33,7 @@ export interface DropDownProps {
     pass "SetMyDDPlaceSetter" to this field then use myDDPlaceSetter(somePlace) to set DDplace externally */
     animCellHeight?: number;
     cellHeight?: number;
-    afterClick?: (val: string) => void;  //sets drop down items to do something after they are clicked, e.g. pass
+    afterClick?: (val: c.LinkedText) => void;  //sets drop down items to do something after they are clicked, e.g. pass
                                         // a setState function for the selected value here
 }
 
@@ -48,7 +49,7 @@ export function DropDown(props: DropDownProps ) {
     const [deepHovCell, setDeepHovCell] = useState<any>();
 
     const [data, setData] = useState<any[]>(props.data);
-    const [selected, setSelected] = useState<any>('');
+    const [selected, setSelected] = useState<c.LinkedText>({text: ''});
     const [dropDownPlace, setDropDownPlace] = useState<number>(-1);
     const [dropDownInc, setDropDownInc] = useState<number>(0);
     const [scrollPos, setScrollPos] = useState<number>(0);
@@ -74,7 +75,10 @@ export function DropDown(props: DropDownProps ) {
         }
     }
 
-    const parentAfterClick = (props.afterClick) ? props.afterClick : (v: any) => {};
+    const parentAfterClick: Function = (data: c.LinkedText) => {
+            if(props.afterClick)
+                    props.afterClick(data);     
+    };
 
     /* EFFECTS */
      /* For setting hovered cell from outside this component */
@@ -100,11 +104,16 @@ export function DropDown(props: DropDownProps ) {
 
     //Sets selected data from dropDownPlace
     useEffect( () => {
+        //console.log("dropDownPlace: ", dropDownPlace);
         if(dropDownPlace<0 || dropDownPlace>=data.length) {
-            setSelected(''); //default, no value selected spot
+            setSelected({text: ''}); //default, no value selected spot
         } else {
             setSelected(data.at(dropDownPlace));
         }
+
+        let hovered = document.getElementsByClassName(sc + '-hov')[0];
+        if(hovered && hovered.scrollIntoView)
+            hovered.scrollIntoView({block: 'center'});
     }
     , [dropDownPlace])
 
@@ -112,6 +121,7 @@ export function DropDown(props: DropDownProps ) {
     //updates dropDownPlace from externally set increment
     useEffect( () => {
 
+        //console.log("dropDownInc: ", dropDownInc);
         if(dropDownInc==0) {
             hovCells.clear();
             setDropDownPlace(-1);
@@ -147,6 +157,7 @@ export function DropDown(props: DropDownProps ) {
 
 
     useEffect( () => {
+        //console.log("selected: ", selected);
         if(props.setSelectedData)
             props.setSelectedData(selected);
     }, [selected])
@@ -169,7 +180,7 @@ export function DropDown(props: DropDownProps ) {
     } else {
 
     return (
-        <div ref={scrollableDivRef} className={sc + ' drop-down-wrapper-div ' + props.addStyleClasses?.div}>
+        <div ref={scrollableDivRef} style={props.inlineStyles} className={sc + ' drop-down-wrapper-div ' + props.addStyleClasses?.div}>
             <table className={sc + ' drop-down-table ' + props.addStyleClasses?.table}>
                     <tbody className={props.addStyleClasses?.tbody}>
                     {/*         Now return data row      */}
@@ -177,7 +188,7 @@ export function DropDown(props: DropDownProps ) {
 
                         let isHov: number = (hovCells.has(value) || hovCells.has(index)) ? 1 : 0;
                         isHov += _.isEqual(deepHovCell, value) ? 1 : 0; //0-no hov, 1-hov, 2-deep hov
-                        let hovRowStyleClass = (isHov > 0) ? (sc + 'hov') : '';
+                        let hovRowStyleClass = (isHov > 0) ? (sc + '-hov') : '';
                         let displayVal = (props.charLimit && value.text.length > props.charLimit) ?
                         value.text.slice(0, props.charLimit) + '...' : value.text;
                         
@@ -189,8 +200,8 @@ export function DropDown(props: DropDownProps ) {
                         onClick={() => {
                             if(value.url && value?.openIn==c.NEW_TAB)
                                  window.open(value.url, "_blank"); //Open link in new tab
-                            parentAfterClick(value.text);
-                            setDropDownPlace(index)}}
+                            parentAfterClick(value);
+                        }}
                         key={index}
                         onMouseEnter={() => {
                             hovCells.add(value);
