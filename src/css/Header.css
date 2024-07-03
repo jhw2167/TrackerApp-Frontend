@@ -77,6 +77,7 @@
 
 .header.burger-icon {
     /* background-color: var(--burger-menu-prim-col); */
+    cursor: pointer;
 }
 
 .header.burger-list-wrapper {
@@ -130,6 +131,11 @@
     cursor: pointer;
     line-height: 30px;
     font-size: 1.2em;
+}
+
+.pld-login-tooltip > *{
+    font-size: x-small;
+    font-weight: 500;
 }
 
 /* Burger Animation */

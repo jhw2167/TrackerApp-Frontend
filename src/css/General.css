@@ -19,7 +19,7 @@
     --very-heavy-grey: rgba(6,6,6);
     --black: black;
 
-    --error-red: red;
+    --error-red: #ff0000;
     --check-green: rgb(11, 211, 11);
 
     --data-font-base: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -143,6 +143,43 @@ footer > div {
 
 .no-internal-flex > * {
     flex: 0 0 !important;
+}
+
+.float-right-important {
+    float: right !important;
+
+}
+
+.error-banner {
+    background-color: var(--black);
+    color: var(--error-red);
+
+    position: relative;
+
+    border: 1px solid var(--error-red);
+    border-radius: 15px;
+    line-height: 2em;
+    font-size: 1.2em;
+    font-weight: 500;
+
+    z-index: 1005;    
+
+    animation: fadein 2s, fadeout 2s 2s;
+
+}
+
+.error-banner > div {
+    padding: 0 10px;
+}
+
+.error-banner::before {
+    content: "\26A0"; /* Unicode for warning symbol */
+    font-size: 29px; /* Adjust size as needed */
+    color: var(--error-red);
+
+    position: absolute;
+    left: -30px; /* Positioning 50px to the left */
+    top: -6%;
 }
 
 

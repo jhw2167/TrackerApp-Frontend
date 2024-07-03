@@ -86,6 +86,7 @@ const FORM_INP_TYPES = {
 	NOTES: 'input-text'
 }
 
+//Form default values
 const DEF_FORM_VALS = [
         //"",     //trans id
         c.formatISODate(now()),     //Purchased Date
@@ -107,9 +108,9 @@ const MAX_STR_LEN = 14;
 
 const PLTRS = Object.entries(c.PLAID_TRANS);
 const PENDING_COLS = PLTRS.map(([k, v]) => {return v;});
-const PENDING_HEADERS = new Map<string, string>(PLTRS.map(([k, v]) => {
- return [v, c.titleCaseHeaders(v)];}));
+const PENDING_HEADERS = new Map<string, string>(PLTRS.map(([k, v]) => { return [v, c.titleCaseHeaders(v)]; }));
 const PENDING_COL_STYLE = new Map<string, ColStyle>(PLTRS.map(([k, col]) => { 
+
         let cs: ColStyle = {
                 content: (v: string) => {return v;},
                 hoverCSS: HOV_COL_STYLE
@@ -214,8 +215,8 @@ function PostTransactions() {
         /* Const */
 
         
-    const USER_PARAMS: Map<string, string> = new Map<string, string>([[api.URI_PARAMS.USER_ID,
-        useConfig().get(api.URI_PARAMS.USER_ID) as string]]);
+        const USER_PARAMS: Map<string, string> = new Map<string, string>([[api.URI_PARAMS.USER_ID,
+                useConfig().get(api.URI_PARAMS.USER_ID) as string]]);
 
         /* States */
         const [rolloverStyles, setRollOverStyles] = useState<Array<any>>([
@@ -223,6 +224,8 @@ function PostTransactions() {
         ]);
 
         const [countFormRefresh, setCountFormRefresh] = useState<number>(0);
+
+        const [postRequestError, setPostRequestError] = useState<api.SingleStatusResponse | undefined>(undefined);
 
         //data states
         const BAD_CHARS = ['-', "'", '"', '.', '/', "\\", ','];      //we don't want our form to include these chars
@@ -442,6 +445,10 @@ function PostTransactions() {
                         })
                 })
                 makeApiCall();
+
+                //set current form values to defaults
+                if(formValues)
+                        formValues.current = DEF_FORM_VALS;
                
         }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -450,6 +457,22 @@ function PostTransactions() {
                 scrollInnerDiv(0);
         }, [scrollEvent]); // eslint-disable-line react-hooks/exhaustive-deps
 
+
+        /* Set Post Request Error */
+        useEffect( () => {
+                if(postRequestError) {
+                        console.log('Error Posting Transaction to server ');
+                        console.log(postRequestError);
+                }
+
+
+        }, [postRequestError]);
+
+        //On any update to predTrans or postedTrans, set postRequestError to undefined
+        useEffect( () => {
+                if(postRequestError) 
+                  setPostRequestError(undefined);
+        }, [prepdTrans, postedTrans]);
 
         /*
                 Aggregate all prepared transactions into an array "data" to post
@@ -483,11 +506,11 @@ function PostTransactions() {
 
                 let postedTransactions: Array<Transaction> = data.responses.filter( (v) => {
                        return api.SERVER_RESPONSE_STATUS_MAP.get( api.SERVER_ALL_TRANSACTIONS )?.includes(v.status); })
-                .map( (v, k) => {
-                        let t: Transaction = v.data;
-                        t.tid = v.id;
-                        return t;
-                });
+                        .map( (v, k) => {
+                                let t: Transaction = v.data;
+                                t.tid = (v.id) ? v.id : t.tid;
+                                return t;
+                        });
 
                 setPrepdTrans([...prepdTrans, ...postedTransactions]);
                 setPostedTrans([...postedTrans, ...postedTransactions]);
@@ -495,7 +518,7 @@ function PostTransactions() {
 
           //Post to server
           const URL_POST_TRANS = api.hydrateURIParams(api.SERVER_ALL_TRANSACTIONS, USER_PARAMS);
-          api.postRequest(URL_POST_TRANS, transactions, functionUpdateTransactionIdsOnPost);
+          api.postRequest(URL_POST_TRANS, transactions, functionUpdateTransactionIdsOnPost, setPostRequestError);
           
         }
 
@@ -613,7 +636,7 @@ function PostTransactions() {
                                  <div>+</div>
                         </OverlayTrigger>
                         </div>
-                     
+                        
                         <div className='col post-trans-subsec-title-item post-trans-arrow-outer-div'> 
                         
                         <OverlayTrigger offset={[0, 0]} 
@@ -650,22 +673,46 @@ function PostTransactions() {
                    </div>
                    {/* End row section component content */} 
 
-                   <div className='row content-row section-footer-row no-internal-flex'>
-                        <div className='col post-trans-double-plus post-trans-subsec-footer-item
-                        post-trans-hoverable'>
+                   <div className='row content-row section-footer-row'>
+                        
+                        {/* Optional Error banner if server post is rejected */}
+                        <div className="col-11 d-inline-block">
+                                {/* only show this block if there is an error */
+
+                                /* only show this block if there is an error */
+                                        (postRequestError) ?
+
+                                        <div className="row">
+                                        <div className="col-1 d-inline-block"></div>
+                                        <div className="pt col-auto text-start error-banner">
+                                          <div className='error-message'> {postRequestError?.message} </div>
+                                        </div>
+                                </div>
+                                : 
+                                <div></div>
+
+                                }
+                                
+                        </div>
+
+                        <div className='col-1'>
+                        <div className='row'>
+                        <div className='col-4 post-trans-double-plus post-trans-subsec-footer-item post-trans-hoverable'>
                         <OverlayTrigger offset={[0, -90]} overlay={rndrBtnTooltip('Post Now', 'bottom', 'post-form-trans-now')}>
                                  <div onClick={() => onAddNewTransSubmit('POST')}>
                                  <DoublePlus styleClass='post-trans-hoverable post-trans-double-plus' />
                                   </div>
                         </OverlayTrigger>
                         </div>
-                        <div className='col post-trans-subsec-footer-item post-trans-arrow-outer-div'> 
+                        <div className='col-4 post-trans-subsec-footer-item post-trans-arrow-outer-div'> 
                         <OverlayTrigger offset={[0, -100]} overlay={rndrBtnTooltip('Move to Prepared\n Table', 'bottom', 'prepare-trans-now')}>
                         <div onClick={() => onAddNewTransSubmit('PREPARE')}>      
                                 <Arrow height={ARROW_DIMS.h} width={ARROW_DIMS.w} 
                           styleClass='post-trans-hoverable post-trans-arrow'/> 
                         </div>
                         </OverlayTrigger>
+                        </div>
+                        </div>
                         </div>
                   </div>
                 {/* End row section footer content */} 
@@ -714,18 +761,30 @@ function PostTransactions() {
                         </div>
                 {/* End row section component content */} 
 
-                   <div className='row content-row section-footer-row no-internal-flex'>
+                { 
+                /* if the next section has rolloverStyles= FIXED, do not display this, it is behind */
+                ( scrollPos < rolloverThresholds[1]) ? 
+
+                <div className='row content-row section-footer-row'>
+                   <div className="col-10"></div>
+                        <div className="col-2">
+                        <div className="row justify-content-center">
                            <PTSectionFooter ids={['post-all-pending-trans', 'post-next-pending-trans']}
-                           messages={['Post All', 'Post Next Record']}
+                           messages={['Move next Transaction into form', 'Move all to prepared']}
                            positions={['bottom', 'bottom']}
                            offsets={[[0, -90], [0, -80]]}
-                           classNames={['col post-trans-double-plus post-trans-subsec-footer-item post-trans-hoverable',
-                           'col post-trans-subsec-footer-item post-trans-arrow-outer-div']}
+                           classNames={['col-3 post-trans-double-plus post-trans-subsec-footer-item post-trans-hoverable',
+                                        'col-2 post-trans-subsec-footer-item post-trans-arrow-outer-div']}
                            children={[ <DoublePlus key={'dp'} styleClass='post-trans-hoverable post-trans-double-plus' />,
                            <Arrow key={'a'} height={ARROW_DIMS.h} width={ARROW_DIMS.w} styleClass='post-trans-hoverable post-trans-arrow'/>
                            ]}/>
-                   </div>
+                        </div>
+                        </div>  
+                   </div> : <div></div>
+                
+                }  
                   {/* End row section footer content */} 
+
                  </div>
                 </div>
                 {/*--------------------------*/}
@@ -766,20 +825,34 @@ function PostTransactions() {
                         </div>
                 {/* End row section component content */} 
 
-                <div className='row content-row section-footer-row no-internal-flex'>
-                <PTSectionFooter ids={['post-all-prepared-trans', 'post-next-prepared-trans']}
+                { 
+                /* if the next section has rolloverStyles= FIXED, do not display this, it is behind */
+                ( scrollPos < rolloverThresholds[2]) ? 
+
+                <div className='row content-row section-footer-row'>
+                   <div className="col-10"></div>
+                        <div className="col-2">
+                        <div className="row justify-content-center">
+                           <PTSectionFooter ids={['post-all-pending-trans', 'post-next-pending-trans']}
                            messages={['Post All', 'Post Next Record']}
                            positions={['bottom', 'bottom']}
                            offsets={[[0, -90], [0, -80]]}
-                           classNames={['col post-trans-double-plus post-trans-subsec-footer-item post-trans-hoverable',
-                           'col post-trans-subsec-footer-item post-trans-arrow-outer-div']}
-                           children={[ 
-                           <DoublePlus key={'dp'} onClick={ () => onMovePreparedTransactions("AGGREGATE") } styleClass='post-trans-hoverable post-trans-double-plus' />,
-                           <Arrow key={'a'}  onClick={ () => onMovePreparedTransactions("SINGLE") }  height={ARROW_DIMS.h} width={ARROW_DIMS.w} styleClass='post-trans-hoverable post-trans-arrow'/>
-                           ]}/>
-                  </div>
+                           classNames={['col-3 post-trans-double-plus post-trans-subsec-footer-item post-trans-hoverable',
+                                        'col-2 post-trans-subsec-footer-item post-trans-arrow-outer-div']}
+                        children={[ 
+                                <DoublePlus key={'dp'} onClick={ () => onMovePreparedTransactions("AGGREGATE") } styleClass='post-trans-hoverable post-trans-double-plus' />,
+                                <Arrow key={'a'}  onClick={ () => onMovePreparedTransactions("SINGLE") }  height={ARROW_DIMS.h} width={ARROW_DIMS.w} styleClass='post-trans-hoverable post-trans-arrow'/>
+                                ]}/>
+                        </div>
+                        </div>  
+                   </div> 
+                   : 
+                   <div></div>
+                
+                }  
                   {/* End row section footer content */} 
 
+                  
                 </div>
                 </div>
                 {/*--------------------------*/}

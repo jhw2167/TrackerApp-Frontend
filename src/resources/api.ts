@@ -15,7 +15,8 @@ export const URI_PARAMS = {
 }
 
 //Property Constants
-export const DEFAULT_USER_ID = '20230303JACKHENRYWELSH@GMAIL.COM';
+//export const DEFAULT_USER_ID = '20230303JACKHENRYWELSH@GMAIL.COM';
+export const DEFAULT_USER_ID = 'DEMO';
 
 
 //Server calls
@@ -35,9 +36,10 @@ export const SERVER_ALL_VENDORS = SERVER_ALL_VENDORS_BASE;
 
 export interface SingleStatusResponse{
     status: string;
-    data: any;
-    id: string;
-    message: string;
+    data?: any;
+    id?: string;
+    message?: string;
+    error?: string;
 }
 
 export interface MultiStatusResponse {
@@ -48,6 +50,24 @@ export interface MultiStatusResponse {
 export const SERVER_RESPONSE_STATUS_MAP: Map<string, string[]> = new Map([
     [ SERVER_ALL_TRANSACTIONS, ['CREATED']]
 ]);
+
+/* AXIOS Setup */
+
+/*
+    Description: Axios interceptors for request and response
+        200 Response: No errors, forward to caller
+        Other Response: Return rejected promise to set the error, no data will be set in calling function
+        the error.response.data.message will be set as the banner error to the user in getRequest or postRequest
+
+*/
+axios.interceptors.response.use((response) => {
+    //console.log("Clean Response: " + JSON.stringify(response));
+    return response;
+}, (error) => {
+    //console.log("Error Response: " + JSON.stringify(error.response.data));
+    return Promise.reject(error);
+});
+
 
 /*Utility functions */
 
@@ -122,7 +142,7 @@ export const hydrateURIParams = function(url: string, uriParams: Map<string,stri
 }
 
 
-export const getRequest = async function getRequest(url: string, setData: Function) {
+export const getRequest = async function getRequest(url: string, setData: Function, setError?: Function) {
 
     const config: AxiosRequestConfig<any> = {
         method: 'GET',
@@ -144,10 +164,8 @@ export const getRequest = async function getRequest(url: string, setData: Functi
 }
 //END GENERAL GET METHOD
 
-
-
 export const postRequest = async function postRequest(url: string, data: any, 
-    setPostData: ((data: any) => void) = () => {}) {
+    setPostData: ((data: any) => void) = () => {}, setError?: ((data: SingleStatusResponse) => void) ) {
 
     
     const config: AxiosRequestConfig<any> = {
@@ -160,11 +178,15 @@ export const postRequest = async function postRequest(url: string, data: any,
     await axios(config).then( (resp) =>
     {
         //console.log("POST returned: " + resp.status +  " with data: " + resp.data);//+ JSON.stringify(resp.data));
-        if(setPostData) setPostData(resp.data);
-    }).catch( (reason) => {
+        if(setPostData) 
+          setPostData(resp.data);
+    }).catch( (reason: any) => {
         //remove domain and port from URL
         let urlStr = url.replace(DOMAIN + PORT, "");
         console.log("Error from POST request from: " + urlStr + " with error: " + reason);
+        if(setError) {
+            setError(reason.response.data);
+        }
     });
     //end axios call   
 

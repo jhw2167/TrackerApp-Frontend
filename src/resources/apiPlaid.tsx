@@ -6,6 +6,11 @@ import { usePlaidLink } from "react-plaid-link"
 
 //imports
 import * as api from "./api";
+import * as c from "./constants";
+import OverlaySub from "../components/subcomponents/OverlaySub";
+
+//Constants
+const sc = "pld";
 
 //Server calls
 export const SERVER_USERS_PLAID = (userId: string) => {
@@ -53,9 +58,13 @@ export function InitiatePlaidLinkButton(props: initPlaidLinkProps ) {
 
     return (
       //<div id="plaid-button-wrapper-div">
-       <div id="plaid-button" onClick={() => open()}>
-        Login
-       </div>
+      <OverlaySub index={0} element={
+        <div id="plaid-button" onClick={() => open()}>Login</div>
+      } 
+      placement={"bottom"}
+      tipcontent={"User Accounts not yet Supported"} 
+      styleclass={c.addStyleClass(sc, 'login')}      
+      />
     );
 
 }

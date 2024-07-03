@@ -31,8 +31,7 @@ function Header()  {
             options: [
                 {text: "Overview", openIn:0, url:"/finances/overview"},
                 {text: "Post", openIn:0, url:"/finances/post"},
-                {text: "",
-                jsx: plaid.InitiatePlaidLinkButton(PLAID_PROPS) }            
+                {text: "", jsx: plaid.InitiatePlaidLinkButton(PLAID_PROPS) }            
          ]
         }
     );

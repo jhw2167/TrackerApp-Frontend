@@ -245,14 +245,17 @@ export default AddNewTrans;
         let handleDropDownFilter = () => {
             if(props.options && !usingDropDown.current && filterableDDOptions.current) 
             {
-            //console.log("ERROR LINES");
-            //console.log(filterableDDOptions);
-            //console.log(filterableDDOptions.current);
-            //console.log(globalHeaders);
-            //console.log(props.index);
-            //console.log('-------------------');
-            filterableDDOptions.current.set(globalHeaders[props.index],
-                props.options.filter( (str: string) => {
+                let index = (props.index) ? props.index : 0;
+                let options: string[] = (props.options) ? props.options : [] as string[];
+            console.log("ERROR LINES");
+            console.log(filterableDDOptions);
+            console.log(filterableDDOptions.current);
+            console.log(globalHeaders);
+            console.log(props.index);
+            console.log(props.options);
+            console.log('-------------------');
+            filterableDDOptions.current.set(globalHeaders[index],
+                options.filter( (str: string) => {
                     return (currentFieldVal.length > 0) ? 
                     str.slice(0, currentFieldVal.length).toLowerCase().includes(currentFieldVal.toLowerCase())
                     : true;
@@ -286,7 +289,7 @@ export default AddNewTrans;
                                 ((props.default) ? props.default : '');
 
         let setSelectedData = (val: c.LinkedText) => {
-            console.log("Setting selected data: %s %s", val.text, props.index);
+            //console.log("Setting selected data: %s %s", val.text, props.index);
 
             if(!val.text || val.text.length===0)
                 return; //dont reset the val

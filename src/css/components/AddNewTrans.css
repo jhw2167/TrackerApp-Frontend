@@ -176,7 +176,7 @@ input.pt {
     position: relative;
     outline: 2px solid var(--tert-col);
     border: 0px;
-    bottom: -5px;    
+    bottom: -3px;    
 }
     .pt.data-col::-webkit-scrollbar {
         display: none;

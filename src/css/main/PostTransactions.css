@@ -36,14 +36,15 @@
 }
 
 .section-footer-row {
-    float: right;
-    margin-right: var(--bordered-sec-margin);
+    width: 100%;
+    margin: auto;
 }
+
 
 .section-title {
     white-space: nowrap;
     font-weight: 700;
-    font-size: 4em;
+    font-size: 3.6em;
 }
 
 .pt.bordered-section {
@@ -81,6 +82,7 @@
     overflow-y: hidden;
     
     height: 50vh;
+    margin-top: 0px;
 }
 
 .main-scrollable-content-col {
@@ -198,11 +200,11 @@
 
 /* Add new Transaction */
 #add-new-transaction {
-    margin-top: 1%;
-    min-height: 200px;
-    max-height: 30%;
+    margin-top: 0.8%;
+    min-height: 160px;
+    max-height: 27%;
 
-    font-size: small;
+    font-size: 0.7em;
     z-index:1000;
 }
 
@@ -225,6 +227,12 @@
 .section-footer-row {
     margin-top: 10px;
 }
+
+/*
+.section-footer-row > div > .row {
+    flex-direction: row-reverse;
+}
+*/
 
 .post-trans-subsec-title-item.post-trans-arrow-outer-div > div {
     position: relative;
@@ -363,9 +371,9 @@
 }
 
 .col-1.post-trans-tab-down-arrow-wrapper > * {
-    height: 36px;
+    height: 28px;
     text-align: center;
-    font-size: 3.5em;
+    font-size: 2.8em;
     z-index: 1000;
     cursor: pointer;
 }
