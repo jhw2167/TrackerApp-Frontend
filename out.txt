@@ -1,0 +1,225 @@
+
+> trackerapp-frontend@0.1.0 build C:\Users\jack\source\repos\Web_Dev\02-Personal_Repos\trackerapp-frontend
+> react-scripts build
+
+Creating an optimized production build...
+Compiled with warnings.
+
+src\App.tsx
+  Line 2:10:  'render' is defined but never used  @typescript-eslint/no-unused-vars
+
+src\Context.tsx
+  Line 68:6:  React Hook useEffect has a missing dependency: 'config'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\components\AddNewTrans.tsx
+  Line 10:13:   'api' is defined but never used                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+  Line 13:10:   'StringMappingType' is defined but never used                                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+  Line 15:10:   'table' is defined but never used                                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+  Line 152:8:   React Hook useEffect has a missing dependency: 'props'. Either include it or remove the dependency array. However, 'props' will change when *any* prop changes, so the preferred fix is to destructure the 'props' object outside of the useEffect call and refer to those specific props inside useEffect  react-hooks/exhaustive-deps
+  Line 308:40:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                         eqeqeq
+  Line 353:57:  Unexpected string concatenation of literals                                                                                                                                                                                                                                                                 no-useless-concat
+  Line 357:32:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                         eqeqeq
+
+src\components\DataGraph.tsx
+  Line 1:10:    'CpuInfo' is defined but never used                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+  Line 4:17:    'useDebugValue' is defined but never used                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  Line 8:26:    'DiscreteColorLegendProps' is defined but never used                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+  Line 10:6:    'RVMouseEventHandler' is defined but never used                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+  Line 13:20:   'Transaction' is defined but never used                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+  Line 18:8:    'OverlaySub' is defined but never used                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+  Line 69:7:    'POP_STYLE' is assigned a value but never used                                                                                                                                                                                                                    @typescript-eslint/no-unused-vars
+  Line 87:30:   'setLegItemClick' is assigned a value but never used                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+  Line 100:12:  React Hook useEffect has missing dependencies: 'props.exclusions' and 'props.limit'. Either include them or remove the dependency array                                                                                                                           react-hooks/exhaustive-deps
+  Line 104:12:  React Hook useEffect has missing dependencies: 'props.height' and 'props.width'. Either include them or remove the dependency array. Outer scope values like 'window.innerWidth' aren't valid dependencies because mutating them doesn't re-render the component  react-hooks/exhaustive-deps
+  Line 299:22:  Array.prototype.map() expects a return value from arrow function                                                                                                                                                                                                  array-callback-return
+  Line 323:46:  Array.prototype.map() expects a return value from arrow function                                                                                                                                                                                                  array-callback-return
+  Line 337:12:  'radius' is assigned a value but never used                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  Line 339:11:  'truedAngle' is assigned a value but never used                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+
+src\components\DataTable.tsx
+  Line 4:17:     'MutableRefObject' is defined but never used                                                                                                                                                                                                                                                                @typescript-eslint/no-unused-vars
+  Line 16:8:     'OverlaySub' is defined but never used                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+  Line 60:12:    'isViewingRecentTransactions' is assigned a value but never used                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+  Line 69:7:     React Hook useEffect has a missing dependency: 'props'. Either include it or remove the dependency array. However, 'props' will change when *any* prop changes, so the preferred fix is to destructure the 'props' object outside of the useEffect call and refer to those specific props inside useEffect  react-hooks/exhaustive-deps
+  Line 146:36:   Expected '!==' and instead saw '!='                                                                                                                                                                                                                                                                         eqeqeq
+  Line 182:100:  Expected '!==' and instead saw '!='                                                                                                                                                                                                                                                                         eqeqeq
+
+src\components\GeneralTable.tsx
+  Line 1:10:    'CpuInfo' is defined but never used                                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  Line 4:13:    'c' is defined but never used                                                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+  Line 8:13:    'CSS' is defined but never used                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+  Line 60:22:   'sethovCells' is assigned a value but never used                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+  Line 82:7:    React Hook useEffect has a missing dependency: 'props'. Either include it or remove the dependency array. However, 'props' will change when *any* prop changes, so the preferred fix is to destructure the 'props' object outside of the useEffect call and refer to those specific props inside useEffect  react-hooks/exhaustive-deps
+  Line 103:58:  Unexpected string concatenation of literals                                                                                                                                                                                                                                                                 no-useless-concat
+  Line 120:69:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                         eqeqeq
+  Line 122:76:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                         eqeqeq
+  Line 126:72:  Unexpected string concatenation of literals                                                                                                                                                                                                                                                                 no-useless-concat
+  Line 197:59:  Do not use String as a constructor                                                                                                                                                                                                                                                                          no-new-wrappers
+  Line 201:40:  Do not use String as a constructor                                                                                                                                                                                                                                                                          no-new-wrappers
+
+src\components\Header.tsx
+  Line 2:10:   'useEffect' is defined but never used                                                                      @typescript-eslint/no-unused-vars
+  Line 7:13:   'c' is defined but never used                                                                              @typescript-eslint/no-unused-vars
+  Line 27:28:  'updateBurgerMenuOptions' is assigned a value but never used                                               @typescript-eslint/no-unused-vars
+  Line 43:21:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  Line 49:63:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+src\components\SubTable.tsx
+  Line 1:10:    'CpuInfo' is defined but never used                                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  Line 7:13:    'values' is defined but never used                                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+  Line 52:7:    React Hook useEffect has a missing dependency: 'props'. Either include it or remove the dependency array. However, 'props' will change when *any* prop changes, so the preferred fix is to destructure the 'props' object outside of the useEffect call and refer to those specific props inside useEffect  react-hooks/exhaustive-deps
+  Line 78:56:   Unexpected string concatenation of literals                                                                                                                                                                                                                                                                 no-useless-concat
+  Line 91:29:   'rowStyle' is assigned a value but never used                                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+  Line 91:83:   Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                         eqeqeq
+  Line 93:76:   Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                         eqeqeq
+  Line 95:82:   Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                         eqeqeq
+  Line 99:56:   Unexpected string concatenation of literals                                                                                                                                                                                                                                                                 no-useless-concat
+  Line 134:63:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                         eqeqeq
+  Line 180:59:  Do not use String as a constructor                                                                                                                                                                                                                                                                          no-new-wrappers
+  Line 184:40:  Do not use String as a constructor                                                                                                                                                                                                                                                                          no-new-wrappers
+
+src\components\narrowcomponents\BurgerMenuDD.tsx
+  Line 11:34:  'DDHtmlStructure' is defined but never used  @typescript-eslint/no-unused-vars
+  Line 30:73:  Expected '===' and instead saw '=='          eqeqeq
+  Line 42:33:  Unexpected string concatenation of literals  no-useless-concat
+
+src\components\narrowcomponents\PTSectionFooter.tsx
+  Line 5:17:  'useState' is defined but never used             @typescript-eslint/no-unused-vars
+  Line 5:27:  'useEffect' is defined but never used            @typescript-eslint/no-unused-vars
+  Line 5:38:  'useRef' is defined but never used               @typescript-eslint/no-unused-vars
+  Line 6:9:   'contains' is defined but never used             @typescript-eslint/no-unused-vars
+  Line 6:19:  'now' is defined but never used                  @typescript-eslint/no-unused-vars
+  Line 8:18:  'Placement' is defined but never used            @typescript-eslint/no-unused-vars
+  Line 8:29:  'UsePopperOptions' is defined but never used     @typescript-eslint/no-unused-vars
+  Line 8:47:  'UsePopperState' is defined but never used       @typescript-eslint/no-unused-vars
+  Line 12:9:  'Transaction' is defined but never used          @typescript-eslint/no-unused-vars
+  Line 13:8:  'Arrow' is defined but never used                @typescript-eslint/no-unused-vars
+  Line 14:8:  'DoublePlus' is defined but never used           @typescript-eslint/no-unused-vars
+  Line 29:7:  'ARROW_DIMS' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+src\components\subcomponents\DropDown.tsx
+  Line 5:13:    'PairValue' is defined but never used                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+  Line 5:24:    'values' is defined but never used                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  Line 6:13:    'CSS' is defined but never used                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+  Line 7:17:    'KeyboardEvent' is defined but never used                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+  Line 7:32:    'MutableRefObject' is defined but never used                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+  Line 8:5:     'ReactElement' is defined but never used                                                                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+  Line 9:10:    'wait' is defined but never used                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+  Line 51:18:   'setData' is assigned a value but never used                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+  Line 59:89:   Expected dot to be on same line as property                                                                                                                                                                                                                                                                                               dot-location
+  Line 60:21:   Expected dot to be on same line as property                                                                                                                                                                                                                                                                                               dot-location
+  Line 61:21:   Expected dot to be on same line as property                                                                                                                                                                                                                                                                                               dot-location
+  Line 62:21:   Expected dot to be on same line as property                                                                                                                                                                                                                                                                                               dot-location
+  Line 94:7:    React Hook useEffect has a missing dependency: 'props'. Either include it or remove the dependency array. However, 'props' will change when *any* prop changes, so the preferred fix is to destructure the 'props' object outside of the useEffect call and refer to those specific props inside useEffect                                react-hooks/exhaustive-deps
+  Line 118:7:   React Hook useEffect has missing dependencies: 'data' and 'sc'. Either include them or remove the dependency array. You can also replace multiple useState variables with useReducer if 'setSelected' needs the current value of 'data'                                                                                                   react-hooks/exhaustive-deps
+  Line 125:23:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                                                       eqeqeq
+  Line 129:31:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                                                       eqeqeq
+  Line 135:22:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                                                       eqeqeq
+  Line 135:67:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                                                       eqeqeq
+  Line 146:27:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                                                       eqeqeq
+  Line 155:8:   React Hook useEffect has missing dependencies: 'ANIM_CELL_HEIGHT', 'CELL_HEIGHT', 'data.length', 'dropDownPlace', 'hovCells', 'prevScrollDir', and 'scrollPos'. Either include them or remove the dependency array. You can also do a functional update 'setScrollPos(s => ...)' if you only need 'scrollPos' in the 'setScrollPos' call  react-hooks/exhaustive-deps
+  Line 163:8:   React Hook useEffect has a missing dependency: 'props'. Either include it or remove the dependency array. However, 'props' will change when *any* prop changes, so the preferred fix is to destructure the 'props' object outside of the useEffect call and refer to those specific props inside useEffect                                react-hooks/exhaustive-deps
+  Line 198:58:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                                                       eqeqeq
+  Line 201:58:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                                                       eqeqeq
+
+src\components\subcomponents\OverlaySub.tsx
+  Line 6:47:  'useState' is defined but never used             @typescript-eslint/no-unused-vars
+  Line 7:10:  'Button' is defined but never used               @typescript-eslint/no-unused-vars
+  Line 7:34:  'OverlayTriggerProps' is defined but never used  @typescript-eslint/no-unused-vars
+  Line 7:64:  'TooltipProps' is defined but never used         @typescript-eslint/no-unused-vars
+  Line 9:10:  'JsxElement' is defined but never used           @typescript-eslint/no-unused-vars
+
+src\index.tsx
+  Line 7:10:  'ConfigProvider' is defined but never used  @typescript-eslint/no-unused-vars
+  Line 7:26:  'useConfig' is defined but never used       @typescript-eslint/no-unused-vars
+
+src\main\Layout.tsx
+  Line 3:52:  'BrowserRouter' is defined but never used  @typescript-eslint/no-unused-vars
+
+src\main\PostTransactions.tsx
+  Line 25:27:    'scroll' is defined but never used                                                                                   @typescript-eslint/no-unused-vars
+  Line 25:35:    'scrollSpy' is defined but never used                                                                                @typescript-eslint/no-unused-vars
+  Line 255:23:   'forceUpdate' is assigned a value but never used                                                                     @typescript-eslint/no-unused-vars
+  Line 268:30:   'setPendingTrans' is assigned a value but never used                                                                 @typescript-eslint/no-unused-vars
+  Line 286:28:   Expected '!==' and instead saw '!='                                                                                  eqeqeq
+  Line 292:40:   Expected '===' and instead saw '=='                                                                                  eqeqeq
+  Line 380:43:   Expected '===' and instead saw '=='                                                                                  eqeqeq
+  Line 384:47:   Expected '===' and instead saw '=='                                                                                  eqeqeq
+  Line 475:12:   React Hook useEffect has a missing dependency: 'postRequestError'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 486:38:   Expected '===' and instead saw '=='                                                                                  eqeqeq
+  Line 591:108:  Expected '===' and instead saw '=='                                                                                  eqeqeq
+  Line 597:47:   Expected '===' and instead saw '=='                                                                                  eqeqeq
+  Line 605:39:   Expected '===' and instead saw '=='                                                                                  eqeqeq
+  Line 920:61:   Expected '!==' and instead saw '!='                                                                                  eqeqeq
+
+src\main\overview.tsx
+  Line 21:10:   'includes' is defined but never used                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+  Line 22:10:   'isPrefixUnaryExpression' is defined but never used                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+  Line 35:97:   Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                                                             eqeqeq
+  Line 62:10:   'winHeight' is assigned a value but never used                                                                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+  Line 85:25:   'end' is assigned a value but never used                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  Line 86:13:   'date' is assigned a value but never used                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  Line 113:13:  Unexpected empty array pattern                                                                                                                                                                                                                                                                                                                  no-empty-pattern
+  Line 125:23:  'end' is assigned a value but never used                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  Line 128:8:   React Hook useCallback has a missing dependency: 'props'. Either include it or remove the dependency array. However, 'props' will change when *any* prop changes, so the preferred fix is to destructure the 'props' object outside of the useCallback call and refer to those specific props inside useCallback                                react-hooks/exhaustive-deps
+  Line 137:37:  React Hook useEffect has a missing dependency: 'onLanding'. Either include it or remove the dependency array                                                                                                                                                                                                                                    react-hooks/exhaustive-deps
+  Line 178:8:   React Hook useEffect has missing dependencies: 'USER_PARAMS', 'isViewingRecentTransactions', 'monthlyTransactions', and 'updateCurrentMonth'. Either include them or remove the dependency array. You can also replace multiple useState variables with useReducer if 'setRecentTransactions' needs the current value of 'monthlyTransactions'  react-hooks/exhaustive-deps
+  Line 189:8:   React Hook useEffect has missing dependencies: 'USER_PARAMS' and 'offsetTransactionsPageNum'. Either include them or remove the dependency array                                                                                                                                                                                                react-hooks/exhaustive-deps
+  Line 203:7:   React Hook useEffect has missing dependencies: 'props' and 'updateOnDateChange'. Either include them or remove the dependency array. However, 'props' will change when *any* prop changes, so the preferred fix is to destructure the 'props' object outside of the useEffect call and refer to those specific props inside useEffect           react-hooks/exhaustive-deps
+  Line 209:62:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                                                             eqeqeq
+  Line 214:8:   React Hook useEffect has missing dependencies: 'hovCellFunc' and 'recentTransactions'. Either include them or remove the dependency array                                                                                                                                                                                                       react-hooks/exhaustive-deps
+  Line 224:8:   React Hook useEffect has a missing dependency: 'SENSITIVE_DATA'. Either include it or remove the dependency array                                                                                                                                                                                                                               react-hooks/exhaustive-deps
+  Line 237:8:   React Hook useEffect has missing dependencies: 'SENSITIVE_DATA' and 'isViewingRecentTransactions'. Either include them or remove the dependency array                                                                                                                                                                                           react-hooks/exhaustive-deps
+  Line 245:8:   React Hook useEffect has a missing dependency: 'SENSITIVE_DATA'. Either include it or remove the dependency array                                                                                                                                                                                                                               react-hooks/exhaustive-deps
+  Line 255:8:   React Hook useEffect has a missing dependency: 'SENSITIVE_DATA'. Either include it or remove the dependency array                                                                                                                                                                                                                               react-hooks/exhaustive-deps
+  Line 258:45:  React Hook useEffect has a missing dependency: 'onRenderComplete'. Either include it or remove the dependency array                                                                                                                                                                                                                             react-hooks/exhaustive-deps
+  Line 268:28:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                                                             eqeqeq
+  Line 311:26:  Expected '===' and instead saw '=='                                                                                                                                                                                                                                                                                                             eqeqeq
+  Line 434:10:  'sleep' is defined but never used                                                                                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+
+src\resources\api.ts
+  Line 4:17:  'AxiosPromise' is defined but never used  @typescript-eslint/no-unused-vars
+
+src\resources\apiPlaid.tsx
+  Line 3:28:   'useContext' is defined but never used                        @typescript-eslint/no-unused-vars
+  Line 37:12:  'serverPostTokenResponse' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+src\resources\constants.ts
+  Line 193:19:  'ERR_COLOR' is assigned a value but never used                    @typescript-eslint/no-unused-vars
+  Line 236:39:  Expected '===' and instead saw '=='                               eqeqeq
+  Line 236:67:  Expected '===' and instead saw '=='                               eqeqeq
+  Line 238:31:  Expected '===' and instead saw '=='                               eqeqeq
+  Line 249:42:  Expected '===' and instead saw '=='                               eqeqeq
+  Line 250:20:  Expected '===' and instead saw '=='                               eqeqeq
+  Line 282:98:  Expected dot to be on same line as property                       dot-location
+  Line 299:30:  Expected '===' and instead saw '=='                               eqeqeq
+  Line 302:49:  Array.prototype.map() expects a return value from arrow function  array-callback-return
+  Line 307:61:  Array.prototype.map() expects a return value from arrow function  array-callback-return
+
+src\resources\subcomponents\arrow.tsx
+  Line 4:17:   'useState' is defined but never used   @typescript-eslint/no-unused-vars
+  Line 4:27:   'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+  Line 30:53:  Expected '===' and instead saw '=='    eqeqeq
+
+src\resources\subcomponents\double_plus.tsx
+  Line 4:17:  'useState' is defined but never used   @typescript-eslint/no-unused-vars
+  Line 4:27:  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+File sizes after gzip:
+
+  221.5 kB (-6 B)  build\static\js\main.35a1048c.js
+  29.81 kB         build\static\css\main.45959af9.css
+  1.78 kB          build\static\js\787.cb936175.chunk.js
+
+The project was built assuming it is hosted at ./.
+You can control this with the homepage field in your package.json.
+
+The build folder is ready to be deployed.
+
+Find out more about deployment here:
+
+  https://cra.link/deployment
+

@@ -19,6 +19,8 @@ import * as plaid from '../resources/apiPlaid';
 
 function Header()  {
 
+    let buildPath = (relativePath: string) => { return c.ROOT + relativePath }
+
     const PLAID_PROPS: plaid.initPlaidLinkProps = {
         linkToken: context.useConfig().get(context.CONFIG_KEYS.PLAID_LINK_TOKEN) as string,
         userId:  context.useConfig().get(api.URI_PARAMS.USER_ID) as string
@@ -29,8 +31,9 @@ function Header()  {
             styeclass: "header ",
             transition: "below",
             options: [
-                {text: "Overview", openIn:0, url:"/finances/overview"},
-                {text: "Post", openIn:0, url:"/finances/post"},
+                {text: "Overview", openIn:0, url: buildPath('/overview')},
+                {text: "Post", openIn:0, url:buildPath('/post')},
+                {text: "Github", openIn:1, url:'https://github.com/jhw2167/TrackerApp-Frontend'},
                 {text: "", jsx: plaid.InitiatePlaidLinkButton(PLAID_PROPS) }            
          ]
         }

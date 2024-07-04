@@ -18,8 +18,6 @@ import Footer from '../components/Footer';
 import DataGraph from '../components/DataGraph';
 import DataTable from '../components/DataTable';
 import SubTable from '../components/SubTable';
-import { includes } from 'underscore';
-import { isPrefixUnaryExpression } from 'typescript';
 
 interface OverviewProps {
     mn?: string | null;

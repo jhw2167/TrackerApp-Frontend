@@ -15,8 +15,8 @@ export const URI_PARAMS = {
 }
 
 //Property Constants
-//export const DEFAULT_USER_ID = '20230303JACKHENRYWELSH@GMAIL.COM';
-export const DEFAULT_USER_ID = 'DEMO';
+export const DEFAULT_USER_ID = '20230303JACKHENRYWELSH@GMAIL.COM';
+//export const DEFAULT_USER_ID = 'DEMO';
 
 
 //Server calls

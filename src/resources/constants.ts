@@ -6,6 +6,8 @@ import React from "react";
 
 export const axios = require('axios').default;
 
+export const ROOT = '/finances'; //not needed, basename handles it
+//export const ROOT = ''; //not needed, basename handles it
 
 /* Interfaces */
 export interface Transaction {

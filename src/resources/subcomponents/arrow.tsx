@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 
 //svg
 import { ReactComponent as ArrowSvg } from '../svg/arrow.svg';
+//import { ReactComponent as ArrowSvg } from './src/resources/svg/arrow.svg'
 
 //CSS
 import 'bootstrap/dist/css/bootstrap.min.css';

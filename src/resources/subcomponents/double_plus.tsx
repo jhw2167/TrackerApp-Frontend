@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 
 //svg
 import { ReactComponent as DoublePlusSVG } from '../svg/double_plus.svg';
+//import { ReactComponent as DoublePlusSVG } from './src/resources/svg/double_plus.svg'
 
 //CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
