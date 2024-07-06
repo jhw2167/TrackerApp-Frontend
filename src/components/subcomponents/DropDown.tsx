@@ -2,11 +2,11 @@
 import * as c from '../../resources/constants';
 
 //other imports
-import _, { PairValue, values } from 'underscore';
-import * as CSS from 'csstype';
-import React, { KeyboardEvent, MutableRefObject,
-    ReactElement, useEffect, useRef, useState } from 'react';
-import { wait } from '@testing-library/user-event/dist/utils';
+import _ from 'underscore';
+import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from 'react';
+
+
 
 
 
@@ -79,6 +79,8 @@ export function DropDown(props: DropDownProps ) {
             if(props.afterClick)
                     props.afterClick(data);     
     };
+
+    const routerNavigate = useNavigate();
 
     /* EFFECTS */
      /* For setting hovered cell from outside this component */
@@ -162,6 +164,7 @@ export function DropDown(props: DropDownProps ) {
             props.setSelectedData(selected);
     }, [selected])
 
+
     /* Functions */
 
     if(!data || data.length<1) {
@@ -196,7 +199,8 @@ export function DropDown(props: DropDownProps ) {
                         rowStyleClassFunc(index)} 
                         onClickCapture={ () => {  
                             if(value.url && value?.openIn==c.REDIRECT)
-                             window.location.href=value.url }}
+                             routerNavigate(value.url);
+                            }}
                         onClick={() => {
                             if(value.url && value?.openIn==c.NEW_TAB)
                                  window.open(value.url, "_blank"); //Open link in new tab

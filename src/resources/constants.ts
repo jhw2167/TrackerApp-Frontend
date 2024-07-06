@@ -6,8 +6,9 @@ import React from "react";
 
 export const axios = require('axios').default;
 
-export const ROOT = '/finances'; //not needed, basename handles it
-//export const ROOT = ''; //not needed, basename handles it
+//export const ROOT = '/finances'; //not needed, basename handles it
+export const ROOT = ''; //not needed, basename handles it
+export const WEB_VERSION = '0.0.21';
 
 /* Interfaces */
 export interface Transaction {
@@ -73,6 +74,7 @@ export interface LinkedText {
 
     export const REDIRECT=0;    //constants for openIn
     export const NEW_TAB=1;
+    export const NEW_PAGE=2;
 
 export interface LinkedTextJSX extends LinkedText{
     jsx?: React.ReactNode

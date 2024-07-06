@@ -18,6 +18,7 @@ import Footer from '../components/Footer';
 import DataGraph from '../components/DataGraph';
 import DataTable from '../components/DataTable';
 import SubTable from '../components/SubTable';
+import { VERSION } from 'underscore';
 
 interface OverviewProps {
     mn?: string | null;
@@ -123,6 +124,7 @@ function Overview(props: OverviewProps) {
         const [start, end] = c.convMnYrToTimeFrameDates(props.mn, props.yr);
         const srchParamStr = "?mn=" + c.MONTHS.at(start.getMonth()) + "&yr=" + start.getFullYear();
         props.setSearchParams(srchParamStr);
+        console.log('SITE Version: ' + c.WEB_VERSION);
     }, [])
 
     const onRenderComplete = useCallback( async () => {

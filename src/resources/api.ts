@@ -1,11 +1,11 @@
 //api.ts used for storing URL, port num and other constants
 
 //imports
-import axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 export const CONST_VAR = "CONSTANT VARS GO HERE";
-export const DOMAIN = "http://localhost";
-export const PORT = ":8080/";
+export const DOMAIN = "https://jackhenrywelsh.com";
+export const PORT = ":443/";
 
 //URI Constants
 export const URI_PARAMS = {
@@ -15,13 +15,15 @@ export const URI_PARAMS = {
 }
 
 //Property Constants
-export const DEFAULT_USER_ID = '20230303JACKHENRYWELSH@GMAIL.COM';
-//export const DEFAULT_USER_ID = 'DEMO';
+//export const DEFAULT_USER_ID = '20230303JACKHENRYWELSH@GMAIL.COM';
+export const DEFAULT_USER_ID = 'DEMO';
 
 
 //Server calls
-export const SERVER_CONFIG = DOMAIN + PORT + "server/config";
-export const SERVER_USER_BASE = DOMAIN + PORT +  "finances/users/{" + URI_PARAMS.USER_ID + "}";
+export const SERVER_API_BASE = "api/finances"
+export const SERVER_USER_BASE = DOMAIN + PORT + SERVER_API_BASE + "/users/{" + URI_PARAMS.USER_ID + "}";
+
+export const SERVER_CONFIG = SERVER_API_BASE + "/server/config";
 export const SERVER_ALL_TRANSACTIONS = SERVER_USER_BASE + "/transactions";
 
 export const SERVER_ALL_CATEGORIES = SERVER_ALL_TRANSACTIONS + "/categories";

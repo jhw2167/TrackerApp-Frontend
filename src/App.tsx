@@ -1,5 +1,5 @@
-import { BrowserRouter } from 'react-router-dom';
-
+import { BrowserRouter, HashRouter } from 'react-router-dom';
+//import { StaticRouter } from "react-router-dom/server";
 //project
 import Layout from './main/Layout';
 import { ConfigProvider } from './Context';
@@ -34,11 +34,11 @@ import './components/narrowcomponents/CSS/BurgerMenuDD.css';
 function App() {
 
   return (
-    <BrowserRouter basename='/finances'>
+    <HashRouter  /*basename='/finances'*/>
       <ConfigProvider>
         <Layout />
       </ConfigProvider>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

@@ -10,6 +10,7 @@
 
 # production
 /build
+/dist
 
 # website
 /public/img
